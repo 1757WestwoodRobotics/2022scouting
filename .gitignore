@@ -1,0 +1,10 @@
+
+web/src/node_modules
+web/node_modules
+web/__sapper__
+server/yarn-error.log
+server/yarn.lock
+server/.env
+server/node_modules
+
+server/dist
