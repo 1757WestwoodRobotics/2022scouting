@@ -1,9 +1,5 @@
 <script>
-	let competitions = [
-	        {id: "mabos", name: "Revere"},
-	        {id: "mawor", name: "WPI"},
-            {id: "necmp1", name: "NE District Championship (Calcium division)"}
-	    ]
+    import {competitions} from '../constants'
 
 	let selected = competitions[0];
 </script>
@@ -49,7 +45,7 @@
 <h1>FRC 2022 Scouting Area</h1>
 
 <figure>
-    <select name="Comp" value={selected}>
+    <select name="Comp" bind:value={selected}>
         {#each competitions as comp}
             <option value={comp}>{comp.name}</option>
         {/each}
