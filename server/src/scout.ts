@@ -68,4 +68,5 @@ export const handleScoutUpload = async (req, res) => {
         const savedPhotos = await dataRepo.find()
         console.log(savedPhotos)
     }
+    res.send("OK")
 }
