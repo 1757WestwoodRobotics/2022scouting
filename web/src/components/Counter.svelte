@@ -6,6 +6,13 @@
     const decrease = () => {value--}
 </script>
 
+<style>
+    h4 {
+        color: white;
+        font-weight: 500;
+    }
+</style>
+
 <div>
     <h4>{name}</h4>
     <button on:click={decrease}>-</button>

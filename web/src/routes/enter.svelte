@@ -28,9 +28,24 @@
 
 <style>
     div {
-        border: 2px solid black;
-        padding: 4px;
+		vertical-align: center;
+        border: 1em solid rgb(22, 22, 22);
+        padding: 1em;
+		background-color: #111115;
+		text-align: center;
+		width: auto;
+		margin: auto;
     }
+
+	h2 {
+		color: white;
+		font-size: 2em;
+		font-weight: 500;
+	}
+
+	hr {
+		border-top: 5px solid rgb(156, 255, 44);
+	}
 </style>
 
 <svelte:head>
@@ -38,14 +53,16 @@
 </svelte:head>
 
 <div>
-    <h3>Auto</h3>
+    <h2>Auto</h2>
+	<hr>
     <Counter bind:value={data.auto_cargo.upper} name="Upper"/>
     <Counter bind:value={data.auto_cargo.lower} name="Lower"/>
     <Counter bind:value={data.auto_cargo.miss} name="Miss"/>
 </div>
 <br>
 <div>
-    <h3>Teleop</h3>
+    <h2>Teleop</h2>
+	<hr>
     <Counter bind:value={data.teleop_cargo.upper} name="Upper"/>
     <Counter bind:value={data.teleop_cargo.lower} name="Lower"/>
     <Counter bind:value={data.teleop_cargo.miss} name="Miss"/>
@@ -60,4 +77,4 @@
 <br>
 
 
-<button on:click={() => {console.log(data)}}>log</button>
+<button on:click={() => {console.log(data)}}>Log</button>

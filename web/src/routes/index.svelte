@@ -9,16 +9,11 @@
 </script>
 
 <style>
-	h1, figure, p {
+	h1, figure, p{
+		font-family: Trebuchet MS;
 		text-align: center;
 		margin: 0 auto;
-	}
-
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
+		color: #cdffe7;
 	}
 
 	figure {
@@ -46,7 +41,7 @@
 	<title>1757 Scouting Database</title>
 </svelte:head>
 
-<h1>FRC 2022 Scouting Area</h1>
+<h1>Select Competition</h1>
 
 <figure>
     <select name="Comp" value={selected}>
