@@ -33,18 +33,18 @@
         padding: 1em;
 		background-color: #111115;
 		text-align: center;
-		width: auto;
+		width: 25em;
 		margin: auto;
     }
-
 	h2 {
 		color: white;
-		font-size: 2em;
+		font-size: 3em;
 		font-weight: 500;
 	}
 
 	hr {
-		border-top: 5px solid rgb(156, 255, 44);
+		border: 0.5em solid rgb(156, 255, 44);
+		margin-bottom: 2em;
 	}
 </style>
 
