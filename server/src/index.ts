@@ -6,9 +6,18 @@ import { conn } from "./data-source";
 import bodyParser from "body-parser";
 import { handleScoutUpload } from "./scout";
 
+import cors from 'cors'
+
 const main = async () => {
   const app = express();
   const port = 1757;
+
+  app.use(
+    cors({
+      origin: "http://127.0.0.1:3000",
+      credentials: true,
+    })
+  );
   app.listen(port, () => {
     console.log(`starting app on ${port}`);
   });

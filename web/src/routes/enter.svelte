@@ -1,7 +1,14 @@
 <script lang="ts">
 	import Counter from '../components/Counter.svelte';
+	import {competitions, climb, matchType, apiPort} from '../constants'
 
 	let data = {
+	    identifier : {
+            team: 0,
+            comp: "",
+            comp_level: "",
+            match_number: 0
+	    },
 	    auto_cargo : {
 	        upper: 0,
 	        lower : 0,
@@ -16,13 +23,6 @@
 	    notes: ""
 	}
 
-	let climb = [
-	    {name: "None", amount: 0},
-	    {name: "Low", amount: 4},
-	    {name: "Mid", amount: 6},
-	    {name: "High", amount: 10},
-	    {name: "Traverse", amount: 15},
-	]
 
 </script>
 
@@ -97,8 +97,21 @@
 	</div>
 	
 </div>
+<br>
+
+<div>
+<h3>Climb Level</h3>
+<select name="climb" bind:value={data.climb_level}>
+    {#each climb as stage}
+        <option value={stage.amount}>{stage.name}</option>
+    {/each}
+</select>
+</div>
+<br>
+<div>
+    <h3>Notes</h3>
+    <textarea bind:value={data.notes}></textarea>
+</div>
 
 
-
-
-<button on:click={() => {console.log(data)}}>Log</button>
+<button on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}})}}>submit</button>

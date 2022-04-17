@@ -1,5 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, PrimaryColumn } from "typeorm";
+import { conn } from "./data-source";
 
+@Entity()
 type CargoData = {
     upper: number,
     lower: number,
@@ -14,26 +16,56 @@ enum ClimbLevel {
     Traverse = 15
 }
 
+enum MatchType {
+    Qualification = "qm",
+    Quarterfinal = "qf",
+    Semifinal = "sf",
+    Final = "f"
+}
+
+type DataIdentifier = {
+    team: number,
+    comp: string,
+    comp_level: MatchType
+    match_number: number
+}
+
 
 @Entity()
 export class ScoutingData extends BaseEntity {
-    @PrimaryColumn()
-    full_iden!: string; // YYYYcomp_TYPENUM_team
+    @PrimaryColumn({type: 'jsonb'})
+    identifier!: DataIdentifier; // comp_TYPENUM_team
 
-    @JoinColumn()
+    @Column({type: 'jsonb'})
     auto_cargo: CargoData;
 
-    @JoinColumn()
+    @Column({type: 'jsonb'})
     teleop_cargo: CargoData;
 
     @Column({type: "enum", enum: ClimbLevel, default: ClimbLevel.None})
     climb_level: ClimbLevel
+
+    @Column()
+    notes: String
 }
 
 
 export const handleScoutUpload = async (req, res) => {
     let data = new ScoutingData()
-    data.full_iden = req.body
     console.log(req.body);
-    res.send("OK");
+    let requ = req.body;
+    if (requ.identifier.team != 0 && requ.identifier.comp != "" && requ.identifier.comp_level != "" && requ.identifier.match_number != 0) {
+        data.identifier = requ.identifier
+        data.auto_cargo = requ.auto_cargo
+        data.teleop_cargo = requ.teleop_cargo
+        data.climb_level = requ.climb_level
+        data.notes = requ.notes
+
+        const dataRepo = conn.getRepository(ScoutingData)
+
+        await dataRepo.save(data)
+
+        const savedPhotos = await dataRepo.find()
+        console.log(savedPhotos)
+    }
 }
