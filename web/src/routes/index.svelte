@@ -6,10 +6,6 @@
 	    ]
 
 	let selected = competitions[0];
-
-	const res = await this.fetch(`http://localhost:${apiPort}/team/${params.team}`);
-
-
 </script>
 
 <style>
