@@ -17,16 +17,14 @@
 
 	:global(body) {
 		background-color: #9d9d9d;
+		text-transform: uppercase;
 	}
 
 	:global(select, option) {
-		font-family: Verdana;
 		text-align: center;
+		font-family: Tahoma;
 	}
 
-	:global(.wrapper) {
-		width: 100%;
-	}
 </style>
 <Title/>
 <Nav {segment}/>

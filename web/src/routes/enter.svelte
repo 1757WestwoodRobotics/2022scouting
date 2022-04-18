@@ -43,7 +43,9 @@
 	}
 
 	hr {
-		border: 0.5em solid rgb(156, 255, 44);
+		background-color:  rgb(156, 255, 44);
+		border: none;
+		height: 0.4em;
 		margin-bottom: 2em;
 	}
 	.container-1 {
@@ -52,6 +54,16 @@
         align-items: center;
         justify-content: center;
         flex-direction: row;
+	}
+
+	select {
+		font-size: 2em;
+		width: 6em;
+		height: 2em;
+		background-color: rgb(33, 33, 33);
+		border-color: #ffffff;
+		border-width: 0.1em;
+		color: rgb(255, 255, 255);
 	}
 
 </style>

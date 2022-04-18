@@ -3,6 +3,13 @@
 </script>
 
 <style>
+	@media (min-height: 700px){
+		nav {
+			position: sticky;
+			top: 0;
+			z-index: 1;
+		}
+	}
 	nav {
 		border-bottom: 0.2em solid rgb(31, 255, 94);
 		font-weight: 300;
@@ -25,8 +32,9 @@
 	li {
 		display: block;
 		float: left;
-		color: rgb(217, 255, 215);
-		font-size: 1.5em;
+		color: #b3ffab;
+		font-size: 1.25em;
+		font-weight: 400;
 	}
 
 	[aria-current] {
@@ -46,7 +54,7 @@
 
 	a {
 		text-decoration: none;
-		padding: 1em 0.5em;
+		padding: 0.5em 0.5em;
 		display: block;
 	}
 </style>

@@ -13,7 +13,8 @@
 		font-family: Trebuchet MS;
 		text-align: center;
 		margin: 0 auto;
-		color: #cdffe7;
+		color: #ffffff;
+		font-weight: 700;
 	}
 
 	figure {
@@ -35,21 +36,49 @@
 			font-size: 4em;
 		}
 	}
+
+	select {
+		font-size: 1em;
+		width: 100%;
+		height: 2em;
+		background-color: rgb(33, 33, 33);
+		border-color: #ffffff;
+		border-width: 0.1em;
+		color: rgb(255, 255, 255);
+	}
+	hr {
+		background-color:  rgb(156, 255, 44);
+		border: none;
+		height: 0.4em;
+		margin-bottom: 2em;
+	}
+
+    div{
+		vertical-align: center;
+        border: 1em solid rgb(22, 22, 22);
+        padding: 1em;
+		background-color: #111115;
+		text-align: center;
+		margin: 1em;
+    }
 </style>
 
 <svelte:head>
 	<title>1757 Scouting Database</title>
 </svelte:head>
-<!-- 
-<h1>Select Competition</h1>
 
-<figure>
-    <select name="Comp" value={selected}>
-        {#each competitions as comp}
-            <option value={comp}>{comp.name}</option>
-        {/each}
-    </select>
-    <p> selected {selected.id}</p>
+<div>
+	<h1>Select Competition</h1>
 
-</figure>
- -->
+	<hr>
+	
+	<figure>
+		<select name="Comp" value={selected}>
+			{#each competitions as comp}
+				<option value={comp}>{comp.name}</option>
+			{/each}
+		</select>
+	</figure>
+</div>
+
+
