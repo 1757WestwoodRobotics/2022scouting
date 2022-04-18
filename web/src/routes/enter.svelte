@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Counter from '../components/Counter.svelte';
 	import {competitions, climb, matchType, apiPort} from '../constants'
-
+	import submit from '../images/button-submit.svg';
 	let data = {
 	    identifier : {
             team: 0,
@@ -27,18 +27,22 @@
 </script>
 
 <style>
-    div .auto, .teleop, .climb{
+    div .auto, .teleop, .climb, .notes{
 		vertical-align: center;
         border: 1em solid rgb(22, 22, 22);
         padding: 1em;
 		background-color: #111115;
 		text-align: center;
 		margin: 1em;
+		width: 15em;
     }
+	.climb, .notes {
+		height: 15em;
+	}
 	h2 {
 		color: white;
-		font-size: 3em;
-		font-weight: 500;
+		font-size: 2em;
+		font-weight: 600;
 		text-align: center;
 	}
 
@@ -57,15 +61,20 @@
 	}
 
 	select {
-		font-size: 2em;
-		width: 6em;
+		font-size: 1em;
+		width: 100%;
 		height: 2em;
 		background-color: rgb(33, 33, 33);
 		border-color: #ffffff;
 		border-width: 0.1em;
 		color: rgb(255, 255, 255);
 	}
-
+	img {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	}
 </style>
 
 <svelte:head>
@@ -89,29 +98,20 @@
 	<div class="climb">
 		<h2>Climb Level</h2>
 		<hr>
-		<select name="Comp" value={data.climb_level}>
+		<select name="climb" bind:value={data.climb_level}>
 			{#each climb as stage}
 				<option value={stage.amount}>{stage.name}</option>
 			{/each}
 		</select>
 	</div>
-	
-</div>
-<br>
 
-<div>
-<h3>Climb Level</h3>
-<select name="climb" bind:value={data.climb_level}>
-    {#each climb as stage}
-        <option value={stage.amount}>{stage.name}</option>
-    {/each}
-</select>
-</div>
-<br>
-<div>
-    <h3>Notes</h3>
-    <textarea bind:value={data.notes}></textarea>
+	<div class="notes">
+		<h2>Notes</h2>
+		<hr>
+		<textarea bind:value={data.notes}></textarea>
+	</div>
 </div>
 
 
-<button on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}}>submit</button>
+
+<img on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}} src={submit} alt="bruh">

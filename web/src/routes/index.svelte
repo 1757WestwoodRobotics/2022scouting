@@ -27,7 +27,7 @@
 		margin: 1em auto;
 	}
 
-	@media (min-width: 480px) {
+	@media (min-width: 560px) {
 		h1 {
 			font-size: 4em;
 		}
@@ -65,13 +65,13 @@
 
 <div>
 	<h1>Select Competition</h1>
-
-<figure>
-    <select name="Comp" bind:value={selected}>
-        {#each competitions as comp}
-            <option value={comp}>{comp.name}</option>
-        {/each}
-    </select>
-    <p> selected {selected.id}</p>
-
-
+	<hr>
+	<figure>
+		<select name="Comp" bind:value={selected}>
+			{#each competitions as comp}
+				<option value={comp}>{comp.name}</option>
+			{/each}
+		</select>
+		<p> selected {selected.id}</p>
+	</figure>
+</div>
