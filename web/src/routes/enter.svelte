@@ -27,54 +27,66 @@
 </script>
 
 <style>
-    div {
+    div .auto, .teleop, .climb{
 		vertical-align: center;
         border: 1em solid rgb(22, 22, 22);
         padding: 1em;
 		background-color: #111115;
 		text-align: center;
-		width: 25em;
-		margin: auto;
+		margin: 1em;
     }
 	h2 {
 		color: white;
 		font-size: 3em;
 		font-weight: 500;
+		text-align: center;
 	}
 
 	hr {
 		border: 0.5em solid rgb(156, 255, 44);
 		margin-bottom: 2em;
 	}
+	.container-1 {
+		display: flex;
+		flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+	}
+
 </style>
 
 <svelte:head>
 	<title>Enter Match Data</title>
 </svelte:head>
-
-<div>
-    <h2>Auto</h2>
-	<hr>
-    <Counter bind:value={data.auto_cargo.upper} name="Upper"/>
-    <Counter bind:value={data.auto_cargo.lower} name="Lower"/>
-    <Counter bind:value={data.auto_cargo.miss} name="Miss"/>
+<div class="container-1">
+	<div class="auto">
+		<h2>Auto</h2>
+		<hr>
+		<Counter bind:value={data.auto_cargo.upper} name="Upper"/>
+		<Counter bind:value={data.auto_cargo.lower} name="Lower"/>
+		<Counter bind:value={data.auto_cargo.miss} name="Miss"/>
+	</div>
+	<div class="teleop">
+		<h2>Teleop</h2>
+		<hr>
+		<Counter bind:value={data.teleop_cargo.upper} name="Upper"/>
+		<Counter bind:value={data.teleop_cargo.lower} name="Lower"/>
+		<Counter bind:value={data.teleop_cargo.miss} name="Miss"/>
+	</div>
+	<div class="climb">
+		<h2>Climb Level</h2>
+		<hr>
+		<select name="Comp" value={data.climb_level}>
+			{#each climb as stage}
+				<option value={stage.amount}>{stage.name}</option>
+			{/each}
+		</select>
+	</div>
+	
 </div>
-<br>
-<div>
-    <h2>Teleop</h2>
-	<hr>
-    <Counter bind:value={data.teleop_cargo.upper} name="Upper"/>
-    <Counter bind:value={data.teleop_cargo.lower} name="Lower"/>
-    <Counter bind:value={data.teleop_cargo.miss} name="Miss"/>
-</div>
 
-<p>Climb Level</p>
-<select name="Comp" value={data.climb_level}>
-    {#each climb as stage}
-        <option value={stage.amount}>{stage.name}</option>
-    {/each}
-</select>
-<br>
+
 
 
 <button on:click={() => {console.log(data)}}>Log</button>

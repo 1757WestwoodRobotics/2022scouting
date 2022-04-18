@@ -16,12 +16,16 @@
 	}
 
 	:global(body) {
-		background-color: #212121;
+		background-color: #9d9d9d;
 	}
 
 	:global(select, option) {
 		font-family: Verdana;
 		text-align: center;
+	}
+
+	:global(.wrapper) {
+		width: 100%;
 	}
 </style>
 <Title/>

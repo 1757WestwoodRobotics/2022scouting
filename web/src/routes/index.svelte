@@ -40,7 +40,7 @@
 <svelte:head>
 	<title>1757 Scouting Database</title>
 </svelte:head>
-
+<!-- 
 <h1>Select Competition</h1>
 
 <figure>
@@ -52,4 +52,4 @@
     <p> selected {selected.id}</p>
 
 </figure>
-
+ -->

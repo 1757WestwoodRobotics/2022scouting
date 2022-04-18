@@ -26,6 +26,7 @@
 		display: block;
 		float: left;
 		color: rgb(217, 255, 215);
+		font-size: 1.5em;
 	}
 
 	[aria-current] {
