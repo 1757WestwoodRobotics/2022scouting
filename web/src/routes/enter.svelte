@@ -27,7 +27,7 @@
 </script>
 
 <style>
-    div .auto, .teleop, .climb, .notes{
+    div .auto, .teleop, .climb, .notes, .info{
 		vertical-align: center;
         border: 1em solid rgb(22, 22, 22);
         padding: 1em;
@@ -39,13 +39,19 @@
 	.climb, .notes {
 		height: 15em;
 	}
+	.info {
+		width: 36em;
+	}
 	h2 {
 		color: white;
 		font-size: 2em;
 		font-weight: 600;
 		text-align: center;
 	}
-
+	span {
+		color: white;
+		font-size: 1.2em;
+	}
 	hr {
 		background-color:  rgb(156, 255, 44);
 		border: none;
@@ -68,12 +74,22 @@
 		border-color: #ffffff;
 		border-width: 0.1em;
 		color: rgb(255, 255, 255);
+		margin-bottom: 1em;
 	}
 	img {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
-		width: 50%;
+		width: 35%;
+	}
+	input {
+		width: 3em;
+	}
+	textarea, input {
+		background-color: rgb(49, 49, 49);
+		color:rgb(255, 255, 255);
+		border: 2px;
+		border-color: white;
 	}
 </style>
 
@@ -81,6 +97,23 @@
 	<title>Enter Match Data</title>
 </svelte:head>
 <div class="container-1">
+	<div class="info">
+		<h2>Match Info</h2>
+		<hr>
+		<select name="Comp" bind:value={data.identifier.comp}>
+			{#each competitions as comp}
+				<option value={comp.id}>{comp.name}</option>
+			{/each}
+		</select>
+		<select name="Type" bind:value={data.identifier.comp_level}>
+			{#each matchType as type}
+				<option value={type.id}>{type.name}</option>
+			{/each}
+		</select>
+		<span>Match Number: <input bind:value={data.identifier.match_number} type=number/></span>
+		<br>
+		<span>Team Number: <input bind:value={data.identifier.team} type=number/></span>
+	</div>
 	<div class="auto">
 		<h2>Auto</h2>
 		<hr>
