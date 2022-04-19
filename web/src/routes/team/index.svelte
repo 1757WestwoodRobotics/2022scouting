@@ -70,7 +70,6 @@
     <hr>
     <form on:submit|preventDefault={handleSubmit}>
         <input bind:value={teamNum}>
-        <img disabled={!teamNum} type="submit" src={submit} alt="bruh">
     </form>    
 </div>
 
