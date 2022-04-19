@@ -76,12 +76,6 @@
 		color: rgb(255, 255, 255);
 		margin-bottom: 1em;
 	}
-	img {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 35%;
-	}
 	input {
 		width: 3em;
 	}
@@ -90,6 +84,14 @@
 		color:rgb(255, 255, 255);
 		border: 2px;
 		border-color: white;
+	}
+	.submit{
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 35%;
+		background-color: rgb(0,0,0,0);
+		border: 0px;
 	}
 </style>
 
@@ -147,4 +149,4 @@
 
 
 
-<img on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}} src={submit} alt="bruh">
+<input class="submit" type="image" on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}} src={submit} alt="bruh"/>
