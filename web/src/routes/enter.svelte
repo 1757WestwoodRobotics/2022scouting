@@ -2,6 +2,7 @@
 	import Counter from '../components/Counter.svelte';
 	import {competitions, climb, matchType, apiPort} from '../constants'
 	import submit from '../images/button-submit.svg';
+
 	let data = {
 	    identifier : {
             team: 0,
@@ -137,14 +138,13 @@
 			{/each}
 		</select>
 	</div>
-
 	<div class="notes">
 		<h2>Notes</h2>
 		<hr>
 		<textarea bind:value={data.notes}></textarea>
 	</div>
+  
 </div>
-
-
+<br>
 
 <img on:click={() => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}} src={submit} alt="bruh">
