@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Counter from '../components/Counter.svelte';
+	import Box from '../components/Box.svelte'
 	import {competitions, climb, matchType, apiPort} from '../constants'
 	import submit from '../images/button-submit.svg';
 
@@ -28,36 +29,9 @@
 </script>
 
 <style>
-    div .auto, .teleop, .climb, .notes, .info{
-		vertical-align: center;
-        border: 1em solid rgb(22, 22, 22);
-        padding: 1em;
-		background-color: #111115;
-		text-align: center;
-		margin: 1em;
-		width: 15em;
-    }
-	.climb, .notes {
-		height: 15em;
-	}
-	.info {
-		width: 36em;
-	}
-	h2 {
-		color: white;
-		font-size: 2em;
-		font-weight: 600;
-		text-align: center;
-	}
 	span {
 		color: white;
 		font-size: 1.2em;
-	}
-	hr {
-		background-color:  rgb(156, 255, 44);
-		border: none;
-		height: 0.4em;
-		margin-bottom: 2em;
 	}
 	.container-1 {
 		display: flex;
@@ -100,9 +74,7 @@
 	<title>Enter Match Data</title>
 </svelte:head>
 <div class="container-1">
-	<div class="info">
-		<h2>Match Info</h2>
-		<hr>
+	<Box --box-width=36em header="Match Info">
 		<select name="Comp" bind:value={data.identifier.comp}>
 			{#each competitions as comp}
 				<option value={comp.id}>{comp.name}</option>
@@ -116,35 +88,27 @@
 		<span>Match Number: <input bind:value={data.identifier.match_number} type=number/></span>
 		<br>
 		<span>Team Number: <input bind:value={data.identifier.team} type=number/></span>
-	</div>
-	<div class="auto">
-		<h2>Auto</h2>
-		<hr>
+	</Box>
+	<Box header="Auto">
 		<Counter bind:value={data.auto_cargo.upper} name="Upper"/>
 		<Counter bind:value={data.auto_cargo.lower} name="Lower"/>
 		<Counter bind:value={data.auto_cargo.miss} name="Miss"/>
-	</div>
-	<div class="teleop">
-		<h2>Teleop</h2>
-		<hr>
+	</Box>
+	<Box header="Teleop">
 		<Counter bind:value={data.teleop_cargo.upper} name="Upper"/>
 		<Counter bind:value={data.teleop_cargo.lower} name="Lower"/>
 		<Counter bind:value={data.teleop_cargo.miss} name="Miss"/>
-	</div>
-	<div class="climb">
-		<h2>Climb Level</h2>
-		<hr>
+	</Box>
+	<Box header="Climb Level">
 		<select name="climb" bind:value={data.climb_level}>
 			{#each climb as stage}
 				<option value={stage.amount}>{stage.name}</option>
 			{/each}
 		</select>
-	</div>
-	<div class="notes">
-		<h2>Notes</h2>
-		<hr>
+	</Box>
+	<Box header="Notes">
 		<textarea bind:value={data.notes}></textarea>
-	</div>
+	</Box>
   
 </div>
 <br>

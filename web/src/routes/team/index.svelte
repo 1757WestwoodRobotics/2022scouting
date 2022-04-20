@@ -1,9 +1,9 @@
 <script context="module" lang="ts">
+	import Box from '../../components/Box.svelte'
     let teamNum = 1757;
     const handleSubmit = () => {
         location.href += `/${teamNum}`
     }
-    import submit from "../../images/button-submit.svg"
 </script>
 
 <script lang="ts">
@@ -47,13 +47,6 @@
 		color: rgb(255, 255, 255);
         text-align: center;
 	}
-    button {
-        vertical-align: center;
-    }
-    img {
-        width: 10em;
-        margin-top: 1em;
-    }
 	hr {
 		background-color:  rgb(156, 255, 44);
 		border: none;
@@ -65,11 +58,9 @@
 <svelte:head>
 	<title>Teams</title>
 </svelte:head>
-<div>
-    <h1>Go to team</h1>
-    <hr>
+<Box title="Go to team" --box-width=auto>
     <form on:submit|preventDefault={handleSubmit}>
         <input bind:value={teamNum}>
     </form>    
-</div>
+</Box>
 
