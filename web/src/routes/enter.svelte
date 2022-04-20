@@ -76,11 +76,13 @@
 <div class="container-1">
 	<Box --box-width=36em header="Match Info">
 		<select name="Comp" bind:value={data.identifier.comp}>
+			<option value="" selected disabled>Select Competition</option>
 			{#each competitions as comp}
 				<option value={comp.id}>{comp.name}</option>
 			{/each}
 		</select>
 		<select name="Type" bind:value={data.identifier.comp_level}>
+			<option value="" selected disabled>Select Match Type</option>
 			{#each matchType as type}
 				<option value={type.id}>{type.name}</option>
 			{/each}

@@ -1,7 +1,7 @@
 <script>
     import {competitions} from '../constants'
 	import Box from '../components/Box.svelte'
-	let selected = competitions[0];
+	let selected = "";
 </script>
 
 <style>
@@ -37,6 +37,7 @@
 <Box title="Select Competition" --box-width=auto>
 	<figure>
 		<select name="Comp" bind:value={selected}>
+			<option value="" selected disabled>Select Competition</option>
 			{#each competitions as comp}
 				<option value={comp}>{comp.name}</option>
 			{/each}
