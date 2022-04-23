@@ -12,6 +12,7 @@ import {
   handleScoutUpload,
 } from "./scout";
 import { eventData, matchData, teamData } from "./tba";
+import { roundObject } from "./helperFuncs";
 
 type FullTeamData = {
   nickname: string;
@@ -101,12 +102,18 @@ const main = async () => {
         totalClimbPoints / (data.teleopPoints - data.teleopCargoPoints);
 
       // I hate this jank
-      const teamData = {
+      const teamData = roundObject({
+        totalAutoPoints,
+        totalTeleopPoints,
+        totalClimbPoints,
+        totalPointsByTeam,
+        autoCargo: entry.auto_cargo,
+        teleopCargo: entry.teleop_cargo,
         totalPercentContributionToAuto,
         totalPercentContributionToTeleop,
         totalPercentContributionToClimb,
         totalPercentContributionToMatch,
-      };
+      }, 3);
       let returnData: any = {};
       returnData[team] = teamData;
       return returnData;
@@ -126,13 +133,13 @@ const main = async () => {
       }
     );
 
-    let contributions: any = {};
-    (individualBlueData.concat(individualRedData)).forEach(
-      (teams: any) => (contributions = { ...contributions, ...teams })
-    );
+    let teamData: any = {};
+    individualBlueData
+      .concat(individualRedData)
+      .forEach((teams: any) => (teamData = { ...teamData, ...teams }));
 
     res.json({
-      contributions,
+      teamData,
       ...dat,
     });
   });

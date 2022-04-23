@@ -1,15 +1,17 @@
 <script context="module" lang="ts">
   import { apiPort } from "../../constants";
+  import TeamMatchInfo from "../../components/TeamMatchInfo.svelte";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
+    const [eventName, matchType, matchNum] = params.iden.split("_");
     const res = await this.fetch(
-      `http://localhost:${apiPort}/team/${params.team}`
+      `http://localhost:${apiPort}/match/${eventName}/${matchType}/${matchNum}`
     );
     const data = await res.json();
 
     if (res.status === 200) {
-      return { team: data };
+      return { match: data };
     } else {
       this.error(res.status, data.message);
     }
@@ -17,47 +19,28 @@
 </script>
 
 <script lang="ts">
-  export let team: {
-    nickname: string;
-    team_number: number;
-    city: string;
-    rookieYear: string;
-    avgTeleopCargo: number;
-    avgAutoCargo: number;
-    teleopConsistency: number;
-    autoConsistency: number;
-    highestClimb: number;
-    avgClimb: number;
-  };
+  export let match;
 </script>
 
 <svelte:head>
-  <title>{team.nickname}</title>
+  <title>{match.key}</title>
 </svelte:head>
 
-<h1>{team.nickname}</h1>
+<h1>{match.key}</h1>
 
 <div class="content">
-  {team.team_number}
-
-  <h4>Cargo Points: {Math.round(team.avgCargoPoints)}</h4>
-
-  <h3>
-    Teleop
-    <h3>
-      <h4>Consistency: {Math.round(team.teleopConsistency)}%</h4>
-      <h4>Cargo #: {Math.round(team.avgTeleopCargo)}</h4>
-
-      <h3>Auto</h3>
-
-      <h4>Consistency: {Math.round(team.autoConsistency)}%</h4>
-      <h4>Cargo #: {Math.round(team.avgAutoCargo)}</h4>
-
-      <h3>Climb</h3>
-      <h4>Highest Climb Amount: {team.highestClimb}</h4>
-      <h4>Avg Climb Points: {team.avgClimb}</h4>
-    </h3>
-  </h3>
+  <div>
+    <h3>Red Alliance</h3>
+    {#each match.alliances.red.team_keys as team}
+      <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />
+    {/each}
+  </div>
+  <div>
+    <h3>Blue Alliance</h3>
+    {#each match.alliances.blue.team_keys as team}
+      <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />
+    {/each}
+  </div>
 </div>
 
 <style>
