@@ -2,9 +2,12 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { ScoutingData } from "./scout";
 
+const {NODE_ENV} = process.env
+const dev = NODE_ENV === 'development'
+
 export const conn = new DataSource({
   type: "postgres",
-  host: "localhost",
+  host: dev ? "localhost" : "db",
   port: 5432,
   database: "frc2022",
   username: "postgres",
