@@ -13,4 +13,5 @@ RUN yarn build
 
 EXPOSE 1757
 
+ENV NODE_ENV=production
 CMD ["node", "dist/index.js"]
