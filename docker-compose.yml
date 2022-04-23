@@ -5,11 +5,15 @@ services:
     ports:
       - "8080:8080"
   server:
+    depends_on:
+      - db
     build: ./server
     ports:
       - "1757:1757"
 
   db:
+    ports:
+      - 5432:5432
     image: "postgres:alpine"
     environment:
       POSTGRES_PASSWORD: postgres

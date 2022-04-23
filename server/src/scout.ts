@@ -9,7 +9,7 @@ type CargoData = {
   miss: number;
 };
 
-enum ClimbLevel {
+export enum ClimbLevel {
   None = 0,
   Low = 4,
   Mid = 6,
@@ -177,7 +177,6 @@ export const handleScoutUpload = async (
   res: Response<any, any>
 ) => {
   let data = new ScoutingData();
-  console.log(req.body);
   let requ = req.body;
   if (
     requ.identifier.team != 0 &&
