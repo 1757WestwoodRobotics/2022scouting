@@ -98,17 +98,7 @@
   <textarea bind:value={data.notes} />
 </div>
 
-<button
-  on:click={() => {
-    fetch(`http://localhost:${apiPort}/scout/upload`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    }).then(() => {
-      alert("submitted");
-    });
-  }}>submit</button
->
+<button on:click={upload}>submit</button>
 
 <style>
   div {
