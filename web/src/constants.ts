@@ -1,8 +1,8 @@
 export const apiPort = 1757;
 export const competitions = [
-  { id: "mabos", name: "Revere" },
-  { id: "mawor", name: "WPI" },
-  { id: "necmp1", name: "NE District Championship (Calcium division)" },
+  { id: "mabos", name: "Revere [mabos]" },
+  { id: "mawor", name: "WPI [mawor]" },
+  { id: "necmp1", name: "NE District Championship Calcium Division [necmp1]" },
 ];
 export const climb = [
   { name: "None", amount: 0 },
