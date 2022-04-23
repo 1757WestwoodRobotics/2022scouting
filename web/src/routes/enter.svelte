@@ -23,7 +23,17 @@
 	    notes: ""
 	}
 
-	const upload = () => {fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {alert("submitted")})}
+	const upload = () => {
+	    fetch(`http://localhost:${apiPort}/scout/upload`, {method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'}}).then(() => {
+	        alert("submitted");
+	        data.identifier.team = 0 
+	        data.identifier.match_number = 0 
+	        data.auto_cargo = {upper: 0, lower: 0, miss: 0}
+	        data.teleop_cargo = {upper:0, lower:0, miss: 0}
+	        data.climb_level = 0 
+	        data.notes = ""
+	    })
+	}
 
 </script>
 

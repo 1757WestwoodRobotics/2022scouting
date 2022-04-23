@@ -62,4 +62,21 @@
 
 <div class="content">
     {team.team_number}
+
+            <h4>Cargo Points: {Math.round(team.avgCargoPoints)}</h4>
+
+    <h3>Teleop<h3>
+
+            <h4>Consistency: {Math.round(team.teleopConsistency)}%</h4>
+            <h4>Cargo #: {Math.round(team.avgTeleopCargo)}</h4>
+
+            <h3>Auto</h3>
+
+            <h4>Consistency: {Math.round(team.autoConsistency)}%</h4>
+            <h4>Cargo #: {Math.round(team.avgAutoCargo)}</h4>
+
+            <h3>Climb</h3>
+            <h4>Highest Climb Amount: {team.highestClimb}</h4>
+            <h4>Avg Climb Points: {team.avgClimb}</h4>
+
 </div>
