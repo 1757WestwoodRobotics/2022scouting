@@ -102,18 +102,21 @@ const main = async () => {
         totalClimbPoints / (data.teleopPoints - data.teleopCargoPoints);
 
       // I hate this jank
-      const teamData = roundObject({
-        totalAutoPoints,
-        totalTeleopPoints,
-        totalClimbPoints,
-        totalPointsByTeam,
-        autoCargo: entry.auto_cargo,
-        teleopCargo: entry.teleop_cargo,
-        totalPercentContributionToAuto,
-        totalPercentContributionToTeleop,
-        totalPercentContributionToClimb,
-        totalPercentContributionToMatch,
-      }, 3);
+      const teamData = roundObject(
+        {
+          totalAutoPoints,
+          totalTeleopPoints,
+          totalClimbPoints,
+          totalPointsByTeam,
+          autoCargo: entry.auto_cargo,
+          teleopCargo: entry.teleop_cargo,
+          totalPercentContributionToAuto,
+          totalPercentContributionToTeleop,
+          totalPercentContributionToClimb,
+          totalPercentContributionToMatch,
+        },
+        3
+      );
       let returnData: any = {};
       returnData[team] = teamData;
       return returnData;

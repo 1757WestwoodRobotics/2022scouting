@@ -15,6 +15,6 @@ function roundTo(n: number, digits: number) {
 
   var multiplicator = Math.pow(10, digits);
   n = parseFloat((n * multiplicator).toFixed(11));
-  var test =(Math.round(n) / multiplicator);
-  return +(test.toFixed(digits));
+  var test = Math.round(n) / multiplicator;
+  return +test.toFixed(digits);
 }

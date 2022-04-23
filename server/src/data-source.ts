@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { ScoutingData } from "./scout";
 
-const {NODE_ENV} = process.env
-const dev = NODE_ENV !== 'production';
+const { NODE_ENV } = process.env;
+const dev = NODE_ENV !== "production";
 
 export const conn = new DataSource({
   type: "postgres",
@@ -16,4 +16,3 @@ export const conn = new DataSource({
   synchronize: true,
   entities: [ScoutingData],
 });
-
