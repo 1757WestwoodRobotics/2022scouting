@@ -6,7 +6,7 @@ import { conn } from "./data-source";
 import bodyParser from "body-parser";
 import { handleScoutUpload } from "./scout";
 
-import cors from 'cors'
+import cors from "cors";
 
 const main = async () => {
   const app = express();

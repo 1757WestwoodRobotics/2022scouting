@@ -13,4 +13,3 @@ export const conn = new DataSource({
   synchronize: true,
   entities: [ScoutingData],
 });
-
