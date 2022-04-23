@@ -1,7 +1,7 @@
 <script lang="ts">
   import { competitions, apiPort } from "../constants";
+  import Box from "../components/Box.svelte";
 
-  let selected = competitions[0];
 
   let teamData = [];
 
@@ -17,6 +17,8 @@
   const updateData = () => {
     promise = fetchData();
   };
+
+  let selected = "";
 </script>
 
 <svelte:head>
@@ -25,14 +27,17 @@
 
 <h1>FRC 2022 Scouting Area</h1>
 
-<figure>
-  <select name="Comp" bind:value={selected} on:change={updateData}>
-    {#each competitions as comp}
-      <option value={comp}>{comp.name}</option>
-    {/each}
-  </select>
-  <p>selected {selected.id}</p>
-</figure>
+<Box title="Select Competition" --box-width="auto">
+  <figure>
+      <select name="Comp" bind:value={selected} on:change={updateData}>
+      <option value="" selected disabled>Select Competition</option>
+      {#each competitions as comp}
+        <option value={comp}>{comp.name}</option>
+      {/each}
+    </select>
+    <p>selected {selected.id}</p>
+  </figure>
+</Box>
 
 {#await promise}
   <p>fecthing...</p>
@@ -74,31 +79,28 @@
 {/await}
 
 <style>
-  h1,
   figure,
   p {
+    font-family: Trebuchet MS;
     text-align: center;
     margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    text-transform: uppercase;
+    color: #ffffff;
     font-weight: 700;
-    margin: 0 0 0.5em 0;
   }
 
   figure {
     margin: 0 0 1em 0;
   }
-
   p {
     margin: 1em auto;
   }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 4em;
-    }
+  select {
+    font-size: 1em;
+    width: 100%;
+    height: 2em;
+    background-color: rgb(33, 33, 33);
+    border-color: #ffffff;
+    border-width: 0.1em;
+    color: rgb(255, 255, 255);
   }
 </style>
