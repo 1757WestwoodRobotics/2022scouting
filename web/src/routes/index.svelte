@@ -29,7 +29,7 @@
 
 <Box title="Select Competition" --box-width="auto">
   <figure>
-    <select name="Comp" bind:value={selected}>
+      <select name="Comp" bind:value={selected} on:change={updateData}>
       <option value="" selected disabled>Select Competition</option>
       {#each competitions as comp}
         <option value={comp}>{comp.name}</option>
