@@ -196,3 +196,23 @@ export const handleScoutUpload = async (
   }
   res.send("OK");
 };
+
+export const filterDataByMatch = async (
+  event: string,
+  level: string,
+  matchNum: number
+) => {
+  let dataRepo = conn.getRepository(ScoutingData);
+
+  let dat = await dataRepo
+    .createQueryBuilder("data")
+    .where("data.identifier->>'comp' = :event", {
+      event,
+    })
+    .andWhere("data.identifier->>'comp_level' = :level", { level })
+    .andWhere("data.identifier->>'match_number' = :matchNum", { matchNum })
+    .getMany();
+
+  return dat;
+};
+

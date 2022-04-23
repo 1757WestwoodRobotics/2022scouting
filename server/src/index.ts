@@ -1,12 +1,17 @@
-import express from "express";
 import "dotenv/config";
 
-import { teamData, matchData, eventData } from "./tba";
-import { conn } from "./data-source";
 import bodyParser from "body-parser";
-import { ClimbLevel, dbTeamData, handleScoutUpload } from "./scout";
-
 import cors from "cors";
+import express from "express";
+
+import { conn } from "./data-source";
+import {
+  ClimbLevel,
+  dbTeamData,
+  filterDataByMatch,
+  handleScoutUpload,
+} from "./scout";
+import { eventData, matchData, teamData } from "./tba";
 
 type FullTeamData = {
   nickname: string;
@@ -66,7 +71,70 @@ const main = async () => {
   app.get("/match/:event/:type/:matchNum", async (req, res) => {
     const { event, type, matchNum } = req.params;
     const dat = await matchData(event, type, matchNum as unknown as number);
-    res.json(dat);
+    const dbDat = await filterDataByMatch(
+      event,
+      type,
+      matchNum as unknown as number
+    );
+    console.log(dbDat);
+    // woohoo complex match to determine contributions!
+    const mapTeamPercentContribution = (team: number, data: any) => {
+      const entry = dbDat.filter((entry) => entry.identifier.team == team)[0];
+      if (typeof entry === "undefined") {
+        return undefined;
+      }
+
+      const totalAutoPoints =
+        entry.auto_cargo.lower * 2 + entry.auto_cargo.upper * 4;
+      const totalTeleopPoints =
+        entry.teleop_cargo.upper * 2 + entry.teleop_cargo.lower;
+      const totalClimbPoints = entry.climb_level;
+      const totalPointsByTeam =
+        totalAutoPoints + totalTeleopPoints + totalClimbPoints;
+
+      const totalPercentContributionToMatch =
+        totalPointsByTeam / data.totalPoints;
+      const totalPercentContributionToAuto = totalAutoPoints / data.autoPoints;
+      const totalPercentContributionToTeleop =
+        totalTeleopPoints / data.teleopCargoPoints;
+      const totalPercentContributionToClimb =
+        totalClimbPoints / (data.teleopPoints - data.teleopCargoPoints);
+
+      // I hate this jank
+      const teamData = {
+        totalPercentContributionToAuto,
+        totalPercentContributionToTeleop,
+        totalPercentContributionToClimb,
+        totalPercentContributionToMatch,
+      };
+      let returnData: any = {};
+      returnData[team] = teamData;
+      return returnData;
+    };
+
+    const individualBlueData = dat.alliances.blue.team_keys.map(
+      (teamIden: string) => {
+        let team = parseInt(teamIden.substring(3));
+        return mapTeamPercentContribution(team, dat.score_breakdown.blue);
+      }
+    );
+
+    const individualRedData = dat.alliances.red.team_keys.map(
+      (teamIden: string) => {
+        let team = parseInt(teamIden.substring(3));
+        return mapTeamPercentContribution(team, dat.score_breakdown.red);
+      }
+    );
+
+    let contributions: any = {};
+    (individualBlueData.concat(individualRedData)).forEach(
+      (teams: any) => (contributions = { ...contributions, ...teams })
+    );
+
+    res.json({
+      contributions,
+      ...dat,
+    });
   });
 
   app.get("/event/:event", async (req, res) => {
@@ -75,12 +143,14 @@ const main = async () => {
       (team: any) => team.team_number
     );
 
-        const teamPromises = eventTeams.map(async (team) => (await teamFullData(team)))
+    const teamPromises = eventTeams.map(
+      async (team) => await teamFullData(team)
+    );
 
-        const teamData: FullTeamData[] = []
-        for(let i = 0; i<teamPromises.length; i++){
-            teamData[i] = await teamPromises[i]
-        }
+    const teamData: FullTeamData[] = [];
+    for (let i = 0; i < teamPromises.length; i++) {
+      teamData[i] = await teamPromises[i];
+    }
 
     res.json(teamData);
   });
