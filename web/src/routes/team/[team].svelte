@@ -15,7 +15,7 @@
 </script>
 
 <script lang="ts">
-	export let team: { nickname: string; team_number: number; website: string; coutry: string; city: string; state_prov: string; school_name: string; };
+	export let team: { nickname: string; team_number: number; city: string; rookieYear: string; avgTeleopCargo: number, avgAutoCargo: number, teleopConsistency: number, autoConsistency: number, highestClimb: number, avgClimb: number };
 </script>
 
 <style>

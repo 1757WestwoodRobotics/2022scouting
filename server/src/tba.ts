@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-const api_key = process.env.TBA_KEY;
+const api_key = process.env.TBA_KEY as string;
 
 export const teamData = async (team: number) => {
   const team_key = "frc" + team;
@@ -21,7 +21,7 @@ export const matchData = async (
 
   const url = `https://www.thebluealliance.com/api/v3/match/${match_id}`;
 
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
+  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key} });
   let data = await response.json();
   console.log(data);
   return data;

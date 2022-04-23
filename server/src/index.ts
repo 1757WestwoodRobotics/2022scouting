@@ -4,9 +4,9 @@ import "dotenv/config";
 import { teamData, matchData } from "./tba";
 import { conn } from "./data-source";
 import bodyParser from "body-parser";
-import { handleScoutUpload } from "./scout";
+import { dbTeamData, handleScoutUpload } from "./scout";
 
-import cors from 'cors'
+import cors from "cors";
 
 const main = async () => {
   const app = express();
@@ -23,14 +23,17 @@ const main = async () => {
   });
   app.use(bodyParser.json());
 
-  app.get("/", (req, res) => {
+  app.get("/", (_, res) => {
     res.send("You weren't supposed to see this!");
   });
 
   app.get("/team/:team", async (req, res) => {
-    const dat = await teamData(req.params.team as unknown as number);
-    console.log(dat);
-    res.json(dat);
+    const teamNum = req.params.team as unknown as number;
+    const teamDat = await teamData(teamNum);
+    const dbDat = await dbTeamData(teamNum);
+
+    const fullData = {nickname: teamDat.nickname, team_number: teamDat.team_number, rookieYear: teamDat.rookie_year, city: teamDat.city, ...dbDat};
+    res.json(fullData);
   });
 
   app.get("/match/:event/:type/:matchNum", async (req, res) => {

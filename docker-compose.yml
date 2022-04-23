@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    build: ./web 
+    ports:
+      - "8080:8080"
+  server:
+    build: ./server
+    ports:
+      - "1757:1757"
+
+  db:
+    image: "postgres:alpine"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "frc2022"
