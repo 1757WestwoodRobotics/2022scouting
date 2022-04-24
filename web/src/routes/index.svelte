@@ -24,6 +24,50 @@
     const green = 255 * Math.sin(interVal);
     return `background-color: rgb(${red}, ${green}, 0); color: black;`;
   };
+
+  const sortingMethods = [
+    {
+      name: "number",
+      fn: (team1, team2) => team1.team_number - team2.team_number,
+    },
+    {
+      name: "teleop cargo",
+      fn: (team1, team2) => team2.avgTeleopCargo - team1.avgTeleopCargo,
+    },
+    {
+      name: "auto cargo",
+      fn: (team1, team2) => team2.avgAutoCargo - team1.avgAutoCargo,
+    },
+    {
+      name: "teleop %",
+      fn: (team1, team2) => team2.teleopConsistency - team1.teleopConsistency,
+    },
+    {
+      name: "auto %",
+      fn: (team1, team2) => team2.autoConsistency - team1.autoConsistency,
+    },
+    {
+      name: "capable climb",
+      fn: (team1, team2) => team2.highestClimb - team1.highestClimb,
+    },
+    {
+      name: "avg climb",
+      fn: (team1, team2) => team2.avgClimb - team1.avgClimb,
+    },
+    {
+      name: "avg upper",
+      fn: (team1, team2) => team2.avgUpperCargo - team1.avgUpperCargo,
+    },
+    {
+      name: "avg lower",
+      fn: (team1, team2) => team2.avgLowerCargo - team1.avgLowerCargo,
+    },
+    {
+      name: "avg cargo points",
+      fn: (team1, team2) => team2.avgCargoPoints - team1.avgCargoPoints,
+    },
+  ];
+  let sortingFunction = sortingMethods[0].fn;
 </script>
 
 <svelte:head>
@@ -36,6 +80,12 @@
       <option value="" selected disabled>Select Competition</option>
       {#each competitions as comp}
         <option value={comp}>{comp.name}</option>
+      {/each}
+    </select>
+    <select name="Comp" bind:value={sortingFunction}>
+      <option value="" selected disabled>Select Sorting Method</option>
+      {#each sortingMethods as method}
+        <option value={method.fn}>{method.name}</option>
       {/each}
     </select>
   </figure>
@@ -61,7 +111,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each data as team}
+      {#each data.sort(sortingFunction) as team}
         <tr>
           <a href="team/{team.team_number}">
             <th>{team.nickname}</th>
