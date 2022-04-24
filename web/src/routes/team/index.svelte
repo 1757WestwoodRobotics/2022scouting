@@ -6,10 +6,6 @@
   };
 </script>
 
-<script lang="ts">
-  export let posts: { slug: string; title: string; html: any }[];
-</script>
-
 <svelte:head>
   <title>Teams</title>
 </svelte:head>

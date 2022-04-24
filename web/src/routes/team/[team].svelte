@@ -14,8 +14,6 @@
       this.error(res.status, data.message);
     }
   }
-
-  let selectedComp;
 </script>
 
 <script lang="ts">
@@ -33,7 +31,8 @@
     highestClimb: number;
     avgClimb: number;
   };
-  let promise = Promise.resolve({});
+
+  let selectedComp;
 
   const fetchMatches = async () => {
     const res = await self.fetch(
@@ -41,6 +40,8 @@
     );
     return res.json();
   };
+
+  let promise = Promise.resolve([]);
 
   const updateMatches = () => {
     promise = fetchMatches();
