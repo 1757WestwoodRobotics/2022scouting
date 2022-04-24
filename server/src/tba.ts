@@ -25,9 +25,9 @@ export const teamData = async (team: number) => {
 export const teamMatches = async (team: number, event: string) => {
   const team_key = "frc" + team;
   const event_id = process.env.YEAR + event;
-  if (typeof teamMatchCache[team_key] !== "undefined") {
+  if (typeof teamMatchCache[team_key+event_id] !== "undefined") {
     console.log(`using cache for team ${team}, event ${event}`);
-    return teamMatchCache[team_key];
+    return teamMatchCache[team_key+event_id];
   }
   const url = `https://www.thebluealliance.com/api/v3/team/${team_key}/event/${event_id}/matches/simple`;
 

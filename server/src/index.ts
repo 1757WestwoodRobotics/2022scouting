@@ -136,6 +136,7 @@ const main = async () => {
           totalPercentContributionToTeleop,
           totalPercentContributionToClimb,
           totalPercentContributionToMatch,
+          notes: entry.notes,
         },
         3
       );

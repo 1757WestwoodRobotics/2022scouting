@@ -84,6 +84,7 @@
         5}% of the cargo RP and {(matchData[team].totalClimbPoints / 16) * 100}%
       of the climb RP
     </p>
+    <p>Scout notes:<br />{matchData[team].notes}</p>
   {/if}
 </div>
 
