@@ -161,6 +161,7 @@ const main = async () => {
     for (let i = 0; i < teamPromises.length; i++) {
       teamData[i] = await teamPromises[i];
     }
+    teamData.sort((a,b) => a.team_number - b.team_number)
 
     res.json(teamData);
   });
