@@ -27,10 +27,12 @@
   <title>{match.key}</title>
 </svelte:head>
 
-<h1>{match.key}</h1>
-<a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
-  >Scout this match</a
->
+<div class="header">
+  <h1>{match.key}</h1>
+  <a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
+    >Scout this match</a
+  >
+</div>
 
 <div class="content">
   <div>
@@ -67,6 +69,17 @@
     padding: 0.5em;
     border-radius: 2px;
     overflow-x: auto;
+  }
+  .header {
+    font-family: Trebuchet MS;
+    color: #fff;
+  }
+
+  .content {
+    font-family: Trebuchet MS;
+    margin: 0 auto;
+    color: #ffffff;
+    font-weight: 700;
   }
 
   .content :global(pre) :global(code) {

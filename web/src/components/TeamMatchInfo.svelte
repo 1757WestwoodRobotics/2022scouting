@@ -1,6 +1,10 @@
 <script>
   export let team = 1757;
   export let matchData = {};
+
+  const limitSigfigs = (num) => {
+    return num.toString().slice(0, 4);
+  };
 </script>
 
 <div>
@@ -21,17 +25,33 @@
       <tbody>
         <tr>
           <th>Contribution</th>
-          <th>{matchData[team].totalPercentContributionToMatch * 100}%</th>
-          <th>{matchData[team].totalPercentContributionToAuto * 100}%</th>
-          <th>{matchData[team].totalPercentContributionToTeleop * 100}%</th>
-          <th>{matchData[team].totalPercentContributionToClimb * 100}%</th>
+          <th
+            >{limitSigfigs(
+              matchData[team].totalPercentContributionToMatch * 100
+            )}%</th
+          >
+          <th
+            >{limitSigfigs(
+              matchData[team].totalPercentContributionToAuto * 100
+            )}%</th
+          >
+          <th
+            >{limitSigfigs(
+              matchData[team].totalPercentContributionToTeleop * 100
+            )}%</th
+          >
+          <th
+            >{limitSigfigs(
+              matchData[team].totalPercentContributionToClimb * 100
+            )}%</th
+          >
         </tr>
         <tr>
           <th>Raw Points</th>
-          <th>{matchData[team].totalPointsByTeam}</th>
-          <th>{matchData[team].totalAutoPoints}</th>
-          <th>{matchData[team].totalTeleopPoints}</th>
-          <th>{matchData[team].totalClimbPoints}</th>
+          <th>{limitSigfigs(matchData[team].totalPointsByTeam)}</th>
+          <th>{limitSigfigs(matchData[team].totalAutoPoints)}</th>
+          <th>{limitSigfigs(matchData[team].totalTeleopPoints)}</th>
+          <th>{limitSigfigs(matchData[team].totalClimbPoints)}</th>
         </tr>
       </tbody>
     </table>
@@ -47,15 +67,15 @@
       <tbody>
         <tr>
           <th>Auto</th>
-          <th>{matchData[team].autoCargo.miss}</th>
-          <th>{matchData[team].autoCargo.upper}</th>
-          <th>{matchData[team].autoCargo.lower}</th>
+          <th>{limitSigfigs(matchData[team].autoCargo.miss)}</th>
+          <th>{limitSigfigs(matchData[team].autoCargo.upper)}</th>
+          <th>{limitSigfigs(matchData[team].autoCargo.lower)}</th>
         </tr>
         <tr>
           <th>Teleop</th>
-          <th>{matchData[team].teleopCargo.miss}</th>
-          <th>{matchData[team].teleopCargo.upper}</th>
-          <th>{matchData[team].teleopCargo.lower}</th>
+          <th>{limitSigfigs(matchData[team].teleopCargo.miss)}</th>
+          <th>{limitSigfigs(matchData[team].teleopCargo.upper)}</th>
+          <th>{limitSigfigs(matchData[team].teleopCargo.lower)}</th>
         </tr>
       </tbody>
     </table>

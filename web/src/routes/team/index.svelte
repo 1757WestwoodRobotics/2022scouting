@@ -16,6 +16,7 @@
 <Box title="Go to team" --box-width="auto">
   <form on:submit|preventDefault={handleSubmit}>
     <input bind:value={teamNum} />
+    <input type="submit" />
   </form>
 </Box>
 
