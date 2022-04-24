@@ -82,6 +82,8 @@
     margin: 0 auto;
     color: #ffffff;
     font-weight: 700;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .content :global(pre) :global(code) {
