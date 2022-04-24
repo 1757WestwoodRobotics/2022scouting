@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv-safe/config";
 
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -57,7 +57,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: "http://127.0.0.1:8080",
+      origin: process.env.FRONTEND_URL || "http://127.0.0.1:8080",
       credentials: true,
     })
   );
