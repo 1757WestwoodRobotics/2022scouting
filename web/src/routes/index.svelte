@@ -79,6 +79,19 @@
 {/await}
 
 <style>
+  a {
+    display: contents;
+  }
+  a th {
+    text-decoration: underline;
+  }
+  tr {
+    border-bottom: #aaa 0.2em solid;
+  }
+  table {
+    border-collapse: collapse;
+    color: #fff;
+  }
   figure,
   p {
     font-family: Trebuchet MS;
