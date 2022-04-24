@@ -57,8 +57,12 @@
     <tbody>
       {#each data as team}
         <tr>
-          <th>{team.nickname}</th>
-          <th>{team.team_number}</th>
+          <a href="team/{team.team_number}">
+            <th>{team.nickname}</th>
+          </a>
+          <a href="team/{team.team_number}">
+            <th>{team.team_number}</th>
+          </a>
           <th>{team.avgTeleopCargo}</th>
           <th>{team.avgAutoCargo}</th>
           <th>{team.teleopConsistency}</th>

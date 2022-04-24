@@ -8,7 +8,7 @@
 </script>
 
 <div>
-  <h4>{team}</h4>
+  <h2><a href="../team/{team}">{team}</a></h2>
   {#if typeof matchData[team] === "undefined"}
     <p>No Data for this match on this team</p>
   {:else}
