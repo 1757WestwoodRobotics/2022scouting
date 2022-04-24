@@ -1,3 +1,34 @@
+<script lang="ts" context="module">
+  export const preload = async ({ query }) => {
+    let [comp, comp_level, match_number] = ["", "", 0];
+    if (typeof query["m"] !== "undefined") {
+      [comp, comp_level, match_number] = query["m"].split("_");
+    }
+    return {
+      data: {
+        identifier: {
+          team: 0,
+          comp,
+          comp_level,
+          match_number,
+        },
+        auto_cargo: {
+          upper: 0,
+          lower: 0,
+          miss: 0,
+        },
+        teleop_cargo: {
+          upper: 0,
+          lower: 0,
+          miss: 0,
+        },
+        climb_level: 0,
+        notes: "",
+      },
+    };
+  };
+</script>
+
 <script lang="ts">
   import Counter from "../components/Counter.svelte";
   import Box from "../components/Box.svelte";
@@ -6,26 +37,7 @@
 
   let possibleTeams = [0];
 
-  let data = {
-    identifier: {
-      team: 0,
-      comp: "",
-      comp_level: "",
-      match_number: 0,
-    },
-    auto_cargo: {
-      upper: 0,
-      lower: 0,
-      miss: 0,
-    },
-    teleop_cargo: {
-      upper: 0,
-      lower: 0,
-      miss: 0,
-    },
-    climb_level: 0,
-    notes: "",
-  };
+  export let data;
 
   const upload = () => {
     fetch(`http://localhost:${apiPort}/scout/upload`, {
@@ -111,13 +123,7 @@
 </div>
 <br />
 
-<input
-  class="submit"
-  type="image"
-  on:click={upload}
-  src={submit}
-  alt="bruh"
-/>
+<input class="submit" type="image" on:click={upload} src={submit} alt="bruh" />
 
 <style>
   span {

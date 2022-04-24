@@ -11,7 +11,7 @@
     const data = await res.json();
 
     if (res.status === 200) {
-      return { match: data };
+      return { match: data, matchInfo: [eventName, matchType, matchNum] };
     } else {
       this.error(res.status, data.message);
     }
@@ -20,6 +20,7 @@
 
 <script lang="ts">
   export let match;
+  export let matchInfo;
 </script>
 
 <svelte:head>
@@ -27,6 +28,9 @@
 </svelte:head>
 
 <h1>{match.key}</h1>
+<a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
+  >Scout this match</a
+>
 
 <div class="content">
   <div>
