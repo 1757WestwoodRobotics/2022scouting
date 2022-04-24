@@ -32,7 +32,6 @@
         <option value={comp}>{comp.name}</option>
       {/each}
     </select>
-    <p>selected {selected.id}</p>
   </figure>
 </Box>
 
