@@ -17,3 +17,10 @@ export const matchType = [
   { name: "Semifinal", id: "sf" },
   { name: "Final", id: "f" },
 ];
+
+export const limitSigfigs = (num) => {
+  if (num === null|| num === undefined) {
+    return null;
+  }
+  return num.toString().slice(0, 4);
+};

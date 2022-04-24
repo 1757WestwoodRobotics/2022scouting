@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import { apiPort, competitions } from "../../constants";
+  import { apiPort, competitions, limitSigfigs } from "../../constants";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
@@ -55,21 +55,30 @@
 
 <div class="content">
   {team.team_number}
+  <br />
+  <hr />
+  Team averages:
+  <h4>Cargo Points: {limitSigfigs(team.avgCargoPoints)}</h4>
+  <div class="avgContainer">
+    <div class="avgContent">
+      <h3>Teleop</h3>
+      <h4>Consistency: {limitSigfigs(team.teleopConsistency)}%</h4>
+      <h4>Cargo #: {limitSigfigs(team.avgTeleopCargo)}</h4>
+    </div>
 
-  <h4>Cargo Points: {Math.round(team.avgCargoPoints)}</h4>
+    <div class="avgContent">
+      <h3>Auto</h3>
 
-  <h3>Teleop</h3>
-  <h4>Consistency: {Math.round(team.teleopConsistency)}%</h4>
-  <h4>Cargo #: {Math.round(team.avgTeleopCargo)}</h4>
+      <h4>Consistency: {limitSigfigs(team.autoConsistency)}%</h4>
+      <h4>Cargo #: {limitSigfigs(team.avgAutoCargo)}</h4>
+    </div>
 
-  <h3>Auto</h3>
-
-  <h4>Consistency: {Math.round(team.autoConsistency)}%</h4>
-  <h4>Cargo #: {Math.round(team.avgAutoCargo)}</h4>
-
-  <h3>Climb</h3>
-  <h4>Highest Climb Amount: {team.highestClimb}</h4>
-  <h4>Avg Climb Points: {team.avgClimb}</h4>
+    <div class="avgContent">
+      <h3>Climb</h3>
+      <h4>Highest Climb Amount: {team.highestClimb}</h4>
+      <h4>Avg Climb Points: {team.avgClimb}</h4>
+    </div>
+  </div>
 
   <select name="Comp" bind:value={selectedComp} on:change={updateMatches}>
     <option value="" selected disabled>Select Competition</option>
@@ -131,15 +140,19 @@
 		so we have to use the :global(...) modifier to target
 		all elements inside .content
 	*/
-  #matchContainer {
+  #matchContainer,
+  .avgContainer {
     display: flex;
     flex-wrap: wrap;
     color: #fff;
     justify-content: space-evenly;
   }
-  .matchData {
+  .matchData,
+  .avgContent {
     flex-grow: 1;
-    border: 2px solid black;
+    border: 2px solid #aaa;
+    padding: 0.1em;
+    margin: 0.1em;
   }
   .content :global(h2) {
     font-size: 1.4em;

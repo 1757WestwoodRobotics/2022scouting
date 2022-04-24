@@ -1,10 +1,7 @@
 <script>
+  import { limitSigfigs } from "../constants";
   export let team = 1757;
   export let matchData = {};
-
-  const limitSigfigs = (num) => {
-    return num.toString().slice(0, 4);
-  };
 </script>
 
 <div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { competitions, apiPort } from "../constants";
+  import { competitions, apiPort, limitSigfigs } from "../constants";
   import Box from "../components/Box.svelte";
 
   let teamData = [];
@@ -63,15 +63,15 @@
           <a href="team/{team.team_number}">
             <th>{team.team_number}</th>
           </a>
-          <th>{team.avgTeleopCargo}</th>
-          <th>{team.avgAutoCargo}</th>
-          <th>{team.teleopConsistency}</th>
-          <th>{team.autoConsistency}</th>
-          <th>{team.highestClimb}</th>
-          <th>{team.avgClimb}</th>
-          <th>{team.avgUpperCargo}</th>
-          <th>{team.avgLowerCargo}</th>
-          <th>{team.avgCargoPoints}</th>
+          <th>{limitSigfigs(team.avgTeleopCargo)}</th>
+          <th>{limitSigfigs(team.avgAutoCargo)}</th>
+          <th>{limitSigfigs(team.teleopConsistency)}</th>
+          <th>{limitSigfigs(team.autoConsistency)}</th>
+          <th>{limitSigfigs(team.highestClimb)}</th>
+          <th>{limitSigfigs(team.avgClimb)}</th>
+          <th>{limitSigfigs(team.avgUpperCargo)}</th>
+          <th>{limitSigfigs(team.avgLowerCargo)}</th>
+          <th>{limitSigfigs(team.avgCargoPoints)}</th>
         </tr>
       {/each}
     </tbody>
