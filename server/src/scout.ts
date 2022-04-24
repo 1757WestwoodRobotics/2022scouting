@@ -70,6 +70,27 @@ export type TeamStats = {
   avgCargoPoints: number;
 };
 
+export const dbTeamMatchData = async (
+  team: number,
+  event: string,
+  matchType: string,
+  matchNum: number
+) => {
+  const dataRepo = conn.getRepository(ScoutingData);
+
+  let dat = await dataRepo
+    .createQueryBuilder("data")
+    .where("data.identifier->>'team' = :team", {
+      team,
+    })
+    .andWhere("data.identifier->>'comp' = :event", { event })
+    .andWhere("data.identifier->>'comp_level' = :matchType", { matchType })
+    .andWhere("data.identifier->>'match_number' = :matchNum", { matchNum })
+    .getOne();
+
+  return dat;
+};
+
 export const dbTeamData = async (team: number): Promise<TeamStats> => {
   const dataRepo = conn.getRepository(ScoutingData);
 

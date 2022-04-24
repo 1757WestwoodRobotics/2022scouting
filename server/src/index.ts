@@ -5,14 +5,15 @@ import cors from "cors";
 import express from "express";
 
 import { conn } from "./data-source";
+import { roundObject } from "./helperFuncs";
 import {
   ClimbLevel,
   dbTeamData,
+  dbTeamMatchData,
   filterDataByMatch,
   handleScoutUpload,
 } from "./scout";
-import { eventData, matchData, teamData } from "./tba";
-import { roundObject } from "./helperFuncs";
+import { eventData, matchData, teamData, teamMatches } from "./tba";
 
 type FullTeamData = {
   nickname: string;
@@ -67,6 +68,27 @@ const main = async () => {
     const teamNum = req.params.team as unknown as number;
     const teamDat = await teamFullData(teamNum);
     res.json(teamDat);
+  });
+
+  app.get("/team/:team/matches/:event", async (req, res) => {
+    const teamNum = req.params.team as unknown as number;
+    const matches = await teamMatches(teamNum, req.params.event);
+    res.json(
+      await Promise.all(
+        matches.map(async (match: any) => {
+          const matchDat = await dbTeamMatchData(
+            teamNum,
+            req.params.event,
+            match.comp_level,
+            match.match_number
+          );
+          return {
+            id: match.comp_level + "_" + match.match_number,
+            matchDat,
+          };
+        })
+      )
+    );
   });
 
   app.get("/match/:event/:type/:matchNum", async (req, res) => {
@@ -161,7 +183,7 @@ const main = async () => {
     for (let i = 0; i < teamPromises.length; i++) {
       teamData[i] = await teamPromises[i];
     }
-    teamData.sort((a,b) => a.team_number - b.team_number)
+    teamData.sort((a, b) => a.team_number - b.team_number);
 
     res.json(teamData);
   });

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import { apiPort } from "../../constants";
+  import { apiPort, competitions } from "../../constants";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
@@ -14,6 +14,8 @@
       this.error(res.status, data.message);
     }
   }
+
+  let selectedComp;
 </script>
 
 <script lang="ts">
@@ -30,6 +32,18 @@
     autoConsistency: number;
     highestClimb: number;
     avgClimb: number;
+  };
+  let promise = Promise.resolve({});
+
+  const fetchMatches = async () => {
+    const res = await self.fetch(
+      `http://localhost:${apiPort}/team/${team.team_number}/matches/${selectedComp.id}`
+    );
+    return res.json();
+  };
+
+  const updateMatches = () => {
+    promise = fetchMatches();
   };
 </script>
 
@@ -56,6 +70,56 @@
   <h3>Climb</h3>
   <h4>Highest Climb Amount: {team.highestClimb}</h4>
   <h4>Avg Climb Points: {team.avgClimb}</h4>
+
+  <select name="Comp" bind:value={selectedComp} on:change={updateMatches}>
+    <option value="" selected disabled>Select Competition</option>
+    {#each competitions as comp}
+      <option value={comp}>{comp.name}</option>
+    {/each}
+  </select>
+
+  {#if typeof selectedComp !== "undefined"}
+    {#await promise}
+      <p>loading...</p>
+    {:then data}
+      <div id="matchContainer">
+        {#each data as match}
+          <div class="matchData">
+            <br />
+            <a href="../match/{selectedComp.id}_{match.id}">{match.id}</a>
+            {#if match.matchDat !== null}
+              <table>
+                <thead>
+                  <tr>
+                    <th />
+                    <th>miss</th>
+                    <th>lower</th>
+                    <th>upper</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>auto</th>
+                    <th>{match.matchDat.auto_cargo.miss}</th>
+                    <th>{match.matchDat.auto_cargo.lower}</th>
+                    <th>{match.matchDat.auto_cargo.upper}</th>
+                  </tr>
+                  <tr>
+                    <th>teleop</th>
+                    <th>{match.matchDat.teleop_cargo.miss}</th>
+                    <th>{match.matchDat.teleop_cargo.lower}</th>
+                    <th>{match.matchDat.teleop_cargo.upper}</th>
+                  </tr>
+                </tbody>
+              </table>
+            {:else}
+              <p>this match has NOT been scouted yet</p>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    {/await}
+  {/if}
 </div>
 
 <style>
@@ -67,6 +131,16 @@
 		so we have to use the :global(...) modifier to target
 		all elements inside .content
 	*/
+  #matchContainer {
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    justify-content: space-evenly;
+  }
+  .matchData {
+    flex-grow: 1;
+    border: 2px solid black;
+  }
   .content :global(h2) {
     font-size: 1.4em;
     font-weight: 500;

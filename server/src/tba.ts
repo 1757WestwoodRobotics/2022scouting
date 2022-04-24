@@ -4,6 +4,7 @@ const api_key = process.env.TBA_KEY as string;
 const teamCache: any = {};
 const matchCache: any = {};
 const eventCache: any = {};
+const teamMatchCache: any = {};
 
 export const teamData = async (team: number) => {
   const team_key = "frc" + team;
@@ -18,6 +19,21 @@ export const teamData = async (team: number) => {
   const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
   let data = await response.json();
   teamCache[team_key] = data;
+  return data;
+};
+
+export const teamMatches = async (team: number, event: string) => {
+  const team_key = "frc" + team;
+  const event_id = process.env.YEAR + event;
+  if (typeof teamMatchCache[team_key] !== "undefined") {
+    console.log(`using cache for team ${team}, event ${event}`);
+    return teamMatchCache[team_key];
+  }
+  const url = `https://www.thebluealliance.com/api/v3/team/${team_key}/event/${event_id}/matches/simple`;
+
+  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
+  let data = await response.json();
+  teamMatchCache[team_key] = data;
   return data;
 };
 
