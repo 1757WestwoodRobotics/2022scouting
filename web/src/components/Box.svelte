@@ -32,7 +32,7 @@
     background-color: #111115;
     text-align: center;
     margin: 1em;
-    width: var(--box-width, 15em);
+    width: var(--box-width, 20em);
   }
   h2 {
     color: white;

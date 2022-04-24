@@ -47,7 +47,7 @@
 </svelte:head>
 
 <div class="container-1">
-  <Box --box-width="36em" header="Match Info">
+  <Box --box-width="46em" header="Match Info">
     <select name="Comp" bind:value={data.identifier.comp}>
       <option value="" selected disabled>Select Competition</option>
       {#each competitions as comp}

@@ -25,8 +25,6 @@
   <title>1757 Scouting Database</title>
 </svelte:head>
 
-<h1>FRC 2022 Scouting Area</h1>
-
 <Box title="Select Competition" --box-width="auto">
   <figure>
       <select name="Comp" bind:value={selected} on:change={updateData}>
