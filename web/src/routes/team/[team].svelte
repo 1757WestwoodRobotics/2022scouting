@@ -102,6 +102,7 @@
               >{match.id}</a
             >
             {#if match.matchDat !== null}
+              Climb: {match.matchDat.climb_level}
               <table>
                 <thead>
                   <tr>

@@ -28,10 +28,25 @@
 </svelte:head>
 
 <div class="header">
-  <h1>{match.key}</h1>
-  <a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
-    >Scout this match</a
-  >
+  <span>
+    <h1>{match.key}</h1>
+    <a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
+      >Scout this match</a
+    >
+  </span>
+  <span>
+    {#each match.videos.filter((a) => a.type == "youtube") as video}
+      <iframe
+        width="100%"
+        height="100%"
+        src="https://www.youtube.com/embed/{video.key}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      />
+    {/each}
+  </span>
 </div>
 
 <div class="content">
@@ -73,6 +88,8 @@
     overflow-x: auto;
   }
   .header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     font-family: Trebuchet MS;
     color: #fff;
   }

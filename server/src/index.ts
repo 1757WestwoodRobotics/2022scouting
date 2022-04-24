@@ -71,12 +71,20 @@ const main = async () => {
   });
 
   app.get("/team/:team", async (req, res) => {
+    if ([req.params.team].includes("undefined")) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     const teamNum = req.params.team as unknown as number;
     const teamDat = await teamFullData(teamNum);
     res.json(teamDat);
   });
 
   app.get("/team/:team/matches/:event", async (req, res) => {
+    if ([req.params.team, req.params.event].includes("undefined")) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     const teamNum = req.params.team as unknown as number;
     const matches = await teamMatches(teamNum, req.params.event);
     res.json(
@@ -90,8 +98,9 @@ const main = async () => {
           );
           return {
             id:
-              match.comp_level +"_"+
-              (match.comp_level != "qm" ? match.set_number + "m": "") +
+              match.comp_level +
+              "_" +
+              (match.comp_level != "qm" ? match.set_number + "m" : "") +
               match.match_number,
             matchDat,
           };
@@ -101,10 +110,18 @@ const main = async () => {
   });
 
   app.get("/match/:event/:type/:matchNum", async (req, res) => {
+    if (
+      [req.params.type, req.params.event, req.params.matchNum].includes(
+        "undefined"
+      )
+    ) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     let { event, type, matchNum } = req.params;
     let setNum = undefined;
-    if (matchNum.includes("_")) {
-      const nums = matchNum.split("_");
+    if (matchNum.includes("m")) {
+      const nums = matchNum.split("m");
       matchNum = nums[1];
       setNum = nums[0];
     }
@@ -190,6 +207,10 @@ const main = async () => {
   });
 
   app.get("/event/:event", async (req, res) => {
+    if (req.params.event === undefined) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     const { event } = req.params;
     const eventTeams: number[] = (await eventData(event)).map(
       (team: any) => team.team_number
@@ -209,6 +230,10 @@ const main = async () => {
   });
   app.get("/event/:event/simple", async (req, res) => {
     const { event } = req.params;
+    if (event === undefined) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     const eventTeams: number[] = (await eventData(event)).map(
       (team: any) => team.team_number
     );
@@ -216,6 +241,10 @@ const main = async () => {
   });
   app.get("/event/:event/matches", async (req, res) => {
     const { event } = req.params;
+    if (event === undefined) {
+      res.status(400).json("cannot send UNDEFINED value");
+      return;
+    }
     const matches = (await eventMatches(event)).map((match: any) => {
       return {
         match_type: match.comp_level,
