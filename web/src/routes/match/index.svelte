@@ -56,7 +56,11 @@
             "_" +
             match.match_type +
             "_" +
-            match.match_number}>{match.match_type} {match.match_number}</a
+            (match.match_type != "qm" ? match.set_number + "m" : "") +
+            match.match_number}
+          >{match.match_type}
+          {(match.match_type != "qm" ? match.set_number + "m" : "") +
+            match.match_number}</a
         >
         <span>
           <strong>red</strong>

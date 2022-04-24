@@ -89,7 +89,10 @@ const main = async () => {
             match.match_number
           );
           return {
-            id: match.comp_level + "_" + match.match_number,
+            id:
+              match.comp_level +"_"+
+              (match.comp_level != "qm" ? match.set_number + "m": "") +
+              match.match_number,
             matchDat,
           };
         })
@@ -98,14 +101,24 @@ const main = async () => {
   });
 
   app.get("/match/:event/:type/:matchNum", async (req, res) => {
-    const { event, type, matchNum } = req.params;
-    const dat = await matchData(event, type, matchNum as unknown as number);
+    let { event, type, matchNum } = req.params;
+    let setNum = undefined;
+    if (matchNum.includes("_")) {
+      const nums = matchNum.split("_");
+      matchNum = nums[1];
+      setNum = nums[0];
+    }
+    const dat = await matchData(
+      event,
+      type,
+      matchNum as unknown as number,
+      setNum as unknown as number
+    );
     const dbDat = await filterDataByMatch(
       event,
       type,
       matchNum as unknown as number
     );
-    console.log(dbDat);
     // woohoo complex match to determine contributions!
     const mapTeamPercentContribution = (team: number, data: any) => {
       const entry = dbDat.filter((entry) => entry.identifier.team == team)[0];
@@ -207,6 +220,7 @@ const main = async () => {
       return {
         match_type: match.comp_level,
         match_number: match.match_number,
+        set_number: match.set_number,
         blue: match.alliances.blue.team_keys.map((a: string) => a.substring(3)),
         red: match.alliances.red.team_keys.map((a: string) => a.substring(3)),
       };

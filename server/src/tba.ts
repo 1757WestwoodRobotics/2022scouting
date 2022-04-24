@@ -26,9 +26,9 @@ export const teamData = async (team: number) => {
 export const teamMatches = async (team: number, event: string) => {
   const team_key = "frc" + team;
   const event_id = process.env.YEAR + event;
-  if (typeof teamMatchCache[team_key+event_id] !== "undefined") {
+  if (typeof teamMatchCache[team_key + event_id] !== "undefined") {
     console.log(`using cache for team ${team}, event ${event}`);
-    return teamMatchCache[team_key+event_id];
+    return teamMatchCache[team_key + event_id];
   }
   const url = `https://www.thebluealliance.com/api/v3/team/${team_key}/event/${event_id}/matches/simple`;
 
@@ -41,13 +41,19 @@ export const teamMatches = async (team: number, event: string) => {
 export const matchData = async (
   event: string,
   matchType: string,
-  matchNumber: number
+  matchNumber: number,
+  setNumber?: number
 ) => {
   if (typeof matchCache[`${event}${matchType}${matchNumber}`] !== "undefined") {
     console.log(`using cache for match`);
     return matchCache[`${event}${matchType}${matchNumber}`];
   }
-  const match_id = process.env.YEAR + event + "_" + matchType + matchNumber;
+  const match_id =
+    process.env.YEAR +
+    event +
+    "_" +
+    matchType +
+    (setNumber ? setNumber + "m" + matchNumber : matchNumber);
 
   const url = `https://www.thebluealliance.com/api/v3/match/${match_id}`;
 
@@ -58,7 +64,7 @@ export const matchData = async (
   return data;
 };
 
-export const eventMatches = async (event:string) => {
+export const eventMatches = async (event: string) => {
   const event_id = process.env.YEAR + event;
 
   if (typeof eventMatchCache[event_id] !== "undefined") {
@@ -71,7 +77,7 @@ export const eventMatches = async (event:string) => {
   let data = await response.json();
   eventMatchCache[event_id] = data;
   return data;
-}
+};
 
 export const eventData = async (event: string) => {
   const event_id = process.env.YEAR + event;
