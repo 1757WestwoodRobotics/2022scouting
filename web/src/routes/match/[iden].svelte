@@ -36,13 +36,15 @@
 
 <div class="content">
   <div>
-    <h3>Red Alliance</h3>
+    <h3 style="color:red;">Red Alliance</h3>
+    <h4>Total points: {match.score_breakdown.red.totalPoints}</h4>
     {#each match.alliances.red.team_keys as team}
       <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />
     {/each}
   </div>
   <div>
-    <h3>Blue Alliance</h3>
+    <h3 style="color:blue;">Blue Alliance</h3>
+    <h4>Total points: {match.score_breakdown.blue.totalPoints}</h4>
     {#each match.alliances.blue.team_keys as team}
       <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />
     {/each}
