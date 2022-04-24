@@ -13,7 +13,13 @@ import {
   filterDataByMatch,
   handleScoutUpload,
 } from "./scout";
-import { eventData, matchData, teamData, teamMatches } from "./tba";
+import {
+  eventData,
+  eventMatches,
+  matchData,
+  teamData,
+  teamMatches,
+} from "./tba";
 
 type FullTeamData = {
   nickname: string;
@@ -194,6 +200,18 @@ const main = async () => {
       (team: any) => team.team_number
     );
     res.json(eventTeams);
+  });
+  app.get("/event/:event/matches", async (req, res) => {
+    const { event } = req.params;
+    const matches = (await eventMatches(event)).map((match: any) => {
+      return {
+        match_type: match.comp_level,
+        match_number: match.match_number,
+        blue: match.alliances.blue.team_keys.map((a: string) => a.substring(3)),
+        red: match.alliances.red.team_keys.map((a: string) => a.substring(3)),
+      };
+    });
+    res.json(matches);
   });
 
   app.post("/scout/upload", handleScoutUpload);
