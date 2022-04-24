@@ -4,6 +4,8 @@
   import submit from "../images/button-submit.svg";
   import { competitions, climb, matchType, apiPort } from "../constants";
 
+  let possibleTeams = [0];
+
   let data = {
     identifier: {
       team: 0,
@@ -40,6 +42,14 @@
       data.notes = "";
     });
   };
+
+  const updatePossibleTeams = () => {
+    fetch(`http://localhost:${apiPort}/event/${data.identifier.comp}/simple`)
+      .then((r) => r.json())
+      .then((r) => {
+        possibleTeams = r;
+      });
+  };
 </script>
 
 <svelte:head>
@@ -48,7 +58,11 @@
 
 <div class="container-1">
   <Box --box-width="46em" header="Match Info">
-    <select name="Comp" bind:value={data.identifier.comp}>
+    <select
+      name="Comp"
+      bind:value={data.identifier.comp}
+      on:change={updatePossibleTeams}
+    >
       <option value="" selected disabled>Select Competition</option>
       {#each competitions as comp}
         <option value={comp.id}>{comp.name}</option>
@@ -68,11 +82,11 @@
     >
     <br />
     <span
-      >Team Number: <input
-        bind:value={data.identifier.team}
-        type="number"
-      /></span
-    >
+      >Team Number: <input bind:value={data.identifier.team} type="number" />
+    </span>
+    {#if !possibleTeams.includes(data.identifier.team)}
+      <p style="color:red;"><strong>WARNING</strong> team not part of comp</p>
+    {/if}
   </Box>
   <Box header="Auto">
     <Counter bind:value={data.auto_cargo.upper} name="Upper" />

@@ -164,6 +164,13 @@ const main = async () => {
 
     res.json(teamData);
   });
+  app.get("/event/:event/simple", async (req, res) => {
+    const { event } = req.params;
+    const eventTeams: number[] = (await eventData(event)).map(
+      (team: any) => team.team_number
+    );
+    res.json(eventTeams);
+  });
 
   app.post("/scout/upload", handleScoutUpload);
 };
