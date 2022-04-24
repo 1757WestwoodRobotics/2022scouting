@@ -18,6 +18,11 @@
   };
 
   let selected = "";
+  const genColor = (data, max) => {
+    return `background-color: rgb(${((max - data) * 255) / max}, ${
+      (data * 255) / max
+    }, 0); color: black;`;
+  };
 </script>
 
 <svelte:head>
@@ -63,15 +68,33 @@
           <a href="team/{team.team_number}">
             <th>{team.team_number}</th>
           </a>
-          <th>{limitSigfigs(team.avgTeleopCargo)}</th>
-          <th>{limitSigfigs(team.avgAutoCargo)}</th>
-          <th>{limitSigfigs(team.teleopConsistency)}</th>
-          <th>{limitSigfigs(team.autoConsistency)}</th>
-          <th>{limitSigfigs(team.highestClimb)}</th>
-          <th>{limitSigfigs(team.avgClimb)}</th>
-          <th>{limitSigfigs(team.avgUpperCargo)}</th>
-          <th>{limitSigfigs(team.avgLowerCargo)}</th>
-          <th>{limitSigfigs(team.avgCargoPoints)}</th>
+          <th style={genColor(team.avgTeleopCargo, 10)}
+            >{limitSigfigs(team.avgTeleopCargo)}</th
+          >
+          <th style={genColor(team.avgAutoCargo, 3)}
+            >{limitSigfigs(team.avgAutoCargo)}</th
+          >
+          <th style={genColor(team.teleopConsistency, 100)}
+            >{limitSigfigs(team.teleopConsistency)}</th
+          >
+          <th style={genColor(team.autoConsistency, 100)}
+            >{limitSigfigs(team.autoConsistency)}</th
+          >
+          <th style={genColor(team.highestClimb, 15)}
+            >{limitSigfigs(team.highestClimb)}</th
+          >
+          <th style={genColor(team.avgClimb, 15)}
+            >{limitSigfigs(team.avgClimb)}</th
+          >
+          <th style={genColor(team.avgUpperCargo, 10)}
+            >{limitSigfigs(team.avgUpperCargo)}</th
+          >
+          <th style={genColor(team.avgLowerCargo, 10)}
+            >{limitSigfigs(team.avgLowerCargo)}</th
+          >
+          <th style={genColor(team.avgCargoPoints, 25)}
+            >{limitSigfigs(team.avgCargoPoints)}</th
+          >
         </tr>
       {/each}
     </tbody>
