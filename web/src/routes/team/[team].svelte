@@ -45,6 +45,8 @@
   const updateMatches = () => {
     promise = fetchMatches();
   };
+
+  let showNotes = false;
 </script>
 
 <svelte:head>
@@ -79,14 +81,22 @@
       <h4>Avg Climb Points: {team.avgClimb}</h4>
     </div>
   </div>
-  <p>Bot Notes</p>
-  <ul>
-    {#each team.notes as note}
-      {#if note != ""}
-        <li>{note}</li>
-      {/if}
-    {/each}
-  </ul>
+  <p style="cursor:pointer;text-decoration:underline;"
+    on:click={() => {
+      showNotes = !showNotes;
+    }}
+  >
+    Bot Notes
+  </p>
+  {#if showNotes}
+    <ul>
+      {#each team.notes as note}
+        {#if note != ""}
+          <li>{note}</li>
+        {/if}
+      {/each}
+    </ul>
+  {/if}
 
   <select name="Comp" bind:value={selectedComp} on:change={updateMatches}>
     <option value="" selected disabled>Select Competition</option>
