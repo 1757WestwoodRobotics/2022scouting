@@ -24,3 +24,7 @@ export const limitSigfigs = (num) => {
   }
   return num.toString().slice(0, 4);
 };
+
+export const mapRange = (s, imin, imax, omin, omax) => {
+  return omin + (s - imin) * (omax - omin) / (imax - imin);
+};

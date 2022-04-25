@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { competitions, apiUrl, limitSigfigs } from "../constants";
+  import { competitions, apiUrl, limitSigfigs, mapRange } from "../constants";
   import Box from "../components/Box.svelte";
 
   let teamData = [];
@@ -16,8 +16,8 @@
   };
 
   let selected = "";
-  const genColor = (data, max) => {
-    const hue = data / max * 120;
+  const genColor = (data, max, min) => {
+    const hue = mapRange(data, min, max, 0, 120);
     return `background-color: hsl(${hue}, 100%, 50%); color: black;`;
   };
 
@@ -61,6 +61,14 @@
     {
       name: "avg cargo points",
       fn: (team1, team2) => team2.avgCargoPoints - team1.avgCargoPoints,
+    },
+    {
+      name: "cargo + climb",
+      fn: (team1, team2) =>
+        team2.avgCargoPoints +
+        team2.avgClimb -
+        team1.avgCargoPoints -
+        team1.avgClimb,
     },
   ];
   let sortingFunction = sortingMethods[0].fn;
@@ -145,6 +153,11 @@
               sortingFunction = sortingMethods[9].fn;
             }}>Avg Cargo Points</th
           >
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[10].fn;
+            }}>Avg Cargo + Climb Points</th
+          >
         </tr>
       </thead>
       <tbody>
@@ -159,56 +172,78 @@
             <th
               style={genColor(
                 team.avgTeleopCargo,
-                Math.max(...data.map((a) => a.avgTeleopCargo))
+                Math.max(...data.map((a) => a.avgTeleopCargo)),
+                Math.min(...data.map((a) => a.avgTeleopCargo))
               )}>{limitSigfigs(team.avgTeleopCargo)}</th
             >
             <th
               style={genColor(
                 team.avgAutoCargo,
-                Math.max(...data.map((a) => a.avgAutoCargo))
+                Math.max(...data.map((a) => a.avgAutoCargo)),
+                Math.min(...data.map((a) => a.avgAutoCargo))
               )}>{limitSigfigs(team.avgAutoCargo)}</th
             >
             <th
               style={genColor(
                 team.teleopConsistency,
-                Math.max(...data.map((a) => a.teleopConsistency))
+                Math.max(...data.map((a) => a.teleopConsistency)),
+                Math.min(...data.map((a) => a.teleopConsistency))
               )}>{limitSigfigs(team.teleopConsistency)}</th
             >
             <th
               style={genColor(
                 team.autoConsistency,
-                Math.max(...data.map((a) => a.autoConsistency))
+                Math.max(...data.map((a) => a.autoConsistency)),
+
+                Math.min(...data.map((a) => a.autoConsistency))
               )}>{limitSigfigs(team.autoConsistency)}</th
             >
             <th
               style={genColor(
                 team.highestClimb,
-                Math.max(...data.map((a) => a.highestClimb))
+                Math.max(...data.map((a) => a.highestClimb)),
+
+                Math.min(...data.map((a) => a.highestClimb))
               )}>{limitSigfigs(team.highestClimb)}</th
             >
             <th
               style={genColor(
                 team.avgClimb,
-                Math.max(...data.map((a) => a.avgClimb))
+                Math.max(...data.map((a) => a.avgClimb)),
+                Math.min(...data.map((a) => a.avgClimb))
               )}>{limitSigfigs(team.avgClimb)}</th
             >
             <th
               style={genColor(
                 team.avgUpperCargo,
-                Math.max(...data.map((a) => a.avgUpperCargo))
+                Math.max(...data.map((a) => a.avgUpperCargo)),
+
+                Math.min(...data.map((a) => a.avgUpperCargo))
               )}>{limitSigfigs(team.avgUpperCargo)}</th
             >
             <th
               style={genColor(
                 team.avgLowerCargo,
-                Math.max(...data.map((a) => a.avgLowerCargo))
+                Math.max(...data.map((a) => a.avgLowerCargo)),
+
+                Math.min(...data.map((a) => a.avgLowerCargo))
               )}>{limitSigfigs(team.avgLowerCargo)}</th
             >
             <th
               style={genColor(
                 team.avgCargoPoints,
-                Math.max(...data.map((a) => a.avgCargoPoints))
+                Math.max(...data.map((a) => a.avgCargoPoints)),
+
+                Math.min(...data.map((a) => a.avgCargoPoints))
               )}>{limitSigfigs(team.avgCargoPoints)}</th
+            >
+            <th
+              style={genColor(
+                team.avgCargoPoints + team.avgClimb,
+                Math.max(...data.map((a) => a.avgCargoPoints + a.avgClimb)),
+
+                Math.min(...data.map((a) => a.avgCargoPoints + a.avgClimb))
+              )}>{limitSigfigs(team.avgCargoPoints + team.avgClimb)}</th
             >
           </tr>
         {/each}
@@ -248,6 +283,8 @@
 
   figure {
     margin: 0 0 1em 0;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
   }
   p {
     margin: 1em auto;
