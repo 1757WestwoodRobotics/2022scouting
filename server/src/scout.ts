@@ -68,6 +68,7 @@ export type TeamStats = {
   avgUpperCargo: number;
   avgLowerCargo: number;
   avgCargoPoints: number;
+  avgBallsCycledTeleop: number;
 };
 
 export const dbTeamMatchData = async (
@@ -180,6 +181,16 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
       )
       .reduce((a, b) => a + b, 0) / dat.length;
 
+  let avgBallsCycledTeleop =
+    dat
+      .map(
+        (entry) =>
+          entry.teleop_cargo.upper +
+          entry.teleop_cargo.lower +
+          entry.teleop_cargo.miss
+      )
+      .reduce((a, b) => a + b, 0) / dat.length;
+
   return {
     avgTeleopCargo,
     avgAutoCargo,
@@ -190,6 +201,7 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
     avgUpperCargo,
     avgLowerCargo,
     avgCargoPoints,
+    avgBallsCycledTeleop,
   };
 };
 
@@ -237,7 +249,7 @@ export const filterDataByMatch = async (
   return dat;
 };
 
-export const teamNotes = async(team: number) => {
+export const teamNotes = async (team: number) => {
   let dataRepo = conn.getRepository(ScoutingData);
 
   let dat = await dataRepo
@@ -245,5 +257,5 @@ export const teamNotes = async(team: number) => {
     .where("data.identifier->>'team' = :team", { team })
     .getMany();
 
-    return dat.map((entry) => entry.notes)
-}
+  return dat.map((entry) => entry.notes);
+};

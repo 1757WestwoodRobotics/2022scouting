@@ -70,6 +70,11 @@
         team1.avgCargoPoints -
         team1.avgClimb,
     },
+    {
+      name: "balls cycled teleop",
+      fn: (team1, team2) =>
+        team2.avgBallsCycledTeleop - team1.avgBallsCycledTeleop,
+    },
   ];
   let sortingFunction = sortingMethods[0].fn;
 </script>
@@ -155,6 +160,11 @@
           >
           <th
             on:click={() => {
+              sortingFunction = sortingMethods[11].fn;
+            }}>Avg Cargo Cycled in Teleop</th
+          >
+          <th
+            on:click={() => {
               sortingFunction = sortingMethods[10].fn;
             }}>Avg Cargo + Climb Points</th
           >
@@ -236,6 +246,13 @@
 
                 Math.min(...data.map((a) => a.avgCargoPoints))
               )}>{limitSigfigs(team.avgCargoPoints)}</th
+            >
+            <th
+              style={genColor(
+                team.avgBallsCycledTeleop,
+                Math.max(...data.map((a) => a.avgBallsCycledTeleop)),
+                Math.min(...data.map((a) => a.avgBallsCycledTeleop))
+              )}>{limitSigfigs(team.avgBallsCycledTeleop)}</th
             >
             <th
               style={genColor(

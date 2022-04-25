@@ -81,8 +81,13 @@
         matchData[team].autoCargo.lower +
         matchData[team].teleopCargo.upper +
         matchData[team].teleopCargo.lower) *
-        5}% of the cargo RP and {(matchData[team].totalClimbPoints / 16) * 100}%
-      of the climb RP
+        5}% of the cargo RP, cycled {matchData[team].teleopCargo.upper +
+        matchData[team].teleopCargo.lower +
+        matchData[team].teleopCargo.miss} cargo during teleop, and got {(matchData[
+        team
+      ].totalClimbPoints /
+        16) *
+        100}% of the climb RP
     </p>
     <p>Scout notes:<br />{matchData[team].notes}</p>
   {/if}
