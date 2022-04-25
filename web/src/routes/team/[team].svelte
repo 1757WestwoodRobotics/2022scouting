@@ -28,6 +28,7 @@
     autoConsistency: number;
     highestClimb: number;
     avgClimb: number;
+    notes: string[];
   };
 
   let selectedComp;
@@ -78,6 +79,14 @@
       <h4>Avg Climb Points: {team.avgClimb}</h4>
     </div>
   </div>
+  <p>Bot Notes</p>
+  <ul>
+    {#each team.notes as note}
+      {#if note != ""}
+        <li>{note}</li>
+      {/if}
+    {/each}
+  </ul>
 
   <select name="Comp" bind:value={selectedComp} on:change={updateMatches}>
     <option value="" selected disabled>Select Competition</option>

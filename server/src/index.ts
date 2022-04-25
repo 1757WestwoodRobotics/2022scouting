@@ -12,6 +12,7 @@ import {
   dbTeamMatchData,
   filterDataByMatch,
   handleScoutUpload,
+  teamNotes,
 } from "./scout";
 import {
   eventData,
@@ -40,6 +41,7 @@ type FullTeamData = {
 const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
   const teamDat = await teamData(teamNum);
   const dbDat = await dbTeamData(teamNum);
+    const notes = await teamNotes(teamNum);
 
   const fullData = {
     nickname: teamDat.nickname,
@@ -47,6 +49,7 @@ const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
     rookieYear: teamDat.rookie_year,
     city: teamDat.city,
     ...dbDat,
+        notes
   };
   return fullData;
 };

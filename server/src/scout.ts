@@ -236,3 +236,14 @@ export const filterDataByMatch = async (
 
   return dat;
 };
+
+export const teamNotes = async(team: number) => {
+  let dataRepo = conn.getRepository(ScoutingData);
+
+  let dat = await dataRepo
+    .createQueryBuilder("data")
+    .where("data.identifier->>'team' = :team", { team })
+    .getMany();
+
+    return dat.map((entry) => entry.notes)
+}
