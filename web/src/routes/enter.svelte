@@ -33,14 +33,14 @@
   import Counter from "../components/Counter.svelte";
   import Box from "../components/Box.svelte";
   import submit from "../images/button-submit.svg";
-  import { competitions, climb, matchType, apiPort } from "../constants";
+  import { competitions, climb, matchType, apiUrl } from "../constants";
 
   let possibleTeams = [0];
 
   export let data;
 
   const upload = () => {
-    fetch(`http://localhost:${apiPort}/scout/upload`, {
+    fetch(`${apiUrl}/scout/upload`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
@@ -56,7 +56,7 @@
   };
 
   const updatePossibleTeams = () => {
-    fetch(`http://localhost:${apiPort}/event/${data.identifier.comp}/simple`)
+    fetch(`${apiUrl}/event/${data.identifier.comp}/simple`)
       .then((r) => r.json())
       .then((r) => {
         possibleTeams = r;

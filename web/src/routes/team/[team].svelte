@@ -1,11 +1,9 @@
 <script context="module" lang="ts">
-  import { apiPort, competitions, limitSigfigs } from "../../constants";
+  import { apiUrl, competitions, limitSigfigs } from "../../constants";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
-    const res = await this.fetch(
-      `http://localhost:${apiPort}/team/${params.team}`
-    );
+    const res = await this.fetch(`${apiUrl}/team/${params.team}`);
     const data = await res.json();
 
     if (res.status === 200) {
@@ -36,7 +34,7 @@
 
   const fetchMatches = async () => {
     const res = await self.fetch(
-      `http://localhost:${apiPort}/team/${team.team_number}/matches/${selectedComp.id}`
+      `${apiUrl}/team/${team.team_number}/matches/${selectedComp.id}`
     );
     return res.json();
   };

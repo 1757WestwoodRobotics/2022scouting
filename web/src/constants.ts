@@ -1,4 +1,4 @@
-export const apiPort = 1757;
+export const apiUrl = "http://localhost:1757";
 export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
@@ -19,7 +19,7 @@ export const matchType = [
 ];
 
 export const limitSigfigs = (num) => {
-  if (num === null|| num === undefined) {
+  if (num === null || num === undefined) {
     return null;
   }
   return num.toString().slice(0, 4);

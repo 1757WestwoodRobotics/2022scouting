@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { competitions, apiPort, limitSigfigs } from "../constants";
+  import { competitions, apiUrl, limitSigfigs } from "../constants";
   import Box from "../components/Box.svelte";
 
   let teamData = [];
 
   const fetchData = async () => {
-    const res = await self.fetch(
-      `http://localhost:${apiPort}/event/${selected.id}`
-    );
+    const res = await self.fetch(`${apiUrl}/event/${selected.id}`);
     return res.json();
   };
 
@@ -98,16 +96,56 @@
     <thead>
       <tr>
         <th>Team Name</th>
-        <th>Team Number</th>
-        <th>Avg Teleop Cargo</th>
-        <th>Avg Auto Cargo</th>
-        <th>Teleop % shots made</th>
-        <th>Auto % shots made</th>
-        <th>Highest Climb Level (pts)</th>
-        <th>Avg Climb</th>
-        <th>Avg upper cargo</th>
-        <th>Avg lower cargo</th>
-        <th>Avg Cargo Points</th>
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[0].fn;
+          }}>Team Number</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[1].fn;
+          }}>Avg Teleop Cargo</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[2].fn;
+          }}>Avg Auto Cargo</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[3].fn;
+          }}>Teleop % shots made</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[4].fn;
+          }}>Auto % shots made</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[5].fn;
+          }}>Highest Climb Level (pts)</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[6].fn;
+          }}>Avg Climb</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[7].fn;
+          }}>Avg upper cargo</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[8].fn;
+          }}>Avg lower cargo</th
+        >
+        <th
+          on:click={() => {
+            sortingFunction = sortingMethods[9].fn;
+          }}>Avg Cargo Points</th
+        >
       </tr>
     </thead>
     <tbody>
@@ -200,6 +238,9 @@
     margin: 0 auto;
     color: #ffffff;
     font-weight: 700;
+  }
+  thead tr th:hover {
+    cursor: pointer;
   }
 
   figure {
