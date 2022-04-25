@@ -17,10 +17,8 @@
 
   let selected = "";
   const genColor = (data, max) => {
-    const interVal = (data * Math.PI) / (2 * max);
-    const red = 255 * Math.cos(interVal);
-    const green = 255 * Math.sin(interVal);
-    return `background-color: rgb(${red}, ${green}, 0); color: black;`;
+    const hue = data / max * 120;
+    return `background-color: hsl(${hue}, 100%, 50%); color: black;`;
   };
 
   const sortingMethods = [
