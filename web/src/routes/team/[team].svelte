@@ -81,7 +81,8 @@
       <h4>Avg Climb Points: {team.avgClimb}</h4>
     </div>
   </div>
-  <p style="cursor:pointer;text-decoration:underline;"
+  <p
+    style="cursor:pointer;text-decoration:underline;"
     on:click={() => {
       showNotes = !showNotes;
     }}

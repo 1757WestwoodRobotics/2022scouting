@@ -1,10 +1,15 @@
 <script lang="ts" context="module">
-  export const preload = async ({ query }) => {
+  export async function preload({ query }) {
     let [comp, comp_level, match_number] = ["", "", 0];
+    let possibleTeams = [0];
     if (typeof query["m"] !== "undefined") {
       [comp, comp_level, match_number] = query["m"].split("_");
+      const dat = await this.fetch(`${apiUrl}/event/${comp}/simple`);
+      const json = await dat.json();
+      possibleTeams = json;
     }
     return {
+      possibleTeams,
       data: {
         identifier: {
           team: 0,
@@ -26,7 +31,7 @@
         notes: "",
       },
     };
-  };
+  }
 </script>
 
 <script lang="ts">
@@ -35,9 +40,8 @@
   import submit from "../images/button-submit.svg";
   import { competitions, climb, matchType, apiUrl } from "../constants";
 
-  let possibleTeams = [0];
-
   export let data;
+  export let possibleTeams;
 
   const upload = () => {
     fetch(`${apiUrl}/scout/upload`, {

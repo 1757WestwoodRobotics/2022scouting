@@ -26,5 +26,5 @@ export const limitSigfigs = (num) => {
 };
 
 export const mapRange = (s, imin, imax, omin, omax) => {
-  return omin + (s - imin) * (omax - omin) / (imax - imin);
+  return omin + ((s - imin) * (omax - omin)) / (imax - imin);
 };
