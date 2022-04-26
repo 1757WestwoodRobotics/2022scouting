@@ -53,8 +53,13 @@
   <title>{team.nickname}</title>
 </svelte:head>
 
-<h1>{team.nickname}</h1>
-
+<h1 style="display:inline;">{team.nickname}</h1>
+{#if team.avatar !== undefined}
+  <img
+    style="position:absolute;right:2em;"
+    src={`data:image/png;base64,${team.avatar}`}
+  />
+{/if}
 <div class="content">
   {team.team_number}
   <br />

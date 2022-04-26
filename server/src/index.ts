@@ -27,6 +27,7 @@ type FullTeamData = {
   team_number: number;
   rookieYear: number;
   city: string;
+    avatar: string | undefined,
   avgTeleopCargo: number;
   avgAutoCargo: number;
   teleopConsistency: number;
@@ -41,15 +42,16 @@ type FullTeamData = {
 const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
   const teamDat = await teamData(teamNum);
   const dbDat = await dbTeamData(teamNum);
-    const notes = await teamNotes(teamNum);
+  const notes = await teamNotes(teamNum);
 
   const fullData = {
     nickname: teamDat.nickname,
     team_number: teamDat.team_number,
     rookieYear: teamDat.rookie_year,
     city: teamDat.city,
+        avatar: teamDat.avatar,
     ...dbDat,
-        notes
+    notes,
   };
   return fullData;
 };
@@ -198,6 +200,28 @@ const main = async () => {
       }
     );
 
+    const redExpectedPoint = (
+      await Promise.all(
+        dat.alliances.red.team_keys.map(async (team_iden: string) => {
+          let team = parseInt(team_iden.substring(3));
+          const teamInfo = await dbTeamData(team);
+          const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
+          return teamPoints;
+        })
+      )
+    ).reduce((a, b) => a + b);
+
+    const blueExpectedPoint = (
+      await Promise.all(
+        dat.alliances.blue.team_keys.map(async (team_iden: string) => {
+          let team = parseInt(team_iden.substring(3));
+          const teamInfo = await dbTeamData(team);
+          const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
+          return teamPoints;
+        })
+      )
+    ).reduce((a, b) => a + b);
+
     let teamData: any = {};
     individualBlueData
       .concat(individualRedData)
@@ -205,6 +229,8 @@ const main = async () => {
 
     res.json({
       teamData,
+      blueExpectedPoint,
+      redExpectedPoint,
       ...dat,
     });
   });

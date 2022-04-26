@@ -18,9 +18,22 @@ export const teamData = async (team: number) => {
   const url = `https://www.thebluealliance.com/api/v3/team/${team_key}`;
 
   const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let data = await response.json();
-  teamCache[team_key] = data;
-  return data;
+  let teamData = await response.json();
+
+  const url2 = `https://www.thebluealliance.com/api/v3/team/${team_key}/media/${process.env.YEAR}`;
+  const response2 = await fetch(url2, {
+    headers: { "X-TBA-Auth-Key": api_key },
+  });
+  let mediaData = await response2.json();
+  let av = undefined;
+  try {
+    av = mediaData.filter((a: any) => (a.type = "avatar"))[0].details
+      .base64Image;
+  } catch (e) {}
+
+  const returnDat = { ...teamData, avatar: av };
+  teamCache[team_key] = returnDat;
+  return returnDat;
 };
 
 export const teamMatches = async (team: number, event: string) => {
