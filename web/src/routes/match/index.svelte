@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { competitions, matchType, apiUrl } from "../../constants";
+  import {
+    competitions,
+    matchType,
+    apiUrl,
+    limitSigfigs,
+  } from "../../constants";
 
   let compIden = "mawor";
   let matchNum = 0;
@@ -46,7 +51,10 @@
   <p>fetching matches...</p>
 {:then matches}
   {#each matches as match}
-    {#if filter == "" || match.red.concat(match.blue).includes(filter)}
+    {#if filter == "" || match.red
+        .concat(match.blue)
+        .map((a) => a.id)
+        .includes(filter)}
       <div class="matchContainer">
         <a
           href={"match/" +
@@ -61,22 +69,48 @@
             match.match_number}</a
         >
         <span>
-          <strong>red</strong>
-          {#each match.red as team}
-            <a
-              href="../team/{team}"
-              style={team == filter ? "color:red" : undefined}>{team}</a
-            >&nbsp;
-          {/each}
+          <div class="allianceHolder th-b">
+            {#each match.red as team}
+              <div class="teamHolder">
+                <img
+                  class="teamImg"
+                  src={team.av != undefined
+                    ? `data:image/png;base64,${team.av}`
+                    : undefined}
+                />
+                <a
+                  href="../team/{team.id}"
+                  style={team.id == filter ? "color:red" : undefined}
+                  class="teamTitle">{team.id}</a
+                >
+                <p>TOT<br />{limitSigfigs(team.cargo + team.climb)}</p>
+                <p>CRGO<br />{limitSigfigs(team.cargo)}</p>
+                <p>CLMB<br />{limitSigfigs(team.climb)}</p>
+              </div>
+            {/each}
+          </div>
         </span>
         <span>
-          <strong>blue</strong>
-          {#each match.blue as team}
-            <a
-              href="../team/{team}"
-              style={team == filter ? "color: blue" : undefined}>{team}</a
-            >&nbsp;
-          {/each}
+          <div class="allianceHolder th-r">
+            {#each match.blue as team}
+              <div class="teamHolder">
+                <img
+                  class="teamImg"
+                  src={team.av != undefined
+                    ? `data:image/png;base64,${team.av}`
+                    : undefined}
+                />
+                <a
+                  href="../team/{team.id}"
+                  style={team.id == filter ? "color:blue" : undefined}
+                  class="teamTitle">{team.id}</a
+                >
+                <p>TOT<br />{limitSigfigs(team.cargo + team.climb)}</p>
+                <p>CRGO<br />{limitSigfigs(team.cargo)}</p>
+                <p>CLMB<br />{limitSigfigs(team.climb)}</p>
+              </div>
+            {/each}
+          </div>
         </span>
       </div>
     {/if}
@@ -84,11 +118,36 @@
 {/await}
 
 <style>
+  .teamImg {
+    grid-row-start: 1;
+    grid-row-end: 3;
+    height: 40px;
+    width: 40px;
+    image-rendering: pixelated;
+  }
+  .teamTitle {
+    grid-column-start: 2;
+    grid-column-end: 5;
+  }
+  .allianceHolder {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+  .teamHolder {
+    border: 2px solid;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 0.2em;
+    grid-column-gap: 0.5em;
+  }
   .matchContainer {
     display: grid;
     grid-template-columns: 1fr 3fr 3fr;
-    width: 50%;
+    width: calc(100% - 2em);
     min-width: 500px;
+    border: 2px solid black;
+    padding: 1em;
+    grid-column-gap: 0.5em;
   }
   span a {
     font-family: monospace;

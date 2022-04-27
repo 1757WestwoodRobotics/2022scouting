@@ -27,7 +27,7 @@ type FullTeamData = {
   team_number: number;
   rookieYear: number;
   city: string;
-    avatar: string | undefined,
+  avatar: string | undefined;
   avgTeleopCargo: number;
   avgAutoCargo: number;
   teleopConsistency: number;
@@ -49,7 +49,7 @@ const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
     team_number: teamDat.team_number,
     rookieYear: teamDat.rookie_year,
     city: teamDat.city,
-        avatar: teamDat.avatar,
+    avatar: teamDat.avatar,
     ...dbDat,
     notes,
   };
@@ -274,15 +274,33 @@ const main = async () => {
       res.status(400).json("cannot send UNDEFINED value");
       return;
     }
-    const matches = (await eventMatches(event)).map((match: any) => {
-      return {
-        match_type: match.comp_level,
-        match_number: match.match_number,
-        set_number: match.set_number,
-        blue: match.alliances.blue.team_keys.map((a: string) => a.substring(3)),
-        red: match.alliances.red.team_keys.map((a: string) => a.substring(3)),
-      };
-    });
+
+    const genTeamInfo = (team_keys: string[]): Promise<any>[] => {
+      return team_keys.map(async (a: string) => {
+        const teamNum = a.substring(3);
+        const teamInfo = await teamFullData(parseInt(teamNum));
+        return {
+          id: teamNum,
+          av: teamInfo.avatar,
+          cargo: teamInfo.avgCargoPoints,
+          climb: teamInfo.avgClimb,
+        };
+      });
+    };
+
+    const matches = await Promise.all(
+      (
+        await eventMatches(event)
+      ).map(async (match: any) => {
+        return {
+          match_type: match.comp_level,
+          match_number: match.match_number,
+          set_number: match.set_number,
+          blue: await Promise.all(genTeamInfo(match.alliances.blue.team_keys)),
+          red: await Promise.all(genTeamInfo(match.alliances.red.team_keys)),
+        };
+      })
+    );
     res.json(matches);
   });
 
