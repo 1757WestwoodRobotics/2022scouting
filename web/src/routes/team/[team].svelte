@@ -137,16 +137,16 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th>auto</th>
-                    <th>{match.matchDat.auto_cargo.miss}</th>
-                    <th>{match.matchDat.auto_cargo.lower}</th>
-                    <th>{match.matchDat.auto_cargo.upper}</th>
+                    <td>auto</td>
+                    <td>{match.matchDat.auto_cargo.miss}</td>
+                    <td>{match.matchDat.auto_cargo.lower}</td>
+                    <td>{match.matchDat.auto_cargo.upper}</td>
                   </tr>
                   <tr>
-                    <th>teleop</th>
-                    <th>{match.matchDat.teleop_cargo.miss}</th>
-                    <th>{match.matchDat.teleop_cargo.lower}</th>
-                    <th>{match.matchDat.teleop_cargo.upper}</th>
+                    <td>teleop</td>
+                    <td>{match.matchDat.teleop_cargo.miss}</td>
+                    <td>{match.matchDat.teleop_cargo.lower}</td>
+                    <td>{match.matchDat.teleop_cargo.upper}</td>
                   </tr>
                 </tbody>
               </table>

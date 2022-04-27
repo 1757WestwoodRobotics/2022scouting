@@ -174,93 +174,93 @@
         {#each data.sort(sortingFunction) as team}
           <tr>
             <a href="team/{team.team_number}">
-              <th>{team.nickname}</th>
+              <td>{team.nickname}</td>
             </a>
             <a href="team/{team.team_number}">
-              <th>{team.team_number}</th>
+              <td>{team.team_number}</td>
             </a>
-            <th
+            <td
               style={genColor(
                 team.avgTeleopCargo,
                 Math.max(...data.map((a) => a.avgTeleopCargo)),
                 Math.min(...data.map((a) => a.avgTeleopCargo))
-              )}>{limitSigfigs(team.avgTeleopCargo)}</th
+              )}>{limitSigfigs(team.avgTeleopCargo)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgAutoCargo,
                 Math.max(...data.map((a) => a.avgAutoCargo)),
                 Math.min(...data.map((a) => a.avgAutoCargo))
-              )}>{limitSigfigs(team.avgAutoCargo)}</th
+              )}>{limitSigfigs(team.avgAutoCargo)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.teleopConsistency,
                 Math.max(...data.map((a) => a.teleopConsistency)),
                 Math.min(...data.map((a) => a.teleopConsistency))
-              )}>{limitSigfigs(team.teleopConsistency)}</th
+              )}>{limitSigfigs(team.teleopConsistency)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.autoConsistency,
                 Math.max(...data.map((a) => a.autoConsistency)),
 
                 Math.min(...data.map((a) => a.autoConsistency))
-              )}>{limitSigfigs(team.autoConsistency)}</th
+              )}>{limitSigfigs(team.autoConsistency)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.highestClimb,
                 Math.max(...data.map((a) => a.highestClimb)),
 
                 Math.min(...data.map((a) => a.highestClimb))
-              )}>{limitSigfigs(team.highestClimb)}</th
+              )}>{limitSigfigs(team.highestClimb)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgClimb,
                 Math.max(...data.map((a) => a.avgClimb)),
                 Math.min(...data.map((a) => a.avgClimb))
-              )}>{limitSigfigs(team.avgClimb)}</th
+              )}>{limitSigfigs(team.avgClimb)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgUpperCargo,
                 Math.max(...data.map((a) => a.avgUpperCargo)),
 
                 Math.min(...data.map((a) => a.avgUpperCargo))
-              )}>{limitSigfigs(team.avgUpperCargo)}</th
+              )}>{limitSigfigs(team.avgUpperCargo)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgLowerCargo,
                 Math.max(...data.map((a) => a.avgLowerCargo)),
 
                 Math.min(...data.map((a) => a.avgLowerCargo))
-              )}>{limitSigfigs(team.avgLowerCargo)}</th
+              )}>{limitSigfigs(team.avgLowerCargo)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgCargoPoints,
                 Math.max(...data.map((a) => a.avgCargoPoints)),
 
                 Math.min(...data.map((a) => a.avgCargoPoints))
-              )}>{limitSigfigs(team.avgCargoPoints)}</th
+              )}>{limitSigfigs(team.avgCargoPoints)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgBallsCycledTeleop,
                 Math.max(...data.map((a) => a.avgBallsCycledTeleop)),
                 Math.min(...data.map((a) => a.avgBallsCycledTeleop))
-              )}>{limitSigfigs(team.avgBallsCycledTeleop)}</th
+              )}>{limitSigfigs(team.avgBallsCycledTeleop)}</td
             >
-            <th
+            <td
               style={genColor(
                 team.avgCargoPoints + team.avgClimb,
                 Math.max(...data.map((a) => a.avgCargoPoints + a.avgClimb)),
 
                 Math.min(...data.map((a) => a.avgCargoPoints + a.avgClimb))
-              )}>{limitSigfigs(team.avgCargoPoints + team.avgClimb)}</th
+              )}>{limitSigfigs(team.avgCargoPoints + team.avgClimb)}</td
             >
           </tr>
         {/each}
@@ -273,7 +273,7 @@
   a {
     display: contents;
   }
-  a th {
+  a td {
     text-decoration: underline;
   }
   tr {
