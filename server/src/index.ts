@@ -281,6 +281,7 @@ const main = async () => {
         const teamInfo = await teamFullData(parseInt(teamNum));
         return {
           id: teamNum,
+          name: teamInfo.nickname,
           av: teamInfo.avatar,
           cargo: teamInfo.avgCargoPoints,
           climb: teamInfo.avgClimb,

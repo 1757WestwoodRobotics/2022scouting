@@ -24,6 +24,11 @@
   const updateData = () => {
     promise = fetchData();
   };
+
+  const colorData = (dat, green) => {
+    const hue = (dat / green) * 120;
+    return `background-color: hsl(${hue},100%,50%); color: black;`;
+  };
 </script>
 
 <svelte:head>
@@ -70,6 +75,35 @@
         >
         <span>
           <div class="allianceHolder th-b">
+            {#each match.blue as team}
+              <div class="teamHolder">
+                <img
+                  class="teamImg"
+                  src={team.av != undefined
+                    ? `data:image/png;base64,${team.av}`
+                    : undefined}
+                />
+                <a
+                  href="../team/{team.id}"
+                  style={team.id == filter ? "color:red" : undefined}
+                  class="teamTitle">{team.id}</a
+                >
+                <p class="teamName">{team.name}</p>
+                <p style={colorData(team.cargo + team.climb, 43)}>
+                  TOT<br />{limitSigfigs(team.cargo + team.climb)}
+                </p>
+                <p style={colorData(team.cargo, 30)}>
+                  CRGO<br />{limitSigfigs(team.cargo)}
+                </p>
+                <p style={colorData(team.climb, 13)}>
+                  CLMB<br />{limitSigfigs(team.climb)}
+                </p>
+              </div>
+            {/each}
+          </div>
+        </span>
+        <span>
+          <div class="allianceHolder th-r">
             {#each match.red as team}
               <div class="teamHolder">
                 <img
@@ -83,31 +117,16 @@
                   style={team.id == filter ? "color:red" : undefined}
                   class="teamTitle">{team.id}</a
                 >
-                <p>TOT<br />{limitSigfigs(team.cargo + team.climb)}</p>
-                <p>CRGO<br />{limitSigfigs(team.cargo)}</p>
-                <p>CLMB<br />{limitSigfigs(team.climb)}</p>
-              </div>
-            {/each}
-          </div>
-        </span>
-        <span>
-          <div class="allianceHolder th-r">
-            {#each match.blue as team}
-              <div class="teamHolder">
-                <img
-                  class="teamImg"
-                  src={team.av != undefined
-                    ? `data:image/png;base64,${team.av}`
-                    : undefined}
-                />
-                <a
-                  href="../team/{team.id}"
-                  style={team.id == filter ? "color:blue" : undefined}
-                  class="teamTitle">{team.id}</a
-                >
-                <p>TOT<br />{limitSigfigs(team.cargo + team.climb)}</p>
-                <p>CRGO<br />{limitSigfigs(team.cargo)}</p>
-                <p>CLMB<br />{limitSigfigs(team.climb)}</p>
+                <p class="teamName">{team.name}</p>
+                <p style={colorData(team.cargo + team.climb, 43)}>
+                  TOT<br />{limitSigfigs(team.cargo + team.climb)}
+                </p>
+                <p style={colorData(team.cargo, 30)}>
+                  CRGO<br />{limitSigfigs(team.cargo)}
+                </p>
+                <p style={colorData(team.climb, 13)}>
+                  CLMB<br />{limitSigfigs(team.climb)}
+                </p>
               </div>
             {/each}
           </div>
@@ -118,6 +137,16 @@
 {/await}
 
 <style>
+  .teamName {
+    grid-column-start: 2;
+    grid-column-end: 5;
+  }
+  .teamHolder p {
+    margin: 0.1em;
+  }
+  .teamHolder p:not(.teamName) {
+    text-align: center;
+  }
   .teamImg {
     grid-row-start: 1;
     grid-row-end: 3;
@@ -133,6 +162,12 @@
     display: grid;
     grid-template-columns: auto auto auto;
   }
+  .th-r .teamHolder {
+    border-color: red;
+  }
+  .th-b .teamHolder {
+    border-color: blue;
+  }
   .teamHolder {
     border: 2px solid;
     display: grid;
@@ -142,8 +177,9 @@
   }
   .matchContainer {
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr;
+    grid-template-columns: 1fr 6fr 6fr;
     width: calc(100% - 2em);
+    font-size: 10px;
     min-width: 500px;
     border: 2px solid black;
     padding: 1em;
