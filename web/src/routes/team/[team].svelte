@@ -99,6 +99,103 @@
       },
     },
   };
+
+  const calcGraphData = (data) => {
+    let matches = data
+      .filter((a) => a.matchDat !== null)
+      .sort(
+        (a, b) => parseInt(a.id.substring(3)) - parseInt(b.id.substring(3))
+      );
+    const chartLabels = matches.map((a) => a.id);
+
+    const autoUpper = matches.map((a) => a.matchDat.auto_cargo.upper * 4);
+    const autoLower = matches.map((a) => a.matchDat.auto_cargo.lower * 2);
+    const autoAcc = matches.map(
+      (a) =>
+        ((a.matchDat.auto_cargo.upper + a.matchDat.auto_cargo.lower) /
+          (a.matchDat.auto_cargo.upper +
+            a.matchDat.auto_cargo.lower +
+            a.matchDat.auto_cargo.miss)) *
+        100
+    );
+
+    const teleopUpper = matches.map((a) => a.matchDat.teleop_cargo.upper * 2);
+    const teleopLower = matches.map((a) => a.matchDat.teleop_cargo.lower * 1);
+    const teleopAcc = matches.map(
+      (a) =>
+        ((a.matchDat.teleop_cargo.upper + a.matchDat.teleop_cargo.lower) /
+          (a.matchDat.teleop_cargo.upper +
+            a.matchDat.teleop_cargo.lower +
+            a.matchDat.teleop_cargo.miss)) *
+        100
+    );
+
+    const climb = matches.map((a) => a.matchDat.climb_level);
+    const totalPoints = matches.map(
+      (a) =>
+        a.matchDat.climb_level +
+        a.matchDat.teleop_cargo.upper * 2 +
+        a.matchDat.teleop_cargo.lower * 1 +
+        a.matchDat.auto_cargo.upper * 4 +
+        a.matchDat.auto_cargo.lower * 2
+    );
+
+    return {
+      labels: chartLabels,
+      datasets: [
+        {
+          label: "Auto Upper",
+          data: autoUpper,
+          borderColor: "#00aaff",
+          fill: false,
+        },
+        {
+          label: "Auto Lower",
+          data: autoLower,
+          borderColor: "#00ccff",
+          fill: false,
+        },
+        {
+          label: "Auto Accuracy",
+          data: autoAcc,
+          borderColor: "#00ffff",
+          fill: false,
+          yAxisID: "y1",
+        },
+        {
+          label: "Teleop Upper",
+          data: teleopUpper,
+          borderColor: "#ffaa00",
+          fill: false,
+        },
+        {
+          label: "Teleop Lower",
+          data: teleopLower,
+          borderColor: "#ffcc00",
+          fill: false,
+        },
+        {
+          label: "Teleop Accuracy",
+          data: teleopAcc,
+          borderColor: "#ffff00",
+          fill: false,
+          yAxisID: "y1",
+        },
+        {
+          label: "Climb",
+          data: climb,
+          borderColor: "#99ff99",
+          fill: false,
+        },
+        {
+          label: "Total Points",
+          data: totalPoints,
+          borderColor: "#ffffff",
+          fill: false,
+        },
+      ],
+    };
+  };
 </script>
 
 <svelte:head>
@@ -208,110 +305,7 @@
           </div>
         {/each}
       </div>
-      <Line
-        data={(() => {
-          let matches = data
-            .filter((a) => a.matchDat !== null)
-            .sort(
-              (a, b) =>
-                parseInt(a.id.substring(3)) - parseInt(b.id.substring(3))
-            );
-          const chartLabels = matches.map((a) => a.id);
-
-          const autoUpper = matches.map((a) => a.matchDat.auto_cargo.upper * 4);
-          const autoLower = matches.map((a) => a.matchDat.auto_cargo.lower * 2);
-          const autoAcc = matches.map(
-            (a) =>
-              ((a.matchDat.auto_cargo.upper + a.matchDat.auto_cargo.lower) /
-                (a.matchDat.auto_cargo.upper +
-                  a.matchDat.auto_cargo.lower +
-                  a.matchDat.auto_cargo.miss)) *
-              100
-          );
-
-          const teleopUpper = matches.map(
-            (a) => a.matchDat.teleop_cargo.upper * 2
-          );
-          const teleopLower = matches.map(
-            (a) => a.matchDat.teleop_cargo.lower * 1
-          );
-          const teleopAcc = matches.map(
-            (a) =>
-              ((a.matchDat.teleop_cargo.upper + a.matchDat.teleop_cargo.lower) /
-                (a.matchDat.teleop_cargo.upper +
-                  a.matchDat.teleop_cargo.lower +
-                  a.matchDat.teleop_cargo.miss)) *
-              100
-          );
-
-          const climb = matches.map((a) => a.matchDat.climb_level);
-          const totalPoints = matches.map(
-            (a) =>
-              a.matchDat.climb_level +
-              a.matchDat.teleop_cargo.upper * 2 +
-              a.matchDat.teleop_cargo.lower * 1 +
-              a.matchDat.auto_cargo.upper * 4 +
-              a.matchDat.auto_cargo.lower * 2
-          );
-
-          return {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Auto Upper",
-                data: autoUpper,
-                borderColor: "#00aaff",
-                fill: false,
-              },
-              {
-                label: "Auto Lower",
-                data: autoLower,
-                borderColor: "#00ccff",
-                fill: false,
-              },
-              {
-                label: "Auto Accuracy",
-                data: autoAcc,
-                borderColor: "#00ffff",
-                fill: false,
-                yAxisID: "y1",
-              },
-              {
-                label: "Teleop Upper",
-                data: teleopUpper,
-                borderColor: "#ffaa00",
-                fill: false,
-              },
-              {
-                label: "Teleop Lower",
-                data: teleopLower,
-                borderColor: "#ffcc00",
-                fill: false,
-              },
-              {
-                label: "Teleop Accuracy",
-                data: teleopAcc,
-                borderColor: "#ffff00",
-                fill: false,
-                yAxisID: "y1",
-              },
-              {
-                label: "Climb",
-                data: climb,
-                borderColor: "#99ff99",
-                fill: false,
-              },
-              {
-                label: "Total Points",
-                data: totalPoints,
-                borderColor: "#ffffff",
-                fill: false,
-              },
-            ],
-          };
-        })()}
-        options={chartOptions}
-      />
+      <Line data={calcGraphData(data)} options={chartOptions} />
     {/await}
   {/if}
 </div>
