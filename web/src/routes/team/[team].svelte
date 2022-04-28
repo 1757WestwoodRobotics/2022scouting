@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
   import { apiUrl, competitions, limitSigfigs } from "../../constants";
+  import { Line } from "svelte-chartjs";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
@@ -47,6 +48,57 @@
   };
 
   let showNotes = false;
+  let chartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: "Matches over Time",
+      },
+    },
+    interaction: {
+      intersect: false,
+    },
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: "Pts",
+        },
+        suggestedMin: 0,
+        suggestedMax: 50,
+        stack: "stack",
+        stackWeight: 2,
+        grid: {
+          borderColor: "#ff0000",
+        },
+      },
+      y1: {
+        display: true,
+        title: {
+          display: true,
+          text: "%",
+        },
+        suggestedMin: 0,
+        suggestedMax: 100,
+        offset: true,
+        position: "left",
+        stack: "stack",
+        stackWeight: 1,
+
+        grid: {
+          borderColor: "#0000ff",
+        },
+      },
+    },
+  };
 </script>
 
 <svelte:head>
@@ -156,6 +208,110 @@
           </div>
         {/each}
       </div>
+      <Line
+        data={(() => {
+          let matches = data
+            .filter((a) => a.matchDat !== null)
+            .sort(
+              (a, b) =>
+                parseInt(a.id.substring(3)) - parseInt(b.id.substring(3))
+            );
+          const chartLabels = matches.map((a) => a.id);
+
+          const autoUpper = matches.map((a) => a.matchDat.auto_cargo.upper * 4);
+          const autoLower = matches.map((a) => a.matchDat.auto_cargo.lower * 2);
+          const autoAcc = matches.map(
+            (a) =>
+              ((a.matchDat.auto_cargo.upper + a.matchDat.auto_cargo.lower) /
+                (a.matchDat.auto_cargo.upper +
+                  a.matchDat.auto_cargo.lower +
+                  a.matchDat.auto_cargo.miss)) *
+              100
+          );
+
+          const teleopUpper = matches.map(
+            (a) => a.matchDat.teleop_cargo.upper * 2
+          );
+          const teleopLower = matches.map(
+            (a) => a.matchDat.teleop_cargo.lower * 1
+          );
+          const teleopAcc = matches.map(
+            (a) =>
+              ((a.matchDat.teleop_cargo.upper + a.matchDat.teleop_cargo.lower) /
+                (a.matchDat.teleop_cargo.upper +
+                  a.matchDat.teleop_cargo.lower +
+                  a.matchDat.teleop_cargo.miss)) *
+              100
+          );
+
+          const climb = matches.map((a) => a.matchDat.climb_level);
+          const totalPoints = matches.map(
+            (a) =>
+              a.matchDat.climb_level +
+              a.matchDat.teleop_cargo.upper * 2 +
+              a.matchDat.teleop_cargo.lower * 1 +
+              a.matchDat.auto_cargo.upper * 4 +
+              a.matchDat.auto_cargo.lower * 2
+          );
+
+          return {
+            labels: chartLabels,
+            datasets: [
+              {
+                label: "Auto Upper",
+                data: autoUpper,
+                borderColor: "#00aaff",
+                fill: false,
+              },
+              {
+                label: "Auto Lower",
+                data: autoLower,
+                borderColor: "#00ccff",
+                fill: false,
+              },
+              {
+                label: "Auto Accuracy",
+                data: autoAcc,
+                borderColor: "#00ffff",
+                fill: false,
+                yAxisID: "y1",
+              },
+              {
+                label: "Teleop Upper",
+                data: teleopUpper,
+                borderColor: "#ffaa00",
+                fill: false,
+              },
+              {
+                label: "Teleop Lower",
+                data: teleopLower,
+                borderColor: "#ffcc00",
+                fill: false,
+              },
+              {
+                label: "Teleop Accuracy",
+                data: teleopAcc,
+                borderColor: "#ffff00",
+                fill: false,
+                yAxisID: "y1",
+              },
+              {
+                label: "Climb",
+                data: climb,
+                borderColor: "#99ff99",
+                fill: false,
+              },
+              {
+                label: "Total Points",
+                data: totalPoints,
+                borderColor: "#ffffff",
+                fill: false,
+              },
+            ],
+          };
+        })()}
+        options={chartOptions}
+      />
     {/await}
   {/if}
 </div>

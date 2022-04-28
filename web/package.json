@@ -13,7 +13,8 @@
   "dependencies": {
     "compression": "^1.7.1",
     "express": "^4.17.3",
-    "sirv": "^1.0.0"
+    "sirv": "^1.0.0",
+    "svelte-chartjs": "^1.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
