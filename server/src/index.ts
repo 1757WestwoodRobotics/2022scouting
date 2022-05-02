@@ -40,9 +40,12 @@ type FullTeamData = {
   avgCargoPoints: number;
 };
 
-const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
+const teamFullData = async (
+  teamNum: number,
+  limit: number | undefined = undefined
+): Promise<FullTeamData> => {
   const teamDat = await teamData(teamNum);
-  const dbDat = await dbTeamData(teamNum);
+  const dbDat = await dbTeamData(teamNum, limit);
   const notes = await teamNotes(teamNum);
   const imp_notes = await fetchNotes(teamNum);
 
@@ -84,7 +87,10 @@ const main = async () => {
       return;
     }
     const teamNum = req.params.team as unknown as number;
-    const teamDat = await teamFullData(teamNum);
+    const teamDat = await teamFullData(
+      teamNum,
+      req.query.l ? parseInt(req.query.l as string) : undefined
+    );
     res.json(teamDat);
   });
 
@@ -248,14 +254,12 @@ const main = async () => {
       (team: any) => team.team_number
     );
 
-    const teamPromises = eventTeams.map(
-      async (team) => await teamFullData(team)
+    const limit = req.query.l ? parseInt(req.query.l as string) : undefined;
+
+    const teamData = await Promise.all(
+      eventTeams.map(async (team) => await teamFullData(team, limit))
     );
 
-    const teamData: FullTeamData[] = [];
-    for (let i = 0; i < teamPromises.length; i++) {
-      teamData[i] = await teamPromises[i];
-    }
     teamData.sort((a, b) => a.team_number - b.team_number);
 
     res.json(teamData);

@@ -246,21 +246,21 @@
   {#if showNotes}
     <ul>
       <li>Lead Notes:</li>
-        <ul>
-          {#each team.imp_notes as note}
-            {#if note != ""}
-              <li>{note}</li>
-            {/if}
-          {/each}
-        </ul>
+      <ul>
+        {#each team.imp_notes as note}
+          {#if note != ""}
+            <li>{note}</li>
+          {/if}
+        {/each}
+      </ul>
       <li>Team Notes:</li>
-        <ul>
-          {#each team.notes as note}
-            {#if note != ""}
-              <li>{note}</li>
-            {/if}
-          {/each}
-        </ul>
+      <ul>
+        {#each team.notes as note}
+          {#if note != ""}
+            <li>{note}</li>
+          {/if}
+        {/each}
+      </ul>
     </ul>
   {/if}
 

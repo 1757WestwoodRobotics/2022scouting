@@ -3,9 +3,12 @@
   import Box from "../components/Box.svelte";
 
   let teamData = [];
+  let maxEntries: number | undefined = undefined; // max amount of fetched entities for any given
 
   const fetchData = async () => {
-    const res = await self.fetch(`${apiUrl}/event/${selected.id}`);
+    const res = await self.fetch(
+      `${apiUrl}/event/${selected.id}${maxEntries ? "?l=" + maxEntries : ""}`
+    );
     return res.json();
   };
 
@@ -98,6 +101,7 @@
       {/each}
     </select>
   </figure>
+  <input type="number" placeholder="Last N matches" bind:value={maxEntries} />
 </Box>
 
 {#await promise}
@@ -204,7 +208,6 @@
               style={genColor(
                 team.autoConsistency,
                 Math.max(...data.map((a) => a.autoConsistency)),
-
                 Math.min(...data.map((a) => a.autoConsistency))
               )}>{limitSigfigs(team.autoConsistency)}</td
             >
@@ -212,7 +215,6 @@
               style={genColor(
                 team.highestClimb,
                 Math.max(...data.map((a) => a.highestClimb)),
-
                 Math.min(...data.map((a) => a.highestClimb))
               )}>{limitSigfigs(team.highestClimb)}</td
             >
@@ -227,7 +229,6 @@
               style={genColor(
                 team.avgUpperCargo,
                 Math.max(...data.map((a) => a.avgUpperCargo)),
-
                 Math.min(...data.map((a) => a.avgUpperCargo))
               )}>{limitSigfigs(team.avgUpperCargo)}</td
             >
@@ -235,7 +236,6 @@
               style={genColor(
                 team.avgLowerCargo,
                 Math.max(...data.map((a) => a.avgLowerCargo)),
-
                 Math.min(...data.map((a) => a.avgLowerCargo))
               )}>{limitSigfigs(team.avgLowerCargo)}</td
             >
@@ -243,7 +243,6 @@
               style={genColor(
                 team.avgCargoPoints,
                 Math.max(...data.map((a) => a.avgCargoPoints)),
-
                 Math.min(...data.map((a) => a.avgCargoPoints))
               )}>{limitSigfigs(team.avgCargoPoints)}</td
             >

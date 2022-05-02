@@ -69,6 +69,7 @@ export type TeamStats = {
   avgLowerCargo: number;
   avgCargoPoints: number;
   avgBallsCycledTeleop: number;
+  sd: number;
 };
 
 export const dbTeamMatchData = async (
@@ -92,7 +93,10 @@ export const dbTeamMatchData = async (
   return dat;
 };
 
-export const dbTeamData = async (team: number): Promise<TeamStats> => {
+export const dbTeamData = async (
+  team: number,
+  limit: number = 50
+): Promise<TeamStats> => {
   const dataRepo = conn.getRepository(ScoutingData);
 
   let dat = await dataRepo
@@ -100,6 +104,8 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
     .where("data.identifier->>'team' = :team", {
       team,
     })
+    .orderBy("data.identifier->>'match_number'", "DESC")
+    .take(limit)
     .getMany();
 
   let avgTeleopCargo =
@@ -158,9 +164,9 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
   let highestClimb = dat
     .map((entry) => entry.climb_level as number)
     .reduce((a, b) => (a > b ? a : b), 0);
-  let avgClimb =
-    dat.map((entry) => entry.climb_level as number).reduce((a, b) => a + b, 0) /
-    dat.length;
+
+  let climbs = dat.map((entry) => entry.climb_level as number);
+  let avgClimb = climbs.reduce((a, b) => a + b, 0) / dat.length;
 
   let avgUpperCargo =
     dat
@@ -170,16 +176,22 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
     dat
       .map((entry) => entry.teleop_cargo.lower + entry.auto_cargo.lower)
       .reduce((a, b) => a + b, 0) / dat.length;
-  let avgCargoPoints =
-    dat
-      .map(
-        (entry) =>
-          entry.teleop_cargo.upper * 2 +
-          entry.teleop_cargo.lower +
-          entry.auto_cargo.upper * 4 +
-          entry.auto_cargo.lower * 2
-      )
-      .reduce((a, b) => a + b, 0) / dat.length;
+
+  let cargoPoints = dat.map(
+    (entry) =>
+      entry.teleop_cargo.upper * 2 +
+      entry.teleop_cargo.lower +
+      entry.auto_cargo.upper * 4 +
+      entry.auto_cargo.lower * 2
+  );
+
+  let avgCargoPoints = cargoPoints.reduce((a, b) => a + b, 0) / dat.length;
+
+  let sd = Math.sqrt(
+    cargoPoints
+      .map((a) => (a - avgCargoPoints) * (a - avgCargoPoints))
+      .reduce((a, b) => a + b) / dat.length
+  );
 
   let avgBallsCycledTeleop =
     dat
@@ -202,6 +214,7 @@ export const dbTeamData = async (team: number): Promise<TeamStats> => {
     avgLowerCargo,
     avgCargoPoints,
     avgBallsCycledTeleop,
+    sd,
   };
 };
 

@@ -75,6 +75,11 @@
         >
         <span>
           <div class="allianceHolder th-b">
+            <p class="totalMatchPointExpectedHolder">
+              {limitSigfigs(
+                match.blue.map((a) => a.cargo + a.climb).reduce((a, b) => a + b)
+              )}
+            </p>
             {#each match.blue as team}
               <div class="teamHolder">
                 <img
@@ -85,7 +90,7 @@
                 />
                 <a
                   href="../team/{team.id}"
-                  style={team.id == filter ? "color:red" : undefined}
+                  style={team.id == filter ? "color:blue" : undefined}
                   class="teamTitle">{team.id}</a
                 >
                 <p class="teamName">{team.name}</p>
@@ -104,6 +109,11 @@
         </span>
         <span>
           <div class="allianceHolder th-r">
+            <p class="totalMatchPointExpectedHolder">
+              {limitSigfigs(
+                match.red.map((a) => a.cargo + a.climb).reduce((a, b) => a + b)
+              )}
+            </p>
             {#each match.red as team}
               <div class="teamHolder">
                 <img
@@ -137,6 +147,11 @@
 {/await}
 
 <style>
+  .totalMatchPointExpectedHolder {
+    grid-column-start: 4;
+    grid-column-end: 1;
+    text-align: center;
+  }
   .teamName {
     grid-column-start: 2;
     grid-column-end: 5;
