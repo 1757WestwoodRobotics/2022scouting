@@ -21,6 +21,7 @@ import {
   teamData,
   teamMatches,
 } from "./tba";
+import { fetchNotes, handleNotes } from "./notes";
 
 type FullTeamData = {
   nickname: string;
@@ -43,6 +44,7 @@ const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
   const teamDat = await teamData(teamNum);
   const dbDat = await dbTeamData(teamNum);
   const notes = await teamNotes(teamNum);
+  const imp_notes = await fetchNotes(teamNum);
 
   const fullData = {
     nickname: teamDat.nickname,
@@ -52,6 +54,7 @@ const teamFullData = async (teamNum: number): Promise<FullTeamData> => {
     avatar: teamDat.avatar,
     ...dbDat,
     notes,
+    imp_notes,
   };
   return fullData;
 };
@@ -306,6 +309,7 @@ const main = async () => {
   });
 
   app.post("/scout/upload", handleScoutUpload);
+  app.post("/scout/notes", handleNotes);
 };
 
 conn

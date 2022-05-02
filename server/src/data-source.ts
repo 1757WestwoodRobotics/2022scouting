@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { BotNotes } from "./notes";
 import { ScoutingData } from "./scout";
 
 const { NODE_ENV } = process.env;
@@ -14,5 +15,5 @@ export const conn = new DataSource({
   password: "postgres",
   logging: true,
   synchronize: true,
-  entities: [ScoutingData],
+  entities: [ScoutingData, BotNotes],
 });
