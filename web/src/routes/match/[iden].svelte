@@ -29,7 +29,7 @@
 <div class="header">
   <span>
     <h1>{match.key}</h1>
-    <a href={`../enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
+    <a href={`enter?m=${matchInfo[0]}_${matchInfo[1]}_${matchInfo[2]}`}
       >Scout this match</a
     >
   </span>

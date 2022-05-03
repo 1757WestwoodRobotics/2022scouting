@@ -280,7 +280,7 @@
           <div class="matchData">
             <br />
             <a
-              href="../match/{selectedComp.id}_{match.id}"
+              href="match/{selectedComp.id}_{match.id}"
               title={match.matchDat !== null ? match.matchDat.notes : undefined}
               >{match.id}</a
             >

@@ -86,7 +86,7 @@
                     : undefined}
                 />
                 <a
-                  href="../team/{team.id}"
+                  href="team/{team.id}"
                   style={team.id == filter ? "color:blue" : undefined}
                   class="teamTitle">{team.id}</a
                 >
@@ -120,7 +120,7 @@
                     : undefined}
                 />
                 <a
-                  href="../team/{team.id}"
+                  href="team/{team.id}"
                   style={team.id == filter ? "color:red" : undefined}
                   class="teamTitle">{team.id}</a
                 >

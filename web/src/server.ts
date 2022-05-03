@@ -16,7 +16,7 @@ export const start = (app) => {
   }
   rout.use(
     compression({ threshold: 0 }),
+    sirv("static", { dev }),
     sapper.middleware(),
-    sirv("static", { dev })
   );
 };

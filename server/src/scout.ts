@@ -190,7 +190,7 @@ export const dbTeamData = async (
   let sd = Math.sqrt(
     cargoPoints
       .map((a) => (a - avgCargoPoints) * (a - avgCargoPoints))
-      .reduce((a, b) => a + b) / dat.length
+      .reduce((a, b) => a + b, 0) / dat.length
   );
 
   let avgBallsCycledTeleop =
