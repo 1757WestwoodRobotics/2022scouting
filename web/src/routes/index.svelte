@@ -305,13 +305,4 @@
   p {
     margin: 1em auto;
   }
-  select {
-    font-size: 1em;
-    width: 100%;
-    height: 2em;
-    background-color: rgb(33, 33, 33);
-    border-color: #ffffff;
-    border-width: 0.1em;
-    color: rgb(255, 255, 255);
-  }
 </style>
