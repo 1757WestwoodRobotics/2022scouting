@@ -1,10 +1,5 @@
 <script lang="ts">
-  import {
-    competitions,
-    matchType,
-    apiUrl,
-    limitSigfigs,
-  } from "../../constants";
+  import { competitions, matchType, limitSigfigs } from "../../constants";
 
   let compIden = "mawor";
   let matchNum = 0;
@@ -14,7 +9,9 @@
   };
 
   const fetchData = async () => {
-    const res = await self.fetch(`${apiUrl}/event/${compIden}/matches`);
+    const res = await self.fetch(
+      `process.BACKEND_URL/event/${compIden}/matches`
+    );
     return res.json();
   };
 

@@ -2379,6 +2379,11 @@ svelte-check@^1.0.46:
     svelte-preprocess "^4.0.0"
     typescript "*"
 
+svelte-environment-variables@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/svelte-environment-variables/-/svelte-environment-variables-1.0.4.tgz#60a5817be8b3023bc601748ae1885cc8e0a31bcd"
+  integrity sha512-3x0zwtkzbfdFeJCd9i3JKxnFfyPcVdKdMC+PZ/dsWZidd/nnmEPnZl7RGbY0nfWqgnVbr+13Ly0PZXR4epFtEQ==
+
 svelte-preprocess@^4.0.0, svelte-preprocess@^4.3.0:
   version "4.10.6"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.10.6.tgz#5f9a53e7ed3b85fc7e0841120c725b76ac5a1ba8"

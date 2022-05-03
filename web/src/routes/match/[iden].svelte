@@ -1,12 +1,11 @@
 <script context="module" lang="ts">
-  import { apiUrl } from "../../constants";
   import TeamMatchInfo from "../../components/TeamMatchInfo.svelte";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
     const [eventName, matchType, matchNum] = params.iden.split("_");
     const res = await this.fetch(
-      `${apiUrl}/match/${eventName}/${matchType}/${matchNum}`
+      `process.BACKEND_URL/match/${eventName}/${matchType}/${matchNum}`
     );
     const data = await res.json();
 

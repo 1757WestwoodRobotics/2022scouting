@@ -32,6 +32,7 @@ export default {
         values: {
           "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
+                    "process.BACKEND_URL": process.env.BACKEND_URL || "http://localhost:1757"
         },
       }),
       svelte({

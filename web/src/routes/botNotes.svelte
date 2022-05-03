@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { apiUrl, competitions } from "../constants";
+  import { competitions } from "../constants";
   import Box from "../components/Box.svelte";
   let possibleTeams = [];
   let data = {
@@ -10,7 +10,7 @@
     author: "",
   };
   const upload = () => {
-    fetch(`${apiUrl}/scout/notes`, {
+    fetch(`process.BACKEND_URL/scout/notes`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },

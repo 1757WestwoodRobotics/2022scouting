@@ -4,7 +4,7 @@
     let possibleTeams = [0];
     if (typeof query["m"] !== "undefined") {
       [comp, comp_level, match_number] = query["m"].split("_");
-      const dat = await this.fetch(`${apiUrl}/event/${comp}/simple`);
+      const dat = await this.fetch(`process.BACKEND_URL/event/${comp}/simple`);
       const json = await dat.json();
       possibleTeams = json;
     }
@@ -38,13 +38,13 @@
   import Counter from "../components/Counter.svelte";
   import Box from "../components/Box.svelte";
   import submit from "../images/button-submit.svg";
-  import { competitions, climb, matchType, apiUrl } from "../constants";
+  import { competitions, climb, matchType } from "../constants";
 
   export let data;
   export let possibleTeams;
 
   const upload = () => {
-    fetch(`${apiUrl}/scout/upload`, {
+    fetch(`process.BACKEND_URL/scout/upload`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@
   };
 
   const updatePossibleTeams = () => {
-    fetch(`${apiUrl}/event/${data.identifier.comp}/simple`)
+    fetch(`process.BACKEND_URL/event/${data.identifier.comp}/simple`)
       .then((r) => r.json())
       .then((r) => {
         possibleTeams = r;

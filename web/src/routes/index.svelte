@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { competitions, apiUrl, limitSigfigs, mapRange } from "../constants";
+  import { competitions, limitSigfigs, mapRange } from "../constants";
   import Box from "../components/Box.svelte";
 
   let teamData = [];
@@ -7,7 +7,9 @@
 
   const fetchData = async () => {
     const res = await self.fetch(
-      `${apiUrl}/event/${selected.id}${maxEntries ? "?l=" + maxEntries : ""}`
+      `process.BACKEND_URL/event/${selected.id}${
+        maxEntries ? "?l=" + maxEntries : ""
+      }`
     );
     return res.json();
   };

@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-  import { apiUrl, competitions, limitSigfigs } from "../../constants";
+  import { competitions, limitSigfigs } from "../../constants";
   import { Line } from "svelte-chartjs";
   export async function preload({ params }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
-    const res = await this.fetch(`${apiUrl}/team/${params.team}`);
+    const res = await this.fetch(`process.BACKEND_URL/team/${params.team}`);
     const data = await res.json();
 
     if (res.status === 200) {
@@ -36,7 +36,7 @@
 
   const fetchMatches = async () => {
     const res = await self.fetch(
-      `${apiUrl}/team/${team.team_number}/matches/${selectedComp.id}`
+      `process.BACKEND_URL/team/${team.team_number}/matches/${selectedComp.id}`
     );
     return res.json();
   };

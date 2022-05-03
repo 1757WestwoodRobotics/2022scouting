@@ -1,4 +1,3 @@
-export const apiUrl = "http://localhost:1757";
 export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
