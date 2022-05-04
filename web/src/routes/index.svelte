@@ -4,11 +4,16 @@
 
   let teamData = [];
   let maxEntries: number | undefined = undefined; // max amount of fetched entities for any given
+  let limitToComp = false;
 
   const fetchData = async () => {
     const res = await self.fetch(
       `process.BACKEND_URL/event/${selected.id}${
-        maxEntries ? "?l=" + maxEntries : ""
+        maxEntries
+          ? "?l=" + maxEntries + (limitToComp ? "&c=t" : "")
+          : limitToComp
+          ? "?c=t"
+          : ""
       }`
     );
     return res.json();
@@ -103,7 +108,14 @@
       {/each}
     </select>
   </figure>
-  <input type="number" placeholder="Last N matches" bind:value={maxEntries} on:change={updateData}/>
+  <input
+    type="number"
+    placeholder="Last N matches"
+    bind:value={maxEntries}
+    on:change={updateData}
+  />
+  Limit to Selected Competition
+  <input type="checkbox" bind:checked={limitToComp} on:change={updateData} />
 </Box>
 
 {#await promise}

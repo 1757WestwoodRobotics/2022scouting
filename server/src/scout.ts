@@ -95,20 +95,24 @@ export const dbTeamMatchData = async (
 
 export const dbTeamData = async (
   team: number,
-  limit: number = 50
+  limit: number = 50,
+  compLimit: string | undefined = undefined
 ): Promise<TeamStats> => {
   const dataRepo = conn.getRepository(ScoutingData);
 
-  let dat = (
-    await dataRepo
-      .createQueryBuilder("data")
-      .where("data.identifier->>'team' = :team", {
-        team,
-      })
-      .orderBy("data.identifier->>'match_number'", "DESC")
-      .take(limit)
-      .getMany()
-  ).map((entry: ScoutingData) => {
+  let req = dataRepo
+    .createQueryBuilder("data")
+    .where("data.identifier->>'team' = :team", {
+      team,
+    })
+    .orderBy("data.identifier->>'match_number'", "DESC")
+    .take(limit);
+
+  if (compLimit !== undefined) {
+    req = req.andWhere("data.identifier->>'comp' = :comp", { comp: compLimit });
+  }
+
+  let dat = (await req.getMany()).map((entry: ScoutingData) => {
     const ret = new ScoutingData();
     ret.notes = entry.notes;
     ret.auto_cargo = {

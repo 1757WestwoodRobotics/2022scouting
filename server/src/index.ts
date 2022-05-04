@@ -42,10 +42,11 @@ type FullTeamData = {
 
 const teamFullData = async (
   teamNum: number,
-  limit: number | undefined = undefined
+  limit: number | undefined = undefined,
+  compLimit: string | undefined = undefined
 ): Promise<FullTeamData> => {
   const teamDat = await teamData(teamNum);
-  const dbDat = await dbTeamData(teamNum, limit);
+  const dbDat = await dbTeamData(teamNum, limit, compLimit);
   const notes = await teamNotes(teamNum);
   const imp_notes = await fetchNotes(teamNum);
 
@@ -254,9 +255,10 @@ export const main = async (app: Express | undefined = undefined) => {
     );
 
     const limit = req.query.l ? parseInt(req.query.l as string) : undefined;
+    const compLimit = req.query.c ? event : undefined;
 
     const teamData = await Promise.all(
-      eventTeams.map(async (team) => await teamFullData(team, limit))
+      eventTeams.map(async (team) => await teamFullData(team, limit, compLimit))
     );
 
     teamData.sort((a, b) => a.team_number - b.team_number);
