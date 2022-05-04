@@ -99,14 +99,32 @@ export const dbTeamData = async (
 ): Promise<TeamStats> => {
   const dataRepo = conn.getRepository(ScoutingData);
 
-  let dat = await dataRepo
-    .createQueryBuilder("data")
-    .where("data.identifier->>'team' = :team", {
-      team,
-    })
-    .orderBy("data.identifier->>'match_number'", "DESC")
-    .take(limit)
-    .getMany();
+  let dat = (
+    await dataRepo
+      .createQueryBuilder("data")
+      .where("data.identifier->>'team' = :team", {
+        team,
+      })
+      .orderBy("data.identifier->>'match_number'", "DESC")
+      .take(limit)
+      .getMany()
+  ).map((entry: ScoutingData) => {
+    const ret = new ScoutingData();
+    ret.notes = entry.notes;
+    ret.auto_cargo = {
+      upper: parseInt(entry.auto_cargo.upper as unknown as string),
+      lower: parseInt(entry.auto_cargo.lower as unknown as string),
+      miss: parseInt(entry.auto_cargo.miss as unknown as string),
+    };
+    ret.teleop_cargo = {
+      upper: parseInt(entry.teleop_cargo.upper as unknown as string),
+      lower: parseInt(entry.teleop_cargo.lower as unknown as string),
+      miss: parseInt(entry.teleop_cargo.miss as unknown as string),
+    };
+    ret.identifier = entry.identifier;
+    ret.climb_level = parseInt(entry.climb_level as unknown as string);
+    return ret;
+  });
 
   let avgTeleopCargo =
     dat
