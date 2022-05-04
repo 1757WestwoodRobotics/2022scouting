@@ -103,7 +103,7 @@
       {/each}
     </select>
   </figure>
-  <input type="number" placeholder="Last N matches" bind:value={maxEntries} />
+  <input type="number" placeholder="Last N matches" bind:value={maxEntries} on:change={updateData}/>
 </Box>
 
 {#await promise}
