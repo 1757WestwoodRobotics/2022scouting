@@ -316,7 +316,11 @@
           </div>
         {/each}
       </div>
-      <Line data={calcGraphData(data)} options={chartOptions} />
+      <div class="contancontain">
+        <div class="graph-container">
+          <Line data={calcGraphData(data)} options={chartOptions} />
+        </div>
+      </div>
     {/await}
   {/if}
 </div>
@@ -330,6 +334,14 @@
 		so we have to use the :global(...) modifier to target
 		all elements inside .content
 	*/
+  .graph-container {
+    width: 100%;
+    min-width: 686px;
+  }
+  .contancontain {
+    overflow-x: scroll;
+    width: 100%;
+  }
   #matchContainer,
   .avgContainer {
     display: flex;

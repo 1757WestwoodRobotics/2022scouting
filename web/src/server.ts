@@ -10,13 +10,11 @@ export const start = (app) => {
   const rout = Router();
   if (app === undefined) {
     app = express().listen(PORT);
-    app.use("/", rout);
-  } else {
-    app.use("/2022", rout);
   }
+  app.use("/2022", rout);
   rout.use(
     compression({ threshold: 0 }),
     sirv("static", { dev }),
-    sapper.middleware(),
+    sapper.middleware()
   );
 };

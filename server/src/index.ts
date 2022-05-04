@@ -70,7 +70,7 @@ export const main = async (app: Express | undefined = undefined) => {
       console.log(`starting app on ${port}`);
     });
   }
-    app = app as Express
+  app = app as Express;
 
   app.use(
     cors({
@@ -316,16 +316,16 @@ export const main = async (app: Express | undefined = undefined) => {
 };
 
 export const start = (app: Express | undefined = undefined) => {
-conn
-  .initialize()
-  .then(() => {
-    main(app).catch((err) => {
-      console.error(err);
-    });
-  })
-  .catch((err) => console.error(err));
-}
+  conn
+    .initialize()
+    .then(() => {
+      main(app).catch((err) => {
+        console.error(err);
+      });
+    })
+    .catch((err) => console.error(err));
+};
 
-if (typeof require !== 'undefined' && require.main === module) {
-    start()
+if (typeof require !== "undefined" && require.main === module) {
+  start();
 }

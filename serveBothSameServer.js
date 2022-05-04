@@ -8,7 +8,7 @@ const app = express();
     app.listen(port, () => {
         console.log("STARTING META PROCESS")
     })
-    const frontend = require("./web/__sapper__/dev/server/server")
+    const frontend = require("./web/__sapper__/build/server/server")
     process.chdir("./web")
     frontend.start(app)
 

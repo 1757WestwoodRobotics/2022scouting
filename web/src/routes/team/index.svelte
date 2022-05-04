@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import Box from "../../components/Box.svelte";
-  import {goto} from "@sapper/app"
+  import { goto } from "@sapper/app";
   let teamNum = 1757;
   const handleSubmit = async () => {
     await goto(`team/${teamNum}`);
