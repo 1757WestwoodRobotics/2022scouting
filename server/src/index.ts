@@ -283,17 +283,29 @@ export const main = async (app: Express | undefined = undefined) => {
       return;
     }
 
+    let infoCache: any = {};
+
     const genTeamInfo = (team_keys: string[]): Promise<any>[] => {
       return team_keys.map(async (a: string) => {
         const teamNum = a.substring(3);
-        const teamInfo = await teamFullData(parseInt(teamNum));
-        return {
+        if (typeof infoCache[teamNum] !== "undefined") {
+          return infoCache[teamNum];
+        }
+        const teamInfo = await teamFullData(
+          parseInt(teamNum),
+          undefined,
+          event // always filter for event regarding match estimates
+        );
+        const ret = {
           id: teamNum,
           name: teamInfo.nickname,
           av: teamInfo.avatar,
           cargo: teamInfo.avgCargoPoints,
           climb: teamInfo.avgClimb,
         };
+        infoCache[teamNum] = ret;
+
+        return ret;
       });
     };
 

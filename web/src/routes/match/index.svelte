@@ -1,11 +1,12 @@
 <script lang="ts">
   import { competitions, matchType, limitSigfigs } from "../../constants";
+  import {goto} from "@sapper/app"
 
   let compIden = "mawor";
   let matchNum = 0;
   let mType = "qm";
-  const handleSubmit = () => {
-    location.href += `/${compIden}_${mType}_${matchNum}`;
+  const handleSubmit = async () => {
+    await goto(`match/${compIden}_${mType}_${matchNum}`);
   };
 
   const fetchData = async () => {
