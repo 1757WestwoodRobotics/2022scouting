@@ -70,8 +70,9 @@ export const main = async (app: Express | undefined = undefined) => {
     app.listen(port, () => {
       console.log(`starting app on ${port}`);
     });
-  }
+  }else{
   app = app as Express;
+    }
 
   app.use(
     cors({
@@ -309,18 +310,28 @@ export const main = async (app: Express | undefined = undefined) => {
       });
     };
 
-    const matches = await Promise.all(
-      (
-        await eventMatches(event)
-      ).map(async (match: any) => {
-        return {
-          match_type: match.comp_level,
-          match_number: match.match_number,
-          set_number: match.set_number,
-          blue: await Promise.all(genTeamInfo(match.alliances.blue.team_keys)),
-          red: await Promise.all(genTeamInfo(match.alliances.red.team_keys)),
-        };
-      })
+    const matches = (
+      await Promise.all(
+        (
+          await eventMatches(event)
+        ).map(async (match: any) => {
+          return {
+            match_type: match.comp_level,
+            match_number: match.match_number,
+            set_number: match.set_number,
+            blue: await Promise.all(
+              genTeamInfo(match.alliances.blue.team_keys)
+            ),
+            red: await Promise.all(genTeamInfo(match.alliances.red.team_keys)),
+          };
+        })
+      )
+    ).sort(
+      (a, b) =>
+        b.match_number -
+        a.match_number +
+        b.set_number * 1000 -
+        a.set_number * 1000
     );
     res.json(matches);
   });
