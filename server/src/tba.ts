@@ -1,5 +1,7 @@
-import fetch from "node-fetch";
+import { API, Match, Match_Simple, Team_Simple } from "tba-api-client";
 const api_key = process.env.TBA_KEY as string;
+
+const client = new API(api_key);
 
 const teamCache: any = {};
 const matchCache: any = {};
@@ -14,39 +16,31 @@ export const teamData = async (team: number) => {
     console.log(`using cache for team ${team}`);
     return teamCache[team_key];
   }
+  let teamData = await client.Team(team_key);
+  let mediaData = await client.TeamMedia(
+    team_key,
+    process.env.YEAR as unknown as string
+  );
 
-  const url = `https://www.thebluealliance.com/api/v3/team/${team_key}`;
-
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let teamData = await response.json();
-
-  const url2 = `https://www.thebluealliance.com/api/v3/team/${team_key}/media/${process.env.YEAR}`;
-  const response2 = await fetch(url2, {
-    headers: { "X-TBA-Auth-Key": api_key },
-  });
-  let mediaData = await response2.json();
-  let av = undefined;
-  try {
-    av = mediaData.filter((a: any) => (a.type = "avatar"))[0].details
-      .base64Image;
-  } catch (e) {}
+  let av = mediaData.filter((a: any) => (a.type = "avatar"));
+  av = av[0].details?.base64Image;
 
   const returnDat = { ...teamData, avatar: av };
   teamCache[team_key] = returnDat;
   return returnDat;
 };
 
-export const teamMatches = async (team: number, event: string) => {
+export const teamMatches = async (
+  team: number,
+  event: string
+): Promise<Match[]> => {
   const team_key = "frc" + team;
   const event_id = process.env.YEAR + event;
   if (typeof teamMatchCache[team_key + event_id] !== "undefined") {
     console.log(`using cache for team ${team}, event ${event}`);
     return teamMatchCache[team_key + event_id];
   }
-  const url = `https://www.thebluealliance.com/api/v3/team/${team_key}/event/${event_id}/matches/simple`;
-
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let data = await response.json();
+  let data = await client.TeamEventMatchesSimple(team_key, event_id);
   teamMatchCache[team_key] = data;
   return data;
 };
@@ -56,7 +50,7 @@ export const matchData = async (
   matchType: string,
   matchNumber: number,
   setNumber?: number
-) => {
+): Promise<Match> => {
   if (typeof matchCache[`${event}${matchType}${matchNumber}`] !== "undefined") {
     console.log(`using cache for match`);
     return matchCache[`${event}${matchType}${matchNumber}`];
@@ -68,16 +62,13 @@ export const matchData = async (
     matchType +
     (setNumber ? setNumber + "m" + matchNumber : matchNumber);
 
-  const url = `https://www.thebluealliance.com/api/v3/match/${match_id}`;
-
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let data = await response.json();
+  let data = await client.Match(match_id);
 
   matchCache[`${event}${matchType}${matchNumber}`] = data;
   return data;
 };
 
-export const eventMatches = async (event: string) => {
+export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
   if (typeof eventMatchCache[event_id] !== "undefined") {
@@ -85,14 +76,13 @@ export const eventMatches = async (event: string) => {
     return eventMatchCache[event_id];
   }
 
-  const url = `https://www.thebluealliance.com/api/v3/event/${event_id}/matches/simple`;
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let data = await response.json();
+  let data = await client.EventMatchesSimple(event_id);
   eventMatchCache[event_id] = data;
+
   return data;
 };
 
-export const eventData = async (event: string) => {
+export const eventData = async (event: string): Promise<Team_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
   if (typeof eventCache[event_id] !== "undefined") {
@@ -100,9 +90,7 @@ export const eventData = async (event: string) => {
     return eventCache[event_id];
   }
 
-  const url = `https://www.thebluealliance.com/api/v3/event/${event_id}/teams/simple`;
-  const response = await fetch(url, { headers: { "X-TBA-Auth-Key": api_key } });
-  let data = await response.json();
+  let data = await client.EventTeamsSimple(event_id);
   eventCache[event_id] = data;
   return data;
 };

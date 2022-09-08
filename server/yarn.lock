@@ -174,13 +174,6 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
-bluealliance@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/bluealliance/-/bluealliance-0.9.0.tgz#b73b4d19e3d55ffcb793ed67dc9be7d4749bc6a2"
-  integrity sha512-70QLYYjug4fYl7gR9CWR0a7moQpPCk3iUk80zbaL4i3Dld/f8cmrftGDZyhtalbDX2ILxEiifTAXCdaj68R7FA==
-  dependencies:
-    xmlhttprequest "^1.8.0"
-
 body-parser@1.19.2:
   version "1.19.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.19.2.tgz#4714ccd9c157d44797b8b5607d72c0b89952f26e"
@@ -1505,6 +1498,11 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+tba-api-client@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/tba-api-client/-/tba-api-client-1.1.1.tgz#1d73c42e0f3eb2d7b9ab6a31a621bb6e1e8b5274"
+  integrity sha512-O+n+5UiJx9FMHEtjU662AmtLrjDU7ZKgGcHBdIfuSwfv4TT+jk3yBAtnMmk0vPylk6m0LkGqjXFHyBMIkye4Fg==
+
 thenify-all@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/thenify-all/-/thenify-all-1.6.0.tgz#1a1918d402d8fc3f98fbf234db0bcc8cc10e9726"
@@ -1721,11 +1719,6 @@ xmlbuilder@~11.0.0:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
   integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
-
-xmlhttprequest@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
-  integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
 
 xtend@^4.0.0:
   version "4.0.2"

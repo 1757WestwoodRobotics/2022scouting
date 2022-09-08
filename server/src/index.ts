@@ -70,9 +70,9 @@ export const main = async (app: Express | undefined = undefined) => {
     app.listen(port, () => {
       console.log(`starting app on ${port}`);
     });
-  }else{
-  app = app as Express;
-    }
+  } else {
+    app = app as Express;
+  }
 
   app.use(
     cors({
@@ -146,6 +146,18 @@ export const main = async (app: Express | undefined = undefined) => {
       matchNum as unknown as number,
       setNum as unknown as number
     );
+    if (
+      typeof dat.alliances === "undefined" ||
+      typeof dat.score_breakdown === "undefined" ||
+      typeof dat.score_breakdown.red === "undefined" ||
+      typeof dat.score_breakdown.blue === "undefined" ||
+      typeof dat.alliances === "undefined" ||
+      typeof dat.alliances.red === "undefined" ||
+      typeof dat.alliances.blue === "undefined"
+    ) {
+      res.status(502).json("could not get relevant information from match");
+      return;
+    }
     const dbDat = await filterDataByMatch(
       event,
       type,
@@ -199,14 +211,14 @@ export const main = async (app: Express | undefined = undefined) => {
     const individualBlueData = dat.alliances.blue.team_keys.map(
       (teamIden: string) => {
         let team = parseInt(teamIden.substring(3));
-        return mapTeamPercentContribution(team, dat.score_breakdown.blue);
+        return mapTeamPercentContribution(team, dat.score_breakdown!.blue);
       }
     );
 
     const individualRedData = dat.alliances.red.team_keys.map(
       (teamIden: string) => {
         let team = parseInt(teamIden.substring(3));
-        return mapTeamPercentContribution(team, dat.score_breakdown.red);
+        return mapTeamPercentContribution(team, dat.score_breakdown!.red);
       }
     );
 

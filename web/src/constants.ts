@@ -2,6 +2,7 @@ export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
   { id: "necmp1", name: "NE District Championship Calcium Division [necmp1]" },
+  { id: "nenerd", name: "New England Robotics Derby (N.E.R.D.) [nenerd]" },
 ];
 export const climb = [
   { name: "None", amount: 0 },
