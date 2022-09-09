@@ -22,8 +22,10 @@ export const teamData = async (team: number) => {
     process.env.YEAR as unknown as string
   );
 
-  let av = mediaData.filter((a: any) => (a.type = "avatar"));
-  av = av[0].details?.base64Image;
+  let av = mediaData?.filter((a: any) => (a.type = "avatar"));
+  if (av && av.length > 0) {
+    av = av[0].details?.base64Image;
+  }
 
   const returnDat = { ...teamData, avatar: av };
   teamCache[team_key] = returnDat;
