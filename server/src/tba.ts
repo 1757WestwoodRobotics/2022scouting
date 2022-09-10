@@ -1,4 +1,4 @@
-import { API, Match, Match_Simple, Team_Simple } from "tba-api-client";
+import { API, Match, Match_Simple, Media, Team_Simple } from "tba-api-client";
 const api_key = process.env.TBA_KEY as string;
 
 const client = new API(api_key);
@@ -17,9 +17,15 @@ export const teamData = async (team: number) => {
     return teamCache[team_key];
   }
   let teamData = await client.Team(team_key);
-  let mediaData = await client.TeamMedia(
+  let year = parseInt(process.env.YEAR as unknown as string) as number;
+
+  // @ts-ignore
+  let mediaData: Media[] = await client.TeamMedia(
     team_key,
-    process.env.YEAR as unknown as string
+    // @ts-ignore
+    year,
+    undefined,
+    false
   );
 
   let av = mediaData?.filter((a: any) => (a.type = "avatar"));
