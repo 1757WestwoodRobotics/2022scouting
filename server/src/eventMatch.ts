@@ -125,7 +125,7 @@ export const eventMatch = async (
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
         const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
-        return teamPoints;
+        return teamPoints || 0;
       })
     )
   ).reduce((a, b) => a + b);
@@ -136,7 +136,7 @@ export const eventMatch = async (
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
         const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
-        return teamPoints;
+        return teamPoints || 0;
       })
     )
   ).reduce((a, b) => a + b);
