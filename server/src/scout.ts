@@ -29,6 +29,7 @@ type DataIdentifier = {
   comp: string;
   comp_level: MatchType;
   match_number: number;
+  set_number?: number;
 };
 
 @Entity()
@@ -268,18 +269,23 @@ export const handleScoutUpload = async (
 export const filterDataByMatch = async (
   event: string,
   level: string,
-  matchNum: number
+  matchNum: number,
+  setNum?: number
 ) => {
   let dataRepo = conn.getRepository(ScoutingData);
 
-  let dat = await dataRepo
+  let req = dataRepo
     .createQueryBuilder("data")
     .where("data.identifier->>'comp' = :event", {
       event,
     })
     .andWhere("data.identifier->>'comp_level' = :level", { level })
-    .andWhere("data.identifier->>'match_number' = :matchNum", { matchNum })
-    .getMany();
+    .andWhere("data.identifier->>'match_number' = :matchNum", { matchNum });
+
+  if (setNum !== undefined) {
+    req = req.andWhere("data.identifier->>'set_number' = :setNum", { setNum });
+  }
+  let dat = req.getMany();
 
   return dat;
 };

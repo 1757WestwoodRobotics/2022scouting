@@ -161,7 +161,8 @@ export const main = async (app: Express | undefined = undefined) => {
     const dbDat = await filterDataByMatch(
       event,
       type,
-      matchNum as unknown as number
+      matchNum as unknown as number,
+      setNum as unknown as number
     );
     // woohoo complex match to determine contributions!
     const mapTeamPercentContribution = (team: number, data: any) => {

@@ -16,6 +16,7 @@
           comp,
           comp_level,
           match_number,
+          set_number: undefined,
         },
         auto_cargo: {
           upper: 0,
@@ -56,6 +57,7 @@
       data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
       data.climb_level = 0;
       data.notes = "";
+      data.identifier.set_number = undefined;
     });
   };
 
@@ -90,6 +92,15 @@
         <option value={type.id}>{type.name}</option>
       {/each}
     </select>
+    {#if data.identifier.comp_level && data.identifier.comp_level != "qm"}
+    <span
+      >Set Number: <input
+        bind:value={data.identifier.set_number}
+        type="number"
+      /></span
+    >
+    <br />
+    {/if}
     <span
       >Match Number: <input
         bind:value={data.identifier.match_number}
