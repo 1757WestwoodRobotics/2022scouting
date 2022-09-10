@@ -1,6 +1,6 @@
 <script lang="ts">
   import { competitions, matchType, limitSigfigs } from "../../constants";
-  import {goto} from "@sapper/app"
+  import { goto } from "@sapper/app";
 
   let compIden = "mawor";
   let matchNum = 0;

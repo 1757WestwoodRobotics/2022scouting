@@ -20,6 +20,11 @@
 <script lang="ts">
   export let match;
   export let matchInfo;
+
+  let isPlayed = match.score_breakdown != null;
+  if(!isPlayed){
+    match.score_breakdown = {red: {totalPoints: 0}, blue: {totalPoints: 0}}
+  }
 </script>
 
 <svelte:head>
@@ -52,9 +57,10 @@
   <div>
     <h3 style="color:red;">Red Alliance</h3>
     <h4>
-      Total points: {match.score_breakdown.red.totalPoints}, expected points: {Math.round(
-        match.redExpectedPoint
-      )}
+      {#if isPlayed}
+        Total points: {match.score_breakdown.red.totalPoints},
+      {/if}
+      expected points: {Math.round(match.redExpectedPoint)}
     </h4>
     {#each match.alliances.red.team_keys as team}
       <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />
@@ -63,9 +69,10 @@
   <div>
     <h3 style="color:blue;">Blue Alliance</h3>
     <h4>
-      Total points: {match.score_breakdown.blue.totalPoints}, expected points: {Math.round(
-        match.blueExpectedPoint
-      )}
+      {#if isPlayed}
+        Total points: {match.score_breakdown.blue.totalPoints},
+      {/if}
+      expected points: {Math.round(match.blueExpectedPoint)}
     </h4>
     {#each match.alliances.blue.team_keys as team}
       <TeamMatchInfo matchData={match.teamData} team={team.substring(3)} />

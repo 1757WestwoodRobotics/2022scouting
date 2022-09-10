@@ -1,6 +1,7 @@
-import { dbTeamData, filterDataByMatch } from "./scout";
 import { Request, Response } from "express";
+
 import { roundObject } from "./helperFuncs";
+import { dbTeamData, filterDataByMatch } from "./scout";
 import { matchData } from "./tba";
 
 export const eventMatch = async (
@@ -36,15 +37,22 @@ export const eventMatch = async (
   );
   if (
     typeof dat.alliances === "undefined" ||
-    typeof dat.score_breakdown === "undefined" ||
-    typeof dat.score_breakdown.red === "undefined" ||
-    typeof dat.score_breakdown.blue === "undefined" ||
     typeof dat.alliances === "undefined" ||
     typeof dat.alliances.red === "undefined" ||
     typeof dat.alliances.blue === "undefined"
   ) {
     res.status(502).json("could not get relevant information from match");
     return;
+  }
+
+  let matchPlayed = true;
+  if (
+    dat.score_breakdown === undefined ||
+    dat.score_breakdown === null ||
+    typeof dat.score_breakdown.red === "undefined" ||
+    typeof dat.score_breakdown.blue === "undefined"
+  ) {
+    matchPlayed = false;
   }
   const dbDat = await filterDataByMatch(
     event,
@@ -97,19 +105,19 @@ export const eventMatch = async (
     return returnData;
   };
 
-  const individualBlueData = dat.alliances.blue.team_keys.map(
-    (teamIden: string) => {
-      let team = parseInt(teamIden.substring(3));
-      return mapTeamPercentContribution(team, dat.score_breakdown!.blue);
-    }
-  );
+    const individualBlueData = matchPlayed ? dat.alliances.blue.team_keys.map(
+      (teamIden: string) => {
+        let team = parseInt(teamIden.substring(3));
+        return mapTeamPercentContribution(team, dat.score_breakdown!.blue);
+      }
+    ) : [];
 
-  const individualRedData = dat.alliances.red.team_keys.map(
-    (teamIden: string) => {
-      let team = parseInt(teamIden.substring(3));
-      return mapTeamPercentContribution(team, dat.score_breakdown!.red);
-    }
-  );
+    const individualRedData = matchPlayed ? dat.alliances.red.team_keys.map(
+      (teamIden: string) => {
+        let team = parseInt(teamIden.substring(3));
+        return mapTeamPercentContribution(team, dat.score_breakdown!.red);
+      }
+    ) : [];
 
   const redExpectedPoint = (
     await Promise.all(

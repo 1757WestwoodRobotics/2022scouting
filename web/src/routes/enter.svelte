@@ -93,13 +93,13 @@
       {/each}
     </select>
     {#if data.identifier.comp_level && data.identifier.comp_level != "qm"}
-    <span
-      >Set Number: <input
-        bind:value={data.identifier.set_number}
-        type="number"
-      /></span
-    >
-    <br />
+      <span
+        >Set Number: <input
+          bind:value={data.identifier.set_number}
+          type="number"
+        /></span
+      >
+      <br />
     {/if}
     <span
       >Match Number: <input
