@@ -1,5 +1,10 @@
 <script lang="ts">
   export let segment: string;
+  const refresh_tba = () => {
+    fetch(`process.BACKEND_URL/refresh`, { method: "POST" }).then(() => {
+      alert("backend refreshed");
+    });
+  };
 </script>
 
 <nav>
@@ -27,6 +32,9 @@
         aria-current={segment === "match" ? "page" : undefined}
         href="match">Matches</a
       >
+    </li>
+    <li>
+      <a href="#" on:click={refresh_tba}>Refresh Backend</a>
     </li>
   </ul>
 </nav>

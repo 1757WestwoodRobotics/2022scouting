@@ -22,8 +22,11 @@
   export let matchInfo;
 
   let isPlayed = match.score_breakdown != null;
-  if(!isPlayed){
-    match.score_breakdown = {red: {totalPoints: 0}, blue: {totalPoints: 0}}
+  if (!isPlayed) {
+    match.score_breakdown = {
+      red: { totalPoints: 0 },
+      blue: { totalPoints: 0 },
+    };
   }
 </script>
 

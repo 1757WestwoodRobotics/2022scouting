@@ -3,11 +3,11 @@ const api_key = process.env.TBA_KEY as string;
 
 const client = new API(api_key);
 
-const teamCache: any = {};
-const matchCache: any = {};
-const eventCache: any = {};
-const teamMatchCache: any = {};
-const eventMatchCache: any = {};
+let teamCache: any = {};
+let matchCache: any = {};
+let eventCache: any = {};
+let teamMatchCache: any = {};
+let eventMatchCache: any = {};
 
 export const teamData = async (team: number) => {
   const team_key = "frc" + team;
@@ -36,6 +36,13 @@ export const teamData = async (team: number) => {
   const returnDat = { ...teamData, avatar: av };
   teamCache[team_key] = returnDat;
   return returnDat;
+};
+export const removeCache = () => {
+  teamCache = {};
+  matchCache = {};
+  eventCache = {};
+  teamMatchCache = {};
+  eventMatchCache = {};
 };
 
 export const teamMatches = async (

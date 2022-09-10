@@ -7,11 +7,8 @@ import express, { Express } from "express";
 import { conn } from "./data-source";
 import { eventMatch } from "./eventMatch";
 import { handleNotes } from "./notes";
-import {
-  dbTeamMatchData,
-  handleScoutUpload,
-} from "./scout";
-import { teamMatches } from "./tba";
+import { dbTeamMatchData, handleScoutUpload } from "./scout";
+import { removeCache, teamMatches } from "./tba";
 import { eventHandler, eventMatchHandler, eventSimple } from "./event";
 import { teamFullData } from "./teamData";
 
@@ -76,6 +73,11 @@ export const main = async (app: Express | undefined = undefined) => {
     );
   });
 
+  app.post("/refresh", async (_req, res) => {
+    removeCache();
+    console.log("Refreshing");
+    res.json("OK");
+  });
   app.get("/match/:event/:type/:matchNum", eventMatch);
 
   app.get("/event/:event", eventHandler);
