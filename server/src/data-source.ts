@@ -13,7 +13,6 @@ export const conn = new DataSource({
   database: "frc2022",
   username: "postgres",
   password: "postgres",
-  logging: true,
   synchronize: true,
   entities: [ScoutingData, BotNotes],
 });
