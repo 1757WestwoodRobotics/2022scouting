@@ -2,7 +2,7 @@ import "dotenv-safe/config";
 
 import bodyParser from "body-parser";
 import cors from "cors";
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 
 import { conn } from "./data-source";
 import { eventMatch } from "./eventMatch";
@@ -11,6 +11,18 @@ import { dbTeamMatchData, handleScoutUpload } from "./scout";
 import { removeCache, teamMatches } from "./tba";
 import { eventHandler, eventMatchHandler, eventSimple } from "./event";
 import { teamFullData } from "./teamData";
+
+const handleErr = (
+  err: any,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  res.status(500).json({
+    msg: err.message,
+    success: false,
+  });
+};
 
 export const main = async (app: Express | undefined = undefined) => {
   if (app === undefined) {
@@ -30,6 +42,7 @@ export const main = async (app: Express | undefined = undefined) => {
     })
   );
   app.use(bodyParser.json());
+  app.use(handleErr);
 
   app.get("/team/:team", async (req, res) => {
     if ([req.params.team].includes("undefined")) {
@@ -73,11 +86,16 @@ export const main = async (app: Express | undefined = undefined) => {
     );
   });
 
-  app.post("/refresh", async (_req, res) => {
-    removeCache();
-    console.log("Refreshing");
-    res.json("OK");
+  app.post("/refresh", async (_req, res, next) => {
+    try {
+      removeCache();
+      console.log("Refreshing");
+      res.json("OK");
+    } catch (err) {
+      next(err);
+    }
   });
+
   app.get("/match/:event/:type/:matchNum", eventMatch);
 
   app.get("/event/:event", eventHandler);
