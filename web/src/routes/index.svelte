@@ -4,7 +4,7 @@
 
   let teamData = [];
   let maxEntries: number | undefined = undefined; // max amount of fetched entities for any given
-  let limitToComp = false;
+  let limitToComp = true;
 
   const fetchData = async () => {
     const res = await self.fetch(
@@ -188,6 +188,7 @@
               sortingFunction = sortingMethods[10].fn;
             }}>Avg Cargo + Climb Points</th
           >
+          <th>avg variation</th>
         </tr>
       </thead>
       <tbody>
@@ -277,6 +278,7 @@
                 Math.min(...data.map((a) => a.avgCargoPoints + a.avgClimb))
               )}>{limitSigfigs(team.avgCargoPoints + team.avgClimb)}</td
             >
+            <td>{limitSigfigs(team.sd)}</td>
           </tr>
         {/each}
       </tbody>
