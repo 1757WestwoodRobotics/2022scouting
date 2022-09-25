@@ -298,5 +298,5 @@ export const teamNotes = async (team: number) => {
     .where("data.identifier->>'team' = :team", { team })
     .getMany();
 
-  return dat.map((entry) => entry.notes);
+  return dat.map((entry) => [entry.notes, entry.identifier.comp]);
 };

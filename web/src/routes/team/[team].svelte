@@ -256,8 +256,8 @@
       <li>Team Notes:</li>
       <ul>
         {#each team.notes as note}
-          {#if note != ""}
-            <li>{note}</li>
+          {#if note[0] != ""}
+            <li>{note[0]} ({note[1]})</li>
           {/if}
         {/each}
       </ul>
