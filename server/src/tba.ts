@@ -1,7 +1,17 @@
+import { readFileSync } from "fs";
+import path, { dirname } from "path";
 import { API, Match, Match_Simple, Media, Team_Simple } from "tba-api-client";
 const api_key = process.env.TBA_KEY as string;
 
 const client = new API(api_key);
+
+const extraComps = JSON.parse(
+  String(
+    readFileSync(
+      path.join(dirname(__filename), "..", "..", "extraCompInfo.json")
+    )
+  )
+);
 
 let teamCache: any = {};
 let matchCache: any = {};
@@ -55,7 +65,30 @@ export const teamMatches = async (
     console.log(`using cache for team ${team}, event ${event}`);
     return teamMatchCache[team_key + event_id];
   }
-  let data = await client.TeamEventMatchesSimple(team_key, event_id);
+  let data;
+  if (Object.keys(extraComps).includes(event)) {
+    // @ts-ignore
+    data = extraComps[event]["matches"]["qm"]
+      .filter((a: number[]) => a.includes(parseInt(team as unknown as string)))
+      .map((t: number[], idx: number) => {
+        return {
+          key: `${event_id}_qm${idx + 1}`,
+          comp_level: "qm",
+          set_number: "1",
+          match_number: idx + 1,
+          alliances: {
+            blue: {
+              team_keys: [teamToStr(t[0]), teamToStr(t[1]), teamToStr(t[2])],
+            },
+            red: {
+              team_keys: [teamToStr(t[3]), teamToStr(t[4]), teamToStr(t[5])],
+            },
+          },
+        };
+      });
+  } else {
+    data = await client.TeamEventMatchesSimple(team_key, event_id);
+  }
   teamMatchCache[team_key] = data;
   return data;
 };
@@ -83,6 +116,10 @@ export const matchData = async (
   return data;
 };
 
+const teamToStr = (team: number) => {
+  return `frc${team}`;
+};
+
 export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
@@ -91,7 +128,30 @@ export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
     return eventMatchCache[event_id];
   }
 
-  let data = await client.EventMatchesSimple(event_id);
+  let data;
+  if (Object.keys(extraComps).includes(event)) {
+    // @ts-ignore
+    data = extraComps[event]["matches"]["qm"].map(
+      (t: number[], idx: number) => {
+        return {
+          key: `${event_id}_qm${idx + 1}`,
+          comp_level: "qm",
+          set_number: "1",
+          match_number: idx + 1,
+          alliances: {
+            blue: {
+              team_keys: [teamToStr(t[0]), teamToStr(t[1]), teamToStr(t[2])],
+            },
+            red: {
+              team_keys: [teamToStr(t[3]), teamToStr(t[4]), teamToStr(t[5])],
+            },
+          },
+        };
+      }
+    );
+  } else {
+    data = await client.EventMatchesSimple(event_id);
+  }
   eventMatchCache[event_id] = data;
 
   return data;
@@ -105,7 +165,15 @@ export const eventData = async (event: string): Promise<Team_Simple[]> => {
     return eventCache[event_id];
   }
 
-  let data = await client.EventTeamsSimple(event_id);
+  let data;
+  if (Object.keys(extraComps).includes(event)) {
+    // @ts-ignore
+    data = extraComps[event]["teams"].map((t: number) => {
+      return { key: `frc${t}`, team_number: t, name: "a" };
+    });
+  } else {
+    data = await client.EventTeamsSimple(event_id);
+  }
   eventCache[event_id] = data;
   return data;
 };
