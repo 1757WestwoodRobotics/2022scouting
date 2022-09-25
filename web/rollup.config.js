@@ -109,6 +109,8 @@ export default {
                 preventAssignment: true,
                 values: {
                     "process.browser": false,
+                    "process.env.EXTRA_COMPS": String(readFileSync(path.join(dirname(__filename), "..", "extraCompInfo.json"))),
+                    "process.BACKEND_URL": process.env.BACKEND_URL || "http://127.0.0.1:8080",
                     "process.env.NODE_ENV": JSON.stringify(mode),
                 },
             }),
@@ -153,6 +155,8 @@ export default {
                 values: {
                     "process.browser": true,
                     "process.env.NODE_ENV": JSON.stringify(mode),
+                    "process.env.EXTRA_COMPS": String(readFileSync(path.join(dirname(__filename), "..", "extraCompInfo.json"))),
+                    "process.BACKEND_URL": process.env.BACKEND_URL || "http://127.0.0.1:8080",
                 },
             }),
             commonjs(),
