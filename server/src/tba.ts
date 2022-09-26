@@ -69,19 +69,28 @@ export const teamMatches = async (
   if (Object.keys(extraComps).includes(event)) {
     // @ts-ignore
     data = extraComps[event]["matches"]["qm"]
-      .filter((a: number[]) => a.includes(parseInt(team as unknown as string)))
-      .map((t: number[], idx: number) => {
+      .map((a: number[], idx: number) => [a, idx])
+      .filter((a: [number[], number]) => a[0].includes(parseInt(team as unknown as string)))
+      .map((t: [number[], number]) => {
         return {
-          key: `${event_id}_qm${idx + 1}`,
+          key: `${event_id}_qm${t[1] + 1}`,
           comp_level: "qm",
           set_number: "1",
-          match_number: idx + 1,
+          match_number: t[1] + 1,
           alliances: {
             blue: {
-              team_keys: [teamToStr(t[0]), teamToStr(t[1]), teamToStr(t[2])],
+              team_keys: [
+                teamToStr(t[0][0]),
+                teamToStr(t[0][1]),
+                teamToStr(t[0][2]),
+              ],
             },
             red: {
-              team_keys: [teamToStr(t[3]), teamToStr(t[4]), teamToStr(t[5])],
+              team_keys: [
+                teamToStr(t[0][3]),
+                teamToStr(t[0][4]),
+                teamToStr(t[0][5]),
+              ],
             },
           },
         };
