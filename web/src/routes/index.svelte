@@ -87,8 +87,6 @@
     },
   ];
   let sortingFunction = sortingMethods[0].fn;
-
-
 </script>
 
 <svelte:head>

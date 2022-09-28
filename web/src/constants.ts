@@ -1,4 +1,4 @@
-export const extraComps = process.env.EXTRA_COMPS
+export const extraComps = process.env.EXTRA_COMPS;
 //hi
 
 let comp = Object.keys(extraComps).map((k) => {

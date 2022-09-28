@@ -44,20 +44,49 @@
   export let data;
   export let possibleTeams;
 
+  let offline = false;
+  let offlineDat = [];
+
   const upload = () => {
     fetch(`process.BACKEND_URL/scout/upload`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
-    }).then(() => {
-      alert("submitted");
-      data.identifier.team = 0;
-      data.identifier.match_number = 0;
-      data.auto_cargo = { upper: 0, lower: 0, miss: 0 };
-      data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
-      data.climb_level = 0;
-      data.notes = "";
-      data.identifier.set_number = undefined;
+    })
+      .then(() => {
+        alert("submitted");
+        data.identifier.team = 0;
+        data.identifier.match_number = 0;
+        data.auto_cargo = { upper: 0, lower: 0, miss: 0 };
+        data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
+        data.climb_level = 0;
+        data.notes = "";
+        data.identifier.set_number = undefined;
+      })
+      .catch((e) => {
+        offline = true;
+        console.log("Offline");
+        offlineDat.push(data);
+        alert("Offline Cached");
+        data.identifier.team = 0;
+        data.identifier.match_number = 0;
+        data.auto_cargo = { upper: 0, lower: 0, miss: 0 };
+        data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
+        data.climb_level = 0;
+        data.notes = "";
+        data.identifier.set_number = undefined;
+      });
+  };
+
+  const uploadBulk = () => {
+    offlineDat.forEach((dat) => {
+      fetch(`process.BACKEND_URL/scout/upload`, {
+        method: "POST",
+        body: JSON.stringify(dat),
+        headers: { "Content-Type": "application/json" },
+      });
+      alert("bulk uploaded");
+      offlineDat = [];
     });
   };
 
@@ -138,7 +167,22 @@
 </div>
 <br />
 
-<input class="submit" type="image" on:click={upload} src={submit} alt="bruh" />
+<input
+  class="submit"
+  type="image"
+  on:click={upload}
+  src={submit}
+  alt="submit"
+/>
+<br />
+{#if offline}
+  <input
+    class="bulkUpload"
+    on:click={uploadBulk}
+    type="button"
+    value="Bulk Upload"
+  />
+{/if}
 
 <style>
   span {
@@ -163,9 +207,6 @@
     color: rgb(255, 255, 255);
     margin-bottom: 1em;
   }
-  input {
-    width: 3em;
-  }
   textarea,
   input {
     background-color: rgb(49, 49, 49);
@@ -173,6 +214,17 @@
     border: 2px;
     border-color: white;
   }
+  input[type="number"] {
+    width: 3em;
+  }
+  .submit,
+  .bulkUpload {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+  }
+
   .submit {
     display: block;
     margin-left: auto;
