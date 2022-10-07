@@ -66,7 +66,7 @@
       .catch((e) => {
         offline = true;
         console.log("Offline");
-        offlineDat.push(data);
+        offlineDat.push(JSON.parse(JSON.stringify(data))); // if this wasn't here it would've put the reference to data
         alert("Offline Cached");
         data.identifier.team = 0;
         data.identifier.match_number = 0;
@@ -85,9 +85,9 @@
         body: JSON.stringify(dat),
         headers: { "Content-Type": "application/json" },
       });
-      alert("bulk uploaded");
       offlineDat = [];
     });
+    alert("bulk uploaded");
   };
 
   const updatePossibleTeams = () => {
