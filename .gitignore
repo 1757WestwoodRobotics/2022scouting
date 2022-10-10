@@ -10,3 +10,6 @@ server/node_modules
 server/dist
 node_modules
 yarn-error.log
+server/eventCache.json
+server/teamCache.json
+server/teamMatchCache.json

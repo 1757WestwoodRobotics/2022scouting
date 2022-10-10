@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import path, { dirname } from "path";
 import { API, Match, Match_Simple, Media, Team_Simple } from "tba-api-client";
 const api_key = process.env.TBA_KEY as string;
@@ -13,18 +13,37 @@ const extraComps = JSON.parse(
   )
 );
 
-let teamCache: any = {};
-let matchCache: any = {};
-let eventCache: any = {};
-let teamMatchCache: any = {};
-let eventMatchCache: any = {};
+class ItemCache {
+  name: string;
+  data: any;
+  constructor(name: string) {
+    this.name = name;
+    this.data = existsSync(this.name + ".json")
+      ? JSON.parse(String(readFileSync(this.name + ".json")))
+      : {};
+  }
+  getVal(val: string) {
+    console.log(val, this.name)
+    return this.data[val];
+  }
+  setVal(val: string, obj: any) {
+    this.data[val] = obj;
+    writeFileSync(this.name + ".json", JSON.stringify(this.data));
+  }
+}
+
+let teamCache = new ItemCache("teamCache");
+let matchCache = new ItemCache("matchCache");
+let eventCache = new ItemCache("eventCache");
+let teamMatchCache = new ItemCache("teamMatchCache");
+let eventMatchCache = new ItemCache("eventMatchCache");
 
 export const teamData = async (team: number) => {
   const team_key = "frc" + team;
 
-  if (typeof teamCache[team_key] !== "undefined") {
+  if (typeof teamCache.getVal(team_key) !== "undefined") {
     console.log(`using cache for team ${team}`);
-    return teamCache[team_key];
+    return teamCache.getVal(team_key);
   }
   let teamData = await client.Team(team_key);
   let year = parseInt(process.env.YEAR as unknown as string) as number;
@@ -44,15 +63,15 @@ export const teamData = async (team: number) => {
   }
 
   const returnDat = { ...teamData, avatar: av };
-  teamCache[team_key] = returnDat;
+  teamCache.setVal(team_key, returnDat);
   return returnDat;
 };
 export const removeCache = () => {
-  teamCache = {};
-  matchCache = {};
-  eventCache = {};
-  teamMatchCache = {};
-  eventMatchCache = {};
+  teamCache = new ItemCache("teamCache");
+  matchCache = new ItemCache("matchCache");
+  eventCache = new ItemCache("eventCache");
+  teamMatchCache = new ItemCache("teamMatchCache");
+  eventMatchCache = new ItemCache("eventMatchCache");
 };
 
 export const teamMatches = async (
@@ -61,16 +80,18 @@ export const teamMatches = async (
 ): Promise<Match[]> => {
   const team_key = "frc" + team;
   const event_id = process.env.YEAR + event;
-  if (typeof teamMatchCache[team_key + event_id] !== "undefined") {
+  if (typeof teamMatchCache.getVal(team_key + event_id) !== "undefined") {
     console.log(`using cache for team ${team}, event ${event}`);
-    return teamMatchCache[team_key + event_id];
+    return teamMatchCache.getVal(team_key + event_id);
   }
   let data;
   if (Object.keys(extraComps).includes(event)) {
     // @ts-ignore
     data = extraComps[event]["matches"]["qm"]
       .map((a: number[], idx: number) => [a, idx])
-      .filter((a: [number[], number]) => a[0].includes(parseInt(team as unknown as string)))
+      .filter((a: [number[], number]) =>
+        a[0].includes(parseInt(team as unknown as string))
+      )
       .map((t: [number[], number]) => {
         return {
           key: `${event_id}_qm${t[1] + 1}`,
@@ -98,7 +119,7 @@ export const teamMatches = async (
   } else {
     data = await client.TeamEventMatchesSimple(team_key, event_id);
   }
-  teamMatchCache[team_key] = data;
+  teamMatchCache.setVal(team_key, data);
   return data;
 };
 
@@ -108,9 +129,12 @@ export const matchData = async (
   matchNumber: number,
   setNumber?: number
 ): Promise<Match> => {
-  if (typeof matchCache[`${event}${matchType}${matchNumber}`] !== "undefined") {
+  if (
+    typeof matchCache.getVal(`${event}${matchType}${matchNumber}`) !==
+    "undefined"
+  ) {
     console.log(`using cache for match`);
-    return matchCache[`${event}${matchType}${matchNumber}`];
+    return matchCache.getVal(`${event}${matchType}${matchNumber}`);
   }
   const match_id =
     process.env.YEAR +
@@ -121,7 +145,7 @@ export const matchData = async (
 
   let data = await client.Match(match_id);
 
-  matchCache[`${event}${matchType}${matchNumber}`] = data;
+  matchCache.setVal(`${event}${matchType}${matchNumber}`, data);
   return data;
 };
 
@@ -132,9 +156,9 @@ const teamToStr = (team: number) => {
 export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
-  if (typeof eventMatchCache[event_id] !== "undefined") {
+  if (typeof eventMatchCache.getVal(event_id) !== "undefined") {
     console.log(`using cache for event ${event}`);
-    return eventMatchCache[event_id];
+    return eventMatchCache.getVal(event_id);
   }
 
   let data;
@@ -161,7 +185,7 @@ export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
   } else {
     data = await client.EventMatchesSimple(event_id);
   }
-  eventMatchCache[event_id] = data;
+  eventMatchCache.setVal(event_id, data);
 
   return data;
 };
@@ -169,9 +193,9 @@ export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
 export const eventData = async (event: string): Promise<Team_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
-  if (typeof eventCache[event_id] !== "undefined") {
+  if (typeof eventCache.getVal(event_id) !== "undefined") {
     console.log(`using cache for event ${event}`);
-    return eventCache[event_id];
+    return eventCache.getVal(event_id);
   }
 
   let data;
@@ -183,6 +207,6 @@ export const eventData = async (event: string): Promise<Team_Simple[]> => {
   } else {
     data = await client.EventTeamsSimple(event_id);
   }
-  eventCache[event_id] = data;
+  eventCache.setVal(event_id, data);
   return data;
 };

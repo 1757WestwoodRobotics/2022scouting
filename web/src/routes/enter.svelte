@@ -189,7 +189,7 @@
     type="button"
     value="Bulk Upload"
   />
-  <QRCode squareSize="200" codeValue={qrDat} />
+  <QRCode squareSize="200px" codeValue={qrDat} />
 {/if}
 
 <style>
