@@ -39,13 +39,19 @@
   import Counter from "../components/Counter.svelte";
   import Box from "../components/Box.svelte";
   import submit from "../images/button-submit.svg";
-  import { competitions, climb, matchType } from "../constants";
+  import QRCode from "../components/qrcode.svelte";
+  import { competitions, climb, dataToText, matchType } from "../constants";
 
   export let data;
   export let possibleTeams;
 
   let offline = false;
   let offlineDat = [];
+
+  $: qrDat =
+    offlineDat.length > 0
+      ? dataToText(offlineDat[offlineDat.length - 1])
+      : "None";
 
   const upload = () => {
     fetch(`process.BACKEND_URL/scout/upload`, {
@@ -67,6 +73,7 @@
         offline = true;
         console.log("Offline");
         offlineDat.push(JSON.parse(JSON.stringify(data))); // if this wasn't here it would've put the reference to data
+        offlineDat = offlineDat;
         alert("Offline Cached");
         data.identifier.team = 0;
         data.identifier.match_number = 0;
@@ -182,6 +189,7 @@
     type="button"
     value="Bulk Upload"
   />
+  <QRCode squareSize="200" codeValue={qrDat} />
 {/if}
 
 <style>
