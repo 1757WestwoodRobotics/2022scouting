@@ -9,12 +9,17 @@ const dev = NODE_ENV === "development";
 export const start = (app) => {
   const rout = Router();
   if (app === undefined) {
-    app = express().listen(PORT);
+    app = express();
+    app.listen(PORT);
   }
-  app.use("/2022", rout);
-  rout.use(
+  app.use(
+    // '/2022',
     compression({ threshold: 0 }),
     sirv("static", { dev }),
     sapper.middleware()
   );
 };
+
+if (module.parent) {
+  start(undefined);
+}
