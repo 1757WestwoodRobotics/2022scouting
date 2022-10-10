@@ -37,9 +37,9 @@ export const limitSigfigs = (num: number) => {
 export const dataToText = (data) => {
   return `${data.identifier.team},${data.identifier.match_number},${
     data.identifier.comp
-  },${data.identifier.comp_level},${data.identifier.match_number},${
-    data.identifier.set_number
-  },${data.auto_cargo.upper},${data.auto_cargo.lower},${data.auto_cargo.miss},${
+  },${data.identifier.comp_level},${data.identifier.set_number},${
+    data.auto_cargo.upper
+  },${data.auto_cargo.lower},${data.auto_cargo.miss},${
     data.teleop_cargo.upper
   },${data.teleop_cargo.lower},${data.teleop_cargo.miss},${
     data.climb_level
@@ -62,9 +62,9 @@ export const textToData = (text) => {
     notes;
   [
     team,
+    match_number,
     comp,
     comp_level,
-    match_number,
     set_number,
     auto_up,
     auto_low,

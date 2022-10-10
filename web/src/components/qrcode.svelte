@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate } from "svelte";
   import QRCode from "qrcode";
 
   export let codeValue;
@@ -7,7 +7,7 @@
 
   let qrcode;
 
-  onMount(() => {
+  afterUpdate(() => {
     QRCode.toCanvas(qrcode, codeValue, function (error) {
       if (error) console.error(error);
       console.log("success!");
@@ -16,7 +16,7 @@
 </script>
 
 <div id="qrcode">
-  <canvas bind:this={qrcode} />
+    <canvas width={squareSize} height={squareSize} bind:this={qrcode} />
 </div>
 
 <style>
