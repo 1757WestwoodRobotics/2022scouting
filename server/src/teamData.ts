@@ -1,5 +1,5 @@
 import { fetchNotes } from "./notes";
-import { ClimbLevel, dbTeamData, teamNotes } from "./scout";
+import { ChargeStation, dbTeamData, teamNotes } from "./scout";
 import { teamData } from "./tba";
 
 export type FullTeamData = {
@@ -8,15 +8,22 @@ export type FullTeamData = {
   rookieYear: number;
   city: string;
   avatar: string | undefined;
-  avgTeleopCargo: number;
-  avgAutoCargo: number;
+  avgTeleopGP: number;
+  avgAutoGP: number;
   teleopConsistency: number;
   autoConsistency: number;
-  highestClimb: ClimbLevel;
-  avgClimb: number;
-  avgUpperCargo: number;
-  avgLowerCargo: number;
-  avgCargoPoints: number;
+  highestAutoDock: ChargeStation;
+  highestTeleopDock: ChargeStation;
+  avgAutoDock: number;
+  avgTeleopDock: number;
+  avgTopGP: number;
+  avgMidGP: number;
+  avgHybridGP: number;
+  avgGPPoints: number;
+  avgGPCycledTeleop: number;
+  sd: number;
+  conePreference: number;
+  cubePreference: number;
 };
 
 export const teamFullData = async (

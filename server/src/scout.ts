@@ -3,18 +3,18 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 import { conn } from "./data-source";
 
-type CargoData = {
-  upper: number;
-  lower: number;
+type GamepieceData = {
+  top: number;
+  mid: number;
+  hybrid: number;
   miss: number;
 };
 
-export enum ClimbLevel {
+export enum ChargeStation {
   None = 0,
-  Low = 4,
-  Mid = 6,
-  High = 10,
-  Traverse = 15,
+  Park = 2,
+  Docked = 6,
+  Engaged = 10,
 }
 
 enum MatchType {
@@ -32,6 +32,11 @@ type DataIdentifier = {
   set_number?: number;
 };
 
+type GamepieceScoring = {
+  cone: boolean;
+  cube: boolean;
+};
+
 @Entity()
 export class ScoutingData extends BaseEntity {
   @PrimaryColumn({
@@ -42,35 +47,52 @@ export class ScoutingData extends BaseEntity {
   @Column({
     type: "jsonb",
   })
-  auto_cargo: CargoData;
+  auto_gamepiece: GamepieceData;
 
   @Column({
     type: "jsonb",
   })
-  teleop_cargo: CargoData;
+  teleop_gamepiece: GamepieceData;
 
   @Column({
     type: "enum",
-    enum: ClimbLevel,
-    default: ClimbLevel.None,
+    enum: ChargeStation,
+    default: ChargeStation.None,
   })
-  climb_level: ClimbLevel;
+  auto_charge: ChargeStation;
+
+  @Column({
+    type: "enum",
+    enum: ChargeStation,
+    default: ChargeStation.None,
+  })
+  teleop_charge: ChargeStation;
+
+  @Column({
+    type: "jsonb",
+  })
+  scoring_capabilities: GamepieceScoring;
 
   @Column() notes: String;
 }
 
 export type TeamStats = {
-  avgTeleopCargo: number;
-  avgAutoCargo: number;
+  avgTeleopGP: number;
+  avgAutoGP: number;
   teleopConsistency: number;
   autoConsistency: number;
-  highestClimb: ClimbLevel;
-  avgClimb: number;
-  avgUpperCargo: number;
-  avgLowerCargo: number;
-  avgCargoPoints: number;
-  avgBallsCycledTeleop: number;
+  highestAutoDock: ChargeStation;
+  highestTeleopDock: ChargeStation;
+  avgAutoDock: number;
+  avgTeleopDock: number;
+  avgTopGP: number;
+  avgMidGP: number;
+  avgHybridGP: number;
+  avgGPPoints: number;
+  avgGPCycledTeleop: number;
   sd: number;
+  conePreference: number;
+  cubePreference: number;
 };
 
 export const dbTeamMatchData = async (
@@ -116,35 +138,42 @@ export const dbTeamData = async (
   let dat = (await req.getMany()).map((entry: ScoutingData) => {
     const ret = new ScoutingData();
     ret.notes = entry.notes;
-    ret.auto_cargo = {
-      upper: parseInt(entry.auto_cargo.upper as unknown as string),
-      lower: parseInt(entry.auto_cargo.lower as unknown as string),
-      miss: parseInt(entry.auto_cargo.miss as unknown as string),
+    ret.auto_gamepiece = {
+      top: parseInt(entry.auto_gamepiece.top as unknown as string),
+      mid: parseInt(entry.auto_gamepiece.mid as unknown as string),
+      hybrid: parseInt(entry.auto_gamepiece.hybrid as unknown as string),
+      miss: parseInt(entry.auto_gamepiece.miss as unknown as string),
     };
-    ret.teleop_cargo = {
-      upper: parseInt(entry.teleop_cargo.upper as unknown as string),
-      lower: parseInt(entry.teleop_cargo.lower as unknown as string),
-      miss: parseInt(entry.teleop_cargo.miss as unknown as string),
+    ret.teleop_gamepiece = {
+      top: parseInt(entry.teleop_gamepiece.top as unknown as string),
+      mid: parseInt(entry.teleop_gamepiece.mid as unknown as string),
+      hybrid: parseInt(entry.teleop_gamepiece.hybrid as unknown as string),
+      miss: parseInt(entry.teleop_gamepiece.miss as unknown as string),
     };
     ret.identifier = entry.identifier;
-    ret.climb_level = parseInt(entry.climb_level as unknown as string);
+    ret.auto_charge = parseInt(entry.auto_charge as unknown as string);
+    ret.teleop_charge = parseInt(entry.teleop_charge as unknown as string);
+
+    ret.scoring_capabilities = entry.scoring_capabilities;
     return ret;
   });
 
-  let avgTeleopCargo =
+  let avgTeleopGP =
     dat
       .map(
         (entry) =>
-          (entry.teleop_cargo.lower as number) +
-          (entry.teleop_cargo.upper as number)
+          (entry.teleop_gamepiece.top as number) +
+          (entry.teleop_gamepiece.mid as number) +
+          (entry.teleop_gamepiece.hybrid as number)
       )
       .reduce((a, b) => a + b, 0) / dat.length;
-  let avgAutoCargo =
+  let avgAutoGP =
     dat
       .map(
         (entry) =>
-          (entry.auto_cargo.lower as number) +
-          (entry.auto_cargo.upper as number)
+          (entry.auto_gamepiece.top as number) +
+          (entry.auto_gamepiece.mid as number) +
+          (entry.auto_gamepiece.hybrid as number)
       )
       .reduce((a, b) => a + b, 0) / dat.length;
 
@@ -152,16 +181,18 @@ export const dbTeamData = async (
     (dat
       .map(
         (entry) =>
-          (entry.teleop_cargo.upper as number) +
-          (entry.teleop_cargo.lower as number)
+          (entry.teleop_gamepiece.top as number) +
+          (entry.teleop_gamepiece.mid as number) +
+          (entry.teleop_gamepiece.hybrid as number)
       )
       .reduce((a, b) => a + b, 0) /
       dat
         .map(
           (entry) =>
-            (entry.teleop_cargo.upper as number) +
-            (entry.teleop_cargo.lower as number) +
-            (entry.teleop_cargo.miss as number)
+            (entry.teleop_gamepiece.top as number) +
+            (entry.teleop_gamepiece.mid as number) +
+            (entry.teleop_gamepiece.hybrid as number) +
+            (entry.teleop_gamepiece.miss as number)
         )
         .reduce((a, b) => a + b, 0)) *
     100;
@@ -170,74 +201,111 @@ export const dbTeamData = async (
     (dat
       .map(
         (entry) =>
-          (entry.auto_cargo.upper as number) +
-          (entry.auto_cargo.lower as number)
+          (entry.auto_gamepiece.top as number) +
+          (entry.auto_gamepiece.mid as number) +
+          (entry.auto_gamepiece.hybrid as number)
       )
       .reduce((a, b) => a + b, 0) /
       dat
         .map(
           (entry) =>
-            (entry.auto_cargo.upper as number) +
-            (entry.auto_cargo.lower as number) +
-            (entry.auto_cargo.miss as number)
+            (entry.auto_gamepiece.top as number) +
+            (entry.auto_gamepiece.mid as number) +
+            (entry.auto_gamepiece.hybrid as number) +
+            (entry.auto_gamepiece.miss as number)
         )
         .reduce((a, b) => a + b, 0)) *
     100;
 
-  let highestClimb = dat
-    .map((entry) => entry.climb_level as number)
+  let highestAutoDock = dat
+    .map((entry) => (entry.auto_charge as number) + 2)
     .reduce((a, b) => (a > b ? a : b), 0);
 
-  let climbs = dat.map((entry) => entry.climb_level as number);
-  let avgClimb = climbs.reduce((a, b) => a + b, 0) / dat.length;
+  let highestTeleopDock = dat
+    .map((entry) => entry.teleop_charge as number)
+    .reduce((a, b) => (a > b ? a : b), 0);
 
-  let avgUpperCargo =
+  let autoDocks = dat.map((entry) => (entry.auto_charge as number) + 2);
+  let avgAutoDock = autoDocks.reduce((a, b) => a + b, 0) / dat.length;
+
+  let teleopDocks = dat.map((entry) => entry.teleop_charge as number);
+  let avgTeleopDock = teleopDocks.reduce((a, b) => a + b, 0) / dat.length;
+
+  let avgTopGP =
     dat
-      .map((entry) => entry.teleop_cargo.upper + entry.auto_cargo.upper)
+      .map((entry) => entry.teleop_gamepiece.top + entry.auto_gamepiece.top)
       .reduce((a, b) => a + b, 0) / dat.length;
-  let avgLowerCargo =
+  let avgMidGP =
     dat
-      .map((entry) => entry.teleop_cargo.lower + entry.auto_cargo.lower)
+      .map((entry) => entry.teleop_gamepiece.mid + entry.auto_gamepiece.mid)
       .reduce((a, b) => a + b, 0) / dat.length;
-
-  let cargoPoints = dat.map(
-    (entry) =>
-      entry.teleop_cargo.upper * 2 +
-      entry.teleop_cargo.lower +
-      entry.auto_cargo.upper * 4 +
-      entry.auto_cargo.lower * 2
-  );
-
-  let avgCargoPoints = cargoPoints.reduce((a, b) => a + b, 0) / dat.length;
-
-  let sd = Math.sqrt(
-    cargoPoints
-      .map((a) => (a - avgCargoPoints) * (a - avgCargoPoints))
-      .reduce((a, b) => a + b, 0) / dat.length
-  );
-
-  let avgBallsCycledTeleop =
+  let avgHybridGP =
     dat
       .map(
-        (entry) =>
-          entry.teleop_cargo.upper +
-          entry.teleop_cargo.lower +
-          entry.teleop_cargo.miss
+        (entry) => entry.teleop_gamepiece.hybrid + entry.auto_gamepiece.hybrid
       )
       .reduce((a, b) => a + b, 0) / dat.length;
 
+  let gamepiecePoints = dat.map(
+    (entry) =>
+      entry.teleop_gamepiece.top * 5 +
+      entry.teleop_gamepiece.mid * 3 +
+      entry.teleop_gamepiece.hybrid * 2 +
+      entry.auto_gamepiece.top * 6 +
+      entry.auto_gamepiece.mid * 4 +
+      entry.auto_gamepiece.hybrid * 3
+  );
+
+  let avgGPPoints = gamepiecePoints.reduce((a, b) => a + b, 0) / dat.length;
+
+  let sd = Math.sqrt(
+    gamepiecePoints
+      .map((a) => (a - avgGPPoints) * (a - avgGPPoints))
+      .reduce((a, b) => a + b, 0) / dat.length
+  );
+
+  let avgGPCycledTeleop =
+    dat
+      .map(
+        (entry) =>
+          entry.teleop_gamepiece.top +
+          entry.teleop_gamepiece.mid +
+          entry.teleop_gamepiece.hybrid +
+          entry.teleop_gamepiece.miss
+      )
+      .reduce((a, b) => a + b, 0) / dat.length;
+
+  let conePreference =
+    (dat
+      .map((entry) => (+!!entry.scoring_capabilities.cone))
+      .reduce((a, b) => a + b, 0) /
+      dat.length) *
+    100;
+
+  let cubePreference =
+    (dat
+      .map((entry) => (+!!entry.scoring_capabilities.cube))
+      .reduce((a, b) => a + b, 0) /
+      dat.length) *
+    100;
+
   return {
-    avgTeleopCargo,
-    avgAutoCargo,
+    avgTeleopGP,
+    avgAutoGP,
     teleopConsistency,
     autoConsistency,
-    highestClimb,
-    avgClimb,
-    avgUpperCargo,
-    avgLowerCargo,
-    avgCargoPoints,
-    avgBallsCycledTeleop,
+    highestAutoDock,
+    highestTeleopDock,
+    avgAutoDock,
+    avgTeleopDock,
+    avgTopGP,
+    avgMidGP,
+    avgHybridGP,
+    avgGPPoints,
+    avgGPCycledTeleop,
     sd,
+    conePreference,
+    cubePreference,
   };
 };
 
@@ -254,9 +322,11 @@ export const handleScoutUpload = async (
     requ.identifier.match_number != 0
   ) {
     data.identifier = requ.identifier;
-    data.auto_cargo = requ.auto_cargo;
-    data.teleop_cargo = requ.teleop_cargo;
-    data.climb_level = requ.climb_level;
+    data.auto_gamepiece = requ.auto_gamepiece;
+    data.teleop_gamepiece = requ.teleop_gamepiece;
+    data.auto_charge = requ.auto_charge;
+    data.teleop_charge = requ.teleop_charge;
+    data.scoring_capabilities = requ.scoring_capabilities;
     data.notes = requ.notes;
 
     const dataRepo = conn.getRepository(ScoutingData);

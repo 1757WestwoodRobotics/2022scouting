@@ -68,33 +68,28 @@ export const eventMatch = async (
     }
 
     const totalAutoPoints =
-      entry.auto_cargo.lower * 2 + entry.auto_cargo.upper * 4;
+      entry.auto_gamepiece.top * 6 + entry.auto_gamepiece.mid * 4 + entry.auto_gamepiece.hybrid * 3 + entry.auto_charge + 2;
     const totalTeleopPoints =
-      entry.teleop_cargo.upper * 2 + entry.teleop_cargo.lower;
-    const totalClimbPoints = entry.climb_level;
+      entry.teleop_gamepiece.top * 5 + entry.teleop_gamepiece.mid * 3 + entry.teleop_gamepiece.hybrid * 2 + entry.teleop_charge;
     const totalPointsByTeam =
-      totalAutoPoints + totalTeleopPoints + totalClimbPoints;
+      totalAutoPoints + totalTeleopPoints;
 
     const totalPercentContributionToMatch =
       totalPointsByTeam / data.totalPoints;
     const totalPercentContributionToAuto = totalAutoPoints / data.autoPoints;
     const totalPercentContributionToTeleop =
       totalTeleopPoints / data.teleopCargoPoints;
-    const totalPercentContributionToClimb =
-      totalClimbPoints / (data.teleopPoints - data.teleopCargoPoints);
 
     // I hate this jank
     const teamData = roundObject(
       {
         totalAutoPoints,
         totalTeleopPoints,
-        totalClimbPoints,
         totalPointsByTeam,
-        autoCargo: entry.auto_cargo,
-        teleopCargo: entry.teleop_cargo,
+        autoGP: entry.auto_gamepiece,
+        teleopGP: entry.teleop_gamepiece,
         totalPercentContributionToAuto,
         totalPercentContributionToTeleop,
-        totalPercentContributionToClimb,
         totalPercentContributionToMatch,
         notes: entry.notes,
       },
@@ -124,7 +119,7 @@ export const eventMatch = async (
       dat.alliances.red.team_keys.map(async (team_iden: string) => {
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
-        const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
+        const teamPoints = teamInfo.avgGPPoints + teamInfo.avgAutoDock + teamInfo.avgTeleopDock;
         return teamPoints || 0;
       })
     )
@@ -135,7 +130,7 @@ export const eventMatch = async (
       dat.alliances.blue.team_keys.map(async (team_iden: string) => {
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
-        const teamPoints = teamInfo.avgCargoPoints + teamInfo.avgClimb;
+        const teamPoints = teamInfo.avgGPPoints + teamInfo.avgAutoDock + teamInfo.avgTeleopDock;
         return teamPoints || 0;
       })
     )

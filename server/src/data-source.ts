@@ -10,7 +10,7 @@ export const conn = new DataSource({
   type: "postgres",
   host: dev ? "localhost" : "db",
   port: 5432,
-  database: "frc2022",
+  database: "frc" + process.env.YEAR,
   username: "postgres",
   password: "postgres",
   synchronize: true,

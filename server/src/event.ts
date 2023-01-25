@@ -69,8 +69,9 @@ export const eventMatchHandler = async (
         id: teamNum,
         name: teamInfo.nickname,
         av: teamInfo.avatar,
-        cargo: teamInfo.avgCargoPoints,
-        climb: teamInfo.avgClimb,
+        gamepiece: teamInfo.avgGPPoints,
+        autoCharge: teamInfo.avgAutoDock,
+        teleopCharge: teamInfo.avgTeleopDock,
       };
       infoCache[teamNum] = ret;
 
