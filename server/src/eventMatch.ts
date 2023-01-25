@@ -80,6 +80,8 @@ export const eventMatch = async (
     const totalPercentContributionToTeleop =
       totalTeleopPoints / data.teleopCargoPoints;
 
+    const activationBonusContrib = data.auto_charge + 2 + data.teleop_charge
+
     // I hate this jank
     const teamData = roundObject(
       {
@@ -92,6 +94,7 @@ export const eventMatch = async (
         totalPercentContributionToTeleop,
         totalPercentContributionToMatch,
         notes: entry.notes,
+        activationBonusContrib
       },
       3
     );

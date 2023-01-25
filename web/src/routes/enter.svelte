@@ -18,17 +18,24 @@
           match_number,
           set_number: undefined,
         },
-        auto_cargo: {
-          upper: 0,
-          lower: 0,
+        auto_gamepiece: {
+          top: 0,
+          mid: 0,
+          hybrid: 0,
           miss: 0,
         },
-        teleop_cargo: {
-          upper: 0,
-          lower: 0,
+        teleop_gamepiece: {
+          top: 0,
+          mid: 0,
+          hybrid: 0,
           miss: 0,
         },
-        climb_level: 0,
+        auto_charge: 0,
+        teleop_charge: 0,
+        scoring_capabilities: {
+          cone: false,
+          cube: false,
+        },
         notes: "",
       },
     };
@@ -40,7 +47,7 @@
   import Box from "../components/Box.svelte";
   import submit from "../images/button-submit.svg";
   import QRCode from "../components/qrcode.svelte";
-  import { competitions, climb, dataToText, matchType } from "../constants";
+  import { competitions, charge, dataToText, matchType } from "../constants";
 
   export let data;
   export let possibleTeams;
@@ -63,9 +70,11 @@
         alert("submitted");
         data.identifier.team = 0;
         data.identifier.match_number = 0;
-        data.auto_cargo = { upper: 0, lower: 0, miss: 0 };
-        data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
-        data.climb_level = 0;
+        data.auto_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
+        data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
+        data.auto_charge = 0;
+        data.teleop_charge = 0;
+        data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
       })
@@ -77,9 +86,11 @@
         alert("Offline Cached");
         data.identifier.team = 0;
         data.identifier.match_number = 0;
-        data.auto_cargo = { upper: 0, lower: 0, miss: 0 };
-        data.teleop_cargo = { upper: 0, lower: 0, miss: 0 };
-        data.climb_level = 0;
+        data.auto_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
+        data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
+        data.auto_charge = 0;
+        data.teleop_charge = 0;
+        data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
       });
@@ -152,21 +163,37 @@
     {/if}
   </Box>
   <Box header="Auto">
-    <Counter bind:value={data.auto_cargo.upper} name="Upper" />
-    <Counter bind:value={data.auto_cargo.lower} name="Lower" />
-    <Counter bind:value={data.auto_cargo.miss} name="Miss" />
+    <Counter bind:value={data.auto_gamepiece.top} name="Top" />
+    <Counter bind:value={data.auto_gamepiece.mid} name="Mid" />
+    <Counter bind:value={data.auto_gamepiece.hybrid} name="Hybrid" />
+    <Counter bind:value={data.auto_gamepiece.miss} name="Miss" />
   </Box>
-  <Box header="Teleop">
-    <Counter bind:value={data.teleop_cargo.upper} name="Upper" />
-    <Counter bind:value={data.teleop_cargo.lower} name="Lower" />
-    <Counter bind:value={data.teleop_cargo.miss} name="Miss" />
-  </Box>
-  <Box header="Climb Level">
-    <select name="climb" bind:value={data.climb_level}>
-      {#each climb as stage}
+  <Box header="Auto Charge">
+    <select name="auto_charge" bind:value={data.auto_charge}>
+      {#each charge as stage}
         <option value={stage.amount}>{stage.name}</option>
       {/each}
     </select>
+  </Box>
+  <Box header="Teleop">
+    <Counter bind:value={data.teleop_gamepiece.top} name="Top" />
+    <Counter bind:value={data.teleop_gamepiece.mid} name="Mid" />
+    <Counter bind:value={data.teleop_gamepiece.hybrid} name="Hybrid" />
+    <Counter bind:value={data.teleop_gamepiece.miss} name="Miss" />
+  </Box>
+  <Box header="Teleop Charge">
+    <select name="teleop_charge" bind:value={data.teleop_charge}>
+      {#each charge as stage}
+        <option value={stage.amount}>{stage.name}</option>
+      {/each}
+    </select>
+  </Box>
+  <Box header="Scoring Capabilities">
+    Cone
+    <input type="checkbox" bind:checked={data.scoring_capabilities.cone} />
+    <br />
+    Cube
+    <input type="checkbox" bind:checked={data.scoring_capabilities.cube} />
   </Box>
   <Box header="Notes">
     <textarea bind:value={data.notes} />

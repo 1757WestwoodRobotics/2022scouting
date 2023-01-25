@@ -9,17 +9,17 @@ const app = express();
         console.log("STARTING META PROCESS")
     })
     const frontend = require("./web/__sapper__/build/server/server")
-    process.chdir("./web")
+    // process.chdir("./web")
     frontend.start(app)
 
 
-    process.chdir("../server")   
     const backend = require("./server/dist/index")
+    process.chdir("../server")   
     await backend.start(app)
     process.chdir("../web")
 
     app.get("/", (_,res) => {
-        res.redirect("2022")
+        res.redirect("2023")
     })
 
 };

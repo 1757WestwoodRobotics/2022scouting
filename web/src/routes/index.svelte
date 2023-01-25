@@ -37,12 +37,12 @@
       fn: (team1, team2) => team1.team_number - team2.team_number,
     },
     {
-      name: "teleop cargo",
-      fn: (team1, team2) => team2.avgTeleopCargo - team1.avgTeleopCargo,
+      name: "teleop gamepieces",
+      fn: (team1, team2) => team2.avgTeleopGP - team1.avgTeleopGP,
     },
     {
-      name: "auto cargo",
-      fn: (team1, team2) => team2.avgAutoCargo - team1.avgAutoCargo,
+      name: "auto gamepieces",
+      fn: (team1, team2) => team2.avgAutoGP - team1.avgAutoGP,
     },
     {
       name: "teleop %",
@@ -53,37 +53,49 @@
       fn: (team1, team2) => team2.autoConsistency - team1.autoConsistency,
     },
     {
-      name: "capable climb",
-      fn: (team1, team2) => team2.highestClimb - team1.highestClimb,
+      name: "capable auto charge",
+      fn: (team1, team2) => team2.highestAutoDock - team1.highestAutoDock,
     },
     {
-      name: "avg climb",
-      fn: (team1, team2) => team2.avgClimb - team1.avgClimb,
+      name: "capable teleop charge",
+      fn: (team1, team2) => team2.highestTeleopDock - team1.highestTeleopDock,
     },
     {
-      name: "avg upper",
-      fn: (team1, team2) => team2.avgUpperCargo - team1.avgUpperCargo,
+      name: "avg auto dock",
+      fn: (team1, team2) => team2.avgAutoDock - team1.avgAutoDock,
     },
     {
-      name: "avg lower",
-      fn: (team1, team2) => team2.avgLowerCargo - team1.avgLowerCargo,
+      name: "avg teleop dock",
+      fn: (team1, team2) => team2.avgTeleopDock - team1.avgTeleopDock,
     },
     {
-      name: "avg cargo points",
-      fn: (team1, team2) => team2.avgCargoPoints - team1.avgCargoPoints,
+      name: "avg top",
+      fn: (team1, team2) => team2.avgTopGP - team1.avgTopGP,
     },
     {
-      name: "cargo + climb",
+      name: "avg mid",
+      fn: (team1, team2) => team2.avgMidGP - team1.avgMidGP,
+    },
+    {
+      name: "avg hybrid",
+      fn: (team1, team2) => team2.avgHybridGP - team1.avgHybridGP,
+    },
+    {
+      name: "avg gp points",
+      fn: (team1, team2) => team2.avgGPPoints - team1.avgGPPoints,
+    },
+    {
+      name: "total points",
       fn: (team1, team2) =>
-        team2.avgCargoPoints +
-        team2.avgClimb -
-        team1.avgCargoPoints -
-        team1.avgClimb,
+        team2.avgGPPoints +
+        team2.avgAutoDock + team2.avgTeleopDock -
+        team1.avgGPPoints -
+        team1.avgAutoDock - team1.avgTeleopDock,
     },
     {
-      name: "balls cycled teleop",
+      name: "gp cycled teleop",
       fn: (team1, team2) =>
-        team2.avgBallsCycledTeleop - team1.avgBallsCycledTeleop,
+        team2.avgGPCycledTeleop - team1.avgGPCycledTeleop,
     },
   ];
   let sortingFunction = sortingMethods[0].fn;
@@ -134,57 +146,72 @@
           <th
             on:click={() => {
               sortingFunction = sortingMethods[1].fn;
-            }}>Avg Teleop Cargo</th
+            }}>Avg Teleop GP</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[2].fn;
-            }}>Avg Auto Cargo</th
+            }}>Avg Auto GP</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[3].fn;
-            }}>Teleop % shots made</th
+            }}>Teleop % made</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[4].fn;
-            }}>Auto % shots made</th
+            }}>Auto % made</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[5].fn;
-            }}>Highest Climb Level (pts)</th
+            }}>Highest Auto Charge</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[6].fn;
-            }}>Avg Climb</th
+            }}>Highest Teleop Charge</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[7].fn;
-            }}>Avg upper cargo</th
+            }}>Avg Auto Charge</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[8].fn;
-            }}>Avg lower cargo</th
+            }}>Avg Teleop Charge</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[9].fn;
-            }}>Avg Cargo Points</th
+            }}>Avg Top</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[11].fn;
-            }}>Avg Cargo Cycled in Teleop</th
+            }}>Avg Mid</th
           >
           <th
             on:click={() => {
               sortingFunction = sortingMethods[10].fn;
-            }}>Avg Cargo + Climb Points</th
+            }}>Avg Hybrid</th
+          >
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[11].fn;
+            }}>Avg GP Points</th
+          >
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[11].fn;
+            }}>Avg Total Points</th
+          >
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[11].fn;
+            }}>Avg GP cycles per match</th
           >
           <th>avg variation</th>
         </tr>
@@ -200,17 +227,17 @@
             </a>
             <td
               style={genColor(
-                team.avgTeleopCargo,
-                Math.max(...data.map((a) => a.avgTeleopCargo)),
-                Math.min(...data.map((a) => a.avgTeleopCargo))
-              )}>{limitSigfigs(team.avgTeleopCargo)}</td
+                team.avgTeleopGP,
+                Math.max(...data.map((a) => a.avgTeleopGP)),
+                Math.min(...data.map((a) => a.avgTeleopGP))
+              )}>{limitSigfigs(team.avgTeleopGP)}</td
             >
             <td
               style={genColor(
-                team.avgAutoCargo,
-                Math.max(...data.map((a) => a.avgAutoCargo)),
-                Math.min(...data.map((a) => a.avgAutoCargo))
-              )}>{limitSigfigs(team.avgAutoCargo)}</td
+                team.avgAutoGP,
+                Math.max(...data.map((a) => a.avgAutoGP)),
+                Math.min(...data.map((a) => a.avgAutoGP))
+              )}>{limitSigfigs(team.avgAutoGP)}</td
             >
             <td
               style={genColor(
@@ -228,53 +255,74 @@
             >
             <td
               style={genColor(
-                team.highestClimb,
-                Math.max(...data.map((a) => a.highestClimb)),
-                Math.min(...data.map((a) => a.highestClimb))
-              )}>{limitSigfigs(team.highestClimb)}</td
+                team.highestAutoDock,
+                Math.max(...data.map((a) => a.highestAutoDock)),
+                Math.min(...data.map((a) => a.highestAutoDock))
+              )}>{limitSigfigs(team.highestAutoDock)}</td
             >
             <td
               style={genColor(
-                team.avgClimb,
-                Math.max(...data.map((a) => a.avgClimb)),
-                Math.min(...data.map((a) => a.avgClimb))
-              )}>{limitSigfigs(team.avgClimb)}</td
+                team.highestTeleopDock,
+                Math.max(...data.map((a) => a.highestTeleopDock)),
+                Math.min(...data.map((a) => a.highestTeleopDock))
+              )}>{limitSigfigs(team.highestTeleopDock)}</td
             >
             <td
               style={genColor(
-                team.avgUpperCargo,
-                Math.max(...data.map((a) => a.avgUpperCargo)),
-                Math.min(...data.map((a) => a.avgUpperCargo))
-              )}>{limitSigfigs(team.avgUpperCargo)}</td
+                team.avgAutoDock,
+                Math.max(...data.map((a) => a.avgAutoDock)),
+                Math.min(...data.map((a) => a.avgAutoDock))
+              )}>{limitSigfigs(team.avgAutoDock)}</td
             >
             <td
               style={genColor(
-                team.avgLowerCargo,
-                Math.max(...data.map((a) => a.avgLowerCargo)),
-                Math.min(...data.map((a) => a.avgLowerCargo))
-              )}>{limitSigfigs(team.avgLowerCargo)}</td
+                team.avgTeleopDock,
+                Math.max(...data.map((a) => a.avgTeleopDock)),
+                Math.min(...data.map((a) => a.avgTeleopDock))
+              )}>{limitSigfigs(team.avgTeleopDock)}</td
             >
             <td
               style={genColor(
-                team.avgCargoPoints,
-                Math.max(...data.map((a) => a.avgCargoPoints)),
-                Math.min(...data.map((a) => a.avgCargoPoints))
-              )}>{limitSigfigs(team.avgCargoPoints)}</td
+                team.avgTopGP,
+                Math.max(...data.map((a) => a.avgTopGP)),
+                Math.min(...data.map((a) => a.avgTopGP))
+              )}>{limitSigfigs(team.avgTopGP)}</td
             >
             <td
               style={genColor(
-                team.avgBallsCycledTeleop,
-                Math.max(...data.map((a) => a.avgBallsCycledTeleop)),
-                Math.min(...data.map((a) => a.avgBallsCycledTeleop))
-              )}>{limitSigfigs(team.avgBallsCycledTeleop)}</td
+                team.avgMidGP,
+                Math.max(...data.map((a) => a.avgMidGP)),
+                Math.min(...data.map((a) => a.avgMidGP))
+              )}>{limitSigfigs(team.avgMidGP)}</td
             >
             <td
               style={genColor(
-                team.avgCargoPoints + team.avgClimb,
-                Math.max(...data.map((a) => a.avgCargoPoints + a.avgClimb)),
+                team.avgHybridGP,
+                Math.max(...data.map((a) => a.avgHybridGP)),
+                Math.min(...data.map((a) => a.avgHybridGP))
+              )}>{limitSigfigs(team.avgHybridGP)}</td
+            >
+            <td
+              style={genColor(
+                team.avgGPPoints,
+                Math.max(...data.map((a) => a.avgGPPoints)),
+                Math.min(...data.map((a) => a.avgGPPoints))
+              )}>{limitSigfigs(team.avgGPPoints)}</td
+            >
+            <td
+              style={genColor(
+                team.avgGPPoints + team.avgAutoDock + team.avgTeleopDock,
+                Math.max(...data.map((a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock)),
 
-                Math.min(...data.map((a) => a.avgCargoPoints + a.avgClimb))
-              )}>{limitSigfigs(team.avgCargoPoints + team.avgClimb)}</td
+                Math.min(...data.map((a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock))
+              )}>{limitSigfigs(team.avgGPPoints + team.avgAutoDock + team.avgTeleopDock)}</td
+            >
+            <td
+              style={genColor(
+                team.avgGPCycledTeleop,
+                Math.max(...data.map((a) => a.avgGPCycledTeleop)),
+                Math.min(...data.map((a) => a.avgGPCycledTeleop))
+              )}>{limitSigfigs(team.avgGPCycledTeleop)}</td
             >
             <td>{limitSigfigs(team.sd)}</td>
           </tr>

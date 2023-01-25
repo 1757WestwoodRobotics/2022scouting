@@ -9,16 +9,13 @@ let comp = Object.keys(extraComps).map((k) => {
 export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
-  { id: "necmp1", name: "NE District Championship Calcium Division [necmp1]" },
-  { id: "aroz", name: "AROZ [aroz]" },
   ...comp,
 ];
-export const climb = [
+export const charge = [
   { name: "None", amount: 0 },
-  { name: "Low", amount: 4 },
-  { name: "Mid", amount: 6 },
-  { name: "High", amount: 10 },
-  { name: "Traverse", amount: 15 },
+  { name: "Park", amount: 2 },
+  { name: "Docked", amount: 6 },
+  { name: "Engaged", amount: 10 },
 ];
 export const matchType = [
   { name: "Qualification", id: "qm" },
