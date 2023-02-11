@@ -1,29 +1,36 @@
-const process = require("process")
-const express = require("express")
-
+const http = require("http");
+const httpProxy = require("http-proxy");
+const HttpProxyRules = require("http-proxy-rules");
 
 const main = async () => {
-const app = express();
-    const port = process.env.PORT || 8080
-    app.listen(port, () => {
-        console.log("STARTING META PROCESS")
+  const port = process.env.PORT || 8080;
+  var proxyRules = new HttpProxyRules({
+    rules: {
+      "/api/(.*)": "http://localhost:1757/$1",
+    },
+    default: "http://localhost:3000",
+  });
+
+  let proxy = httpProxy.createProxyServer();
+
+  http
+    .createServer(function (req, res) {
+      // a match method is exposed on the proxy rules instance
+      // to test a request to see if it matches against one of the specified rules
+      var target = proxyRules.match(req);
+      if (target) {
+        return proxy.web(req, res, {
+          target: target,
+        });
+      }
+
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end(
+        "The request url and path did not match any of the listed rules!"
+      );
     })
-    const frontend = require("./web/__sapper__/build/server/server")
-    // process.chdir("./web")
-    frontend.start(app)
-
-
-    const backend = require("./server/dist/index")
-    process.chdir("../server")   
-    await backend.start(app)
-    process.chdir("../web")
-
-    app.get("/", (_,res) => {
-        res.redirect("2023")
-    })
-
+    .listen(port);
 };
-
 
 main().catch((err) => {
   console.error(err);

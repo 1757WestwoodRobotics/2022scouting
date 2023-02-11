@@ -6,6 +6,9 @@
   "author": "Luke Maxwell <24lbmaxwell@protonmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "http-proxy": "^1.18.1",
+    "http-proxy-rules": "^1.1.3"
   }
 }

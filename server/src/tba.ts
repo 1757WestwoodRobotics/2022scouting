@@ -23,7 +23,6 @@ class ItemCache {
       : {};
   }
   getVal(val: string) {
-    console.log(val, this.name)
     return this.data[val];
   }
   setVal(val: string, obj: any) {
@@ -128,7 +127,7 @@ export const matchData = async (
   matchType: string,
   matchNumber: number,
   setNumber?: number
-): Promise<Match> => {
+): Promise<Match | any> => {
   if (
     typeof matchCache.getVal(`${event}${matchType}${matchNumber}`) !==
     "undefined"
@@ -143,10 +142,10 @@ export const matchData = async (
     matchType +
     (setNumber ? setNumber + "m" + matchNumber : matchNumber);
 
-  let data = await client.Match(match_id);
+  let data = await client.Match(match_id).catch(() => {console.log("unable to find")});
 
   matchCache.setVal(`${event}${matchType}${matchNumber}`, data);
-  return data;
+  return data || {};
 };
 
 const teamToStr = (team: number) => {
