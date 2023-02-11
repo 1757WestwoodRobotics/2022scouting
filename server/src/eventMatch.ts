@@ -126,7 +126,7 @@ export const eventMatch = async (
         return teamPoints || 0;
       })
     )
-  ).reduce((a, b) => a + b);
+  ).reduce((a: any, b: any) => a + b);
 
   const blueExpectedPoint = (
     await Promise.all(
@@ -137,7 +137,7 @@ export const eventMatch = async (
         return teamPoints || 0;
       })
     )
-  ).reduce((a, b) => a + b);
+  ).reduce((a: any, b: any) => a + b);
 
   let teamData: any = {};
   individualBlueData

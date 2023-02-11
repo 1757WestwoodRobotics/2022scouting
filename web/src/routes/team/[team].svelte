@@ -19,17 +19,27 @@
   export let team: {
     nickname: string;
     team_number: number;
+    rookieYear: number;
     city: string;
-    rookieYear: string;
-    avgUpperCargo: number;
-    avgLowerCargo: number;
-    avgTeleopCargo: number;
-    avgAutoCargo: number;
+    avatar: string | undefined;
+    avgTeleopGP: number;
+    avgAutoGP: number;
     teleopConsistency: number;
     autoConsistency: number;
-    highestClimb: number;
-    avgClimb: number;
+    highestAutoDock: number;
+    highestTeleopDock: number;
+    avgAutoDock: number;
+    avgTeleopDock: number;
+    avgTopGP: number;
+    avgMidGP: number;
+    avgHybridGP: number;
+    avgGPPoints: number;
+    avgGPCycledTeleop: number;
+    sd: number;
+    conePreference: number;
+    cubePreference: number;
     notes: string[];
+    imp_notes: string[];
   };
 
   let selectedComp;
@@ -108,50 +118,62 @@
       );
     const chartLabels = matches.map((a) => a.id);
 
-    const autoUpper = matches.map((a) => a.matchDat.auto_cargo.upper * 4);
-    const autoLower = matches.map((a) => a.matchDat.auto_cargo.lower * 2);
+    const autoTop = matches.map((a) => a.matchDat.auto_gamepiece.top * 6);
+    const autoMid = matches.map((a) => a.matchDat.auto_gamepiece.mid * 4);
+    const autoHybrid = matches.map((a) => a.matchDat.auto_gamepiece.hybrid * 3);
+
     const autoAcc = matches.map(
       (a) =>
-        ((a.matchDat.auto_cargo.upper + a.matchDat.auto_cargo.lower) /
-          (a.matchDat.auto_cargo.upper +
-            a.matchDat.auto_cargo.lower +
-            a.matchDat.auto_cargo.miss)) *
+        ((a.matchDat.auto_gamepiece.top + a.matchDat.auto_gamepiece.mid + a.matchDat.auto_gamepiece.hybrid) /
+        ((a.matchDat.auto_gamepiece.top + a.matchDat.auto_gamepiece.mid + a.matchDat.auto_gamepiece.hybrid) /
+            a.matchDat.auto_gamepiece.miss)) *
         100
     );
 
-    const teleopUpper = matches.map((a) => a.matchDat.teleop_cargo.upper * 2);
-    const teleopLower = matches.map((a) => a.matchDat.teleop_cargo.lower * 1);
+    const teleopTop = matches.map((a) => a.matchDat.teleop_gamepiece.top * 5);
+    const teleopMid = matches.map((a) => a.matchDat.teleop_gamepiece.mid * 3);
+    const teleopHybrid = matches.map((a) => a.matchDat.teleop_gamepiece.hybrid * 2);
     const teleopAcc = matches.map(
       (a) =>
-        ((a.matchDat.teleop_cargo.upper + a.matchDat.teleop_cargo.lower) /
-          (a.matchDat.teleop_cargo.upper +
-            a.matchDat.teleop_cargo.lower +
-            a.matchDat.teleop_cargo.miss)) *
+        ((a.matchDat.teleop_gamepiece.top + a.matchDat.teleop_gamepiece.mid + a.matchDat.teleop_gamepiece.hybrid) /
+        ((a.matchDat.teleop_gamepiece.top + a.matchDat.teleop_gamepiece.mid + a.matchDat.teleop_gamepiece.hybrid) /
+            a.matchDat.teleop_gamepiece.miss)) *
         100
     );
 
-    const climb = matches.map((a) => a.matchDat.climb_level);
+    const autoCharge = matches.map((a) => a.matchDat.auto_charge);
+    const teleopCharge = matches.map((a) => a.matchDat.teleop_charge);
+    
     const totalPoints = matches.map(
       (a) =>
-        a.matchDat.climb_level +
-        a.matchDat.teleop_cargo.upper * 2 +
-        a.matchDat.teleop_cargo.lower * 1 +
-        a.matchDat.auto_cargo.upper * 4 +
-        a.matchDat.auto_cargo.lower * 2
+        a.matchDat.auto_charge +
+        a.matchDat.teleop_charge +
+        a.matchDat.teleop_gamepiece.top * 5 +
+        a.matchDat.teleop_gamepiece.mid * 3 +
+        a.matchDat.teleop_gamepiece.hybrid * 2 +
+        a.matchDat.auto_gamepiece.top * 6 +
+        a.matchDat.auto_gamepiece.mid * 4 +
+        a.matchDat.auto_gamepiece.hybrid * 3
     );
 
     return {
       labels: chartLabels,
       datasets: [
         {
-          label: "Auto Upper",
-          data: autoUpper,
+          label: "Auto Top",
+          data: autoTop,
           borderColor: "#00aaff",
           fill: false,
         },
         {
-          label: "Auto Lower",
-          data: autoLower,
+          label: "Auto Mid",
+          data: autoMid,
+          borderColor: "#00ccff",
+          fill: false,
+        },
+        {
+          label: "Auto Hybrid",
+          data: autoHybrid,
           borderColor: "#00ccff",
           fill: false,
         },
@@ -164,13 +186,19 @@
         },
         {
           label: "Teleop Upper",
-          data: teleopUpper,
+          data: teleopTop,
+          borderColor: "#ffaa00",
+          fill: false,
+        },
+        {
+          label: "Teleop Mid",
+          data: teleopMid,
           borderColor: "#ffaa00",
           fill: false,
         },
         {
           label: "Teleop Lower",
-          data: teleopLower,
+          data: teleopHybrid,
           borderColor: "#ffcc00",
           fill: false,
         },
@@ -182,8 +210,14 @@
           yAxisID: "y1",
         },
         {
-          label: "Climb",
-          data: climb,
+          label: "Auto Charge",
+          data: autoCharge,
+          borderColor: "#99ff99",
+          fill: false,
+        },
+        {
+          label: "Teleop Charge",
+          data: teleopCharge,
           borderColor: "#99ff99",
           fill: false,
         },
@@ -214,25 +248,46 @@
   <br />
   <hr />
   Team averages:
-  <h4>Cargo Points: {limitSigfigs(team.avgCargoPoints)}</h4>
+  <h4>Gamepiece Points: {limitSigfigs(team.avgGPPoints)}</h4>
   <div class="avgContainer">
     <div class="avgContent">
       <h3>Teleop</h3>
       <h4>Consistency: {limitSigfigs(team.teleopConsistency)}%</h4>
-      <h4>Cargo #: {limitSigfigs(team.avgTeleopCargo)}</h4>
+      <h4>GP #: {limitSigfigs(team.avgTeleopGP)}</h4>
     </div>
 
     <div class="avgContent">
       <h3>Auto</h3>
 
       <h4>Consistency: {limitSigfigs(team.autoConsistency)}%</h4>
-      <h4>Cargo #: {limitSigfigs(team.avgAutoCargo)}</h4>
+      <h4>GP #: {limitSigfigs(team.avgAutoGP)}</h4>
     </div>
 
     <div class="avgContent">
-      <h3>Climb</h3>
-      <h4>Highest Climb Amount: {team.highestClimb}</h4>
-      <h4>Avg Climb Points: {team.avgClimb}</h4>
+      <h3>Charge</h3>
+      <div>
+        <h4>Auto</h4>
+        <h5>Highest Charge Amount: {team.highestAutoDock}</h5>
+        <h5>Avg Charge Points: {team.avgAutoDock}</h5>
+      </div>
+      <div>
+        <h4>Teleop</h4>
+        <h5>Highest Charge Amount: {team.highestTeleopDock}</h5>
+        <h5>Avg Charge Points: {team.avgTeleopDock}</h5>
+      </div>
+    </div>
+  </div>
+    <div class="avgContainer">
+    <div class="avgContent">
+      <h3>Gamepiece preference</h3>
+      <h4>Cone: {team.conePreference}%</h4>
+      <h4>Cube: {team.cubePreference}%</h4>
+    </div>
+      <div class="avgContent">
+      <h3>Avg GP division</h3>
+      <h4>Top: {team.avgTopGP} ({limitSigfigs(team.avgTopGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
+      <h4>Mid: {team.avgMidGP} ({limitSigfigs(team.avgMidGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
+      <h4>Hybrid: {team.avgHybridGP} ({limitSigfigs(team.avgHybridGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
     </div>
   </div>
   <p
@@ -285,28 +340,32 @@
               >{match.id}</a
             >
             {#if match.matchDat !== null}
-              Climb: {match.matchDat.climb_level}
+              Auto Dock: {match.matchDat.auto_charge}
+              Teleop Dock: {match.matchDat.teleop_charge}
               <table>
                 <thead>
                   <tr>
                     <th />
                     <th>miss</th>
-                    <th>lower</th>
-                    <th>upper</th>
+                    <th>top</th>
+                    <th>mid</th>
+                    <th>hybrid</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>auto</td>
-                    <td>{match.matchDat.auto_cargo.miss}</td>
-                    <td>{match.matchDat.auto_cargo.lower}</td>
-                    <td>{match.matchDat.auto_cargo.upper}</td>
+                    <td>{match.matchDat.auto_gamepiece.miss}</td>
+                    <td>{match.matchDat.auto_gamepiece.top}</td>
+                    <td>{match.matchDat.auto_gamepiece.mid}</td>
+                    <td>{match.matchDat.auto_gamepiece.hybrid}</td>
                   </tr>
                   <tr>
                     <td>teleop</td>
-                    <td>{match.matchDat.teleop_cargo.miss}</td>
-                    <td>{match.matchDat.teleop_cargo.lower}</td>
-                    <td>{match.matchDat.teleop_cargo.upper}</td>
+                    <td>{match.matchDat.teleop_gamepiece.miss}</td>
+                    <td>{match.matchDat.teleop_gamepiece.top}</td>
+                    <td>{match.matchDat.teleop_gamepiece.mid}</td>
+                    <td>{match.matchDat.teleop_gamepiece.hybrid}</td>
                   </tr>
                 </tbody>
               </table>
