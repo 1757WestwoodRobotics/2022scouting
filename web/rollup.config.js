@@ -20,7 +20,7 @@ import {
 
 const mode = process.env.NODE_ENV;
 const dev = mode === "development";
-const legacy = !!process.env.SAPPER_LEGACY_BUILD;
+const legacy = true
 
 const onwarn = (warning, onwarn) =>
     (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
@@ -40,7 +40,7 @@ export default {
                     "process.browser": true,
                     "process.env.NODE_ENV": JSON.stringify(mode),
                     "process.env.EXTRA_COMPS": String(readFileSync(path.join(dirname(__filename), "..", "extraCompInfo.json"))),
-                    "process.BACKEND_URL": process.env.BACKEND_URL || "http://127.0.0.1:8080",
+                    "process.BACKEND_URL": process.env.BACKEND_URL || "/api",
                 },
             }),
             svelte({
@@ -74,7 +74,8 @@ export default {
                     [
                         "@babel/preset-env",
                         {
-                            targets: "> 0.25%, not dead",
+                            targets: "android 4.4"
+                ,
                         },
                     ],
                 ],
@@ -83,7 +84,7 @@ export default {
                     [
                         "@babel/plugin-transform-runtime",
                         {
-                            useESModules: true,
+                            useESModules: false,
                         },
                     ],
                 ],

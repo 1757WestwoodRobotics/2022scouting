@@ -1,7 +1,7 @@
 import "dotenv-safe/config";
 
 import bodyParser from "body-parser";
-import cors from "cors";
+// import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
 
 import { conn } from "./data-source";
@@ -35,12 +35,12 @@ export const main = async (app: Express | undefined = undefined) => {
     app = app as Express;
   }
 
-  app.use(
-    cors({
-      origin: process.env.FRONTEND_URL || "http://127.0.0.1:8080",
-      credentials: true,
-    })
-  );
+  // app.use(
+  //   cors({
+  //     origin: process.env.FRONTEND_URL || "http://127.0.0.1:8080",
+  //     credentials: true,
+  //   })
+  // );
   app.use(bodyParser.json());
   app.use(handleErr);
 
