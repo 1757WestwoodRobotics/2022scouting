@@ -73,12 +73,14 @@
       </tbody>
     </table>
     <p>
-      Alone, {team} got {(matchData[team].autoGP.top +
+      Alone, {team} got {((matchData[team].autoGP.top +
         matchData[team].autoGP.mid +
         matchData[team].autoGP.hybrid +
         matchData[team].teleopGP.top +
-        matchData[team].teleopGP.mid + matchData[team].teleopGP.hybrid) *
-        100 / 15}% of the link RP, cycled {matchData[team].teleopGP.top +
+        matchData[team].teleopGP.mid +
+        matchData[team].teleopGP.hybrid) *
+        100) /
+        15}% of the link RP, cycled {matchData[team].teleopGP.top +
         matchData[team].teleopGP.mid +
         matchData[team].teleopGP.hybrid +
         matchData[team].teleopGP.miss} gp during teleop, and got {(matchData[

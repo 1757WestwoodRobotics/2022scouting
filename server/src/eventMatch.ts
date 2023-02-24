@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { roundObject } from "./helperFuncs";
 import { dbTeamData, filterDataByMatch } from "./scout";
+import { getPredictedWinner } from "./statbotics";
 import { matchData } from "./tba";
 
 export const eventMatch = async (
@@ -78,7 +79,7 @@ export const eventMatch = async (
       totalPointsByTeam / data.totalPoints;
     const totalPercentContributionToAuto = totalAutoPoints / data.autoPoints;
     const totalPercentContributionToTeleop =
-      totalTeleopPoints / data.teleopCargoPoints;
+      totalTeleopPoints / data.teleopGamePiecePoints;
 
     const activationBonusContrib = data.auto_charge + 2 + data.teleop_charge
 
@@ -144,10 +145,16 @@ export const eventMatch = async (
     .concat(individualRedData)
     .forEach((teams: any) => (teamData = { ...teamData, ...teams }));
 
+  let statboticsPrediction = await getPredictedWinner(event,type,
+    matchNum as unknown as number,
+    setNum as unknown as number
+  )
+
   res.json({
     teamData,
     blueExpectedPoint,
     redExpectedPoint,
+    statboticsPrediction,
     ...dat,
   });
 };

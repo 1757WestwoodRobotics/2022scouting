@@ -9,6 +9,7 @@ let comp = Object.keys(extraComps).map((k) => {
 export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
+  { id: "week0", name: "Week 0 [week0]" },
   ...comp,
 ];
 export const charge = [

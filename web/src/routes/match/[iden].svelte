@@ -56,6 +56,13 @@
   </span>
 </div>
 
+{#if typeof match.statboticsPrediction !== "undefined"}
+  <h2>
+    Statbotics predicts: {match.statboticsPrediction.winner}<br />Diff: {Math.round(
+      match.statboticsPrediction.difference
+    )}
+  </h2>
+{/if}
 <div class="content">
   <div>
     <h3 style="color:red;">Red Alliance</h3>

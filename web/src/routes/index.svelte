@@ -88,14 +88,15 @@
       name: "total points",
       fn: (team1, team2) =>
         team2.avgGPPoints +
-        team2.avgAutoDock + team2.avgTeleopDock -
+        team2.avgAutoDock +
+        team2.avgTeleopDock -
         team1.avgGPPoints -
-        team1.avgAutoDock - team1.avgTeleopDock,
+        team1.avgAutoDock -
+        team1.avgTeleopDock,
     },
     {
       name: "gp cycled teleop",
-      fn: (team1, team2) =>
-        team2.avgGPCycledTeleop - team1.avgGPCycledTeleop,
+      fn: (team1, team2) => team2.avgGPCycledTeleop - team1.avgGPCycledTeleop,
     },
   ];
   let sortingFunction = sortingMethods[0].fn;
@@ -312,10 +313,21 @@
             <td
               style={genColor(
                 team.avgGPPoints + team.avgAutoDock + team.avgTeleopDock,
-                Math.max(...data.map((a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock)),
+                Math.max(
+                  ...data.map(
+                    (a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock
+                  )
+                ),
 
-                Math.min(...data.map((a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock))
-              )}>{limitSigfigs(team.avgGPPoints + team.avgAutoDock + team.avgTeleopDock)}</td
+                Math.min(
+                  ...data.map(
+                    (a) => a.avgGPPoints + a.avgAutoDock + a.avgTeleopDock
+                  )
+                )
+              )}
+              >{limitSigfigs(
+                team.avgGPPoints + team.avgAutoDock + team.avgTeleopDock
+              )}</td
             >
             <td
               style={genColor(

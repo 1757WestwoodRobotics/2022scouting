@@ -124,26 +124,36 @@
 
     const autoAcc = matches.map(
       (a) =>
-        ((a.matchDat.auto_gamepiece.top + a.matchDat.auto_gamepiece.mid + a.matchDat.auto_gamepiece.hybrid) /
-        ((a.matchDat.auto_gamepiece.top + a.matchDat.auto_gamepiece.mid + a.matchDat.auto_gamepiece.hybrid) /
+        ((a.matchDat.auto_gamepiece.top +
+          a.matchDat.auto_gamepiece.mid +
+          a.matchDat.auto_gamepiece.hybrid) /
+          ((a.matchDat.auto_gamepiece.top +
+            a.matchDat.auto_gamepiece.mid +
+            a.matchDat.auto_gamepiece.hybrid) /
             a.matchDat.auto_gamepiece.miss)) *
         100
     );
 
     const teleopTop = matches.map((a) => a.matchDat.teleop_gamepiece.top * 5);
     const teleopMid = matches.map((a) => a.matchDat.teleop_gamepiece.mid * 3);
-    const teleopHybrid = matches.map((a) => a.matchDat.teleop_gamepiece.hybrid * 2);
+    const teleopHybrid = matches.map(
+      (a) => a.matchDat.teleop_gamepiece.hybrid * 2
+    );
     const teleopAcc = matches.map(
       (a) =>
-        ((a.matchDat.teleop_gamepiece.top + a.matchDat.teleop_gamepiece.mid + a.matchDat.teleop_gamepiece.hybrid) /
-        ((a.matchDat.teleop_gamepiece.top + a.matchDat.teleop_gamepiece.mid + a.matchDat.teleop_gamepiece.hybrid) /
+        ((a.matchDat.teleop_gamepiece.top +
+          a.matchDat.teleop_gamepiece.mid +
+          a.matchDat.teleop_gamepiece.hybrid) /
+          ((a.matchDat.teleop_gamepiece.top +
+            a.matchDat.teleop_gamepiece.mid +
+            a.matchDat.teleop_gamepiece.hybrid) /
             a.matchDat.teleop_gamepiece.miss)) *
         100
     );
 
     const autoCharge = matches.map((a) => a.matchDat.auto_charge);
     const teleopCharge = matches.map((a) => a.matchDat.teleop_charge);
-    
+
     const totalPoints = matches.map(
       (a) =>
         a.matchDat.auto_charge +
@@ -277,17 +287,29 @@
       </div>
     </div>
   </div>
-    <div class="avgContainer">
+  <div class="avgContainer">
     <div class="avgContent">
       <h3>Gamepiece preference</h3>
       <h4>Cone: {team.conePreference}%</h4>
       <h4>Cube: {team.cubePreference}%</h4>
     </div>
-      <div class="avgContent">
+    <div class="avgContent">
       <h3>Avg GP division</h3>
-      <h4>Top: {team.avgTopGP} ({limitSigfigs(team.avgTopGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
-      <h4>Mid: {team.avgMidGP} ({limitSigfigs(team.avgMidGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
-      <h4>Hybrid: {team.avgHybridGP} ({limitSigfigs(team.avgHybridGP / (team.avgTeleopGP + team.avgAutoGP) * 100)} %)</h4>
+      <h4>
+        Top: {team.avgTopGP} ({limitSigfigs(
+          (team.avgTopGP / (team.avgTeleopGP + team.avgAutoGP)) * 100
+        )} %)
+      </h4>
+      <h4>
+        Mid: {team.avgMidGP} ({limitSigfigs(
+          (team.avgMidGP / (team.avgTeleopGP + team.avgAutoGP)) * 100
+        )} %)
+      </h4>
+      <h4>
+        Hybrid: {team.avgHybridGP} ({limitSigfigs(
+          (team.avgHybridGP / (team.avgTeleopGP + team.avgAutoGP)) * 100
+        )} %)
+      </h4>
     </div>
   </div>
   <p

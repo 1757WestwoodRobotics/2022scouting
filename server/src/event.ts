@@ -1,6 +1,7 @@
 import { eventData, eventMatches } from "./tba";
 import { Request, Response } from "express";
 import { teamFullData } from "./teamData";
+import { getPredictedWinner } from "./statbotics";
 
 export const eventHandler = async (
   req: Request<{ event: string }, any, any, any, Record<string, any>>,
@@ -84,10 +85,17 @@ export const eventMatchHandler = async (
       (
         await eventMatches(event)
       ).map(async (match: any) => {
+        const statbotics_dat = await getPredictedWinner(
+          event,
+          match.comp_level,
+          match.match_number,
+          match.set_number
+        ).catch(() => {});
         return {
           match_type: match.comp_level,
           match_number: match.match_number,
           set_number: match.set_number,
+          statbotics_dat,
           blue: await Promise.all(genTeamInfo(match.alliances.blue.team_keys)),
           red: await Promise.all(genTeamInfo(match.alliances.red.team_keys)),
         };

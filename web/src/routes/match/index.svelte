@@ -59,23 +59,34 @@
         .map((a) => a.id)
         .includes(filter)}
       <div class="matchContainer">
-        <a
-          href={"match/" +
-            compIden +
-            "_" +
-            match.match_type +
-            "_" +
-            (match.match_type != "qm" ? match.set_number + "m" : "") +
-            match.match_number}
-          >{match.match_type}
-          {(match.match_type != "qm" ? match.set_number + "m" : "") +
-            match.match_number}</a
-        >
+        <div>
+          <a
+            href={"match/" +
+              compIden +
+              "_" +
+              match.match_type +
+              "_" +
+              (match.match_type != "qm" ? match.set_number + "m" : "") +
+              match.match_number}
+            class="matchNum"
+            >{match.match_type}
+            {(match.match_type != "qm" ? match.set_number + "m" : "") +
+              match.match_number}</a
+          >
+          {#if typeof match.statbotics_dat !== "undefined"}
+            <p>
+              Statbotics Predictions:<br />{match.statbotics_dat.winner} ({match
+                .statbotics_dat.difference})
+            </p>
+          {/if}
+        </div>
         <span>
           <div class="allianceHolder th-b">
             <p class="totalMatchPointExpectedHolder">
               {limitSigfigs(
-                match.blue.map((a) => a.cargo + a.climb).reduce((a, b) => a + b)
+                match.blue
+                  .map((a) => a.gamepiece + a.autoCharge + a.teleopCharge)
+                  .reduce((a, b) => a + b)
               )}
             </p>
             {#each match.blue as team}
@@ -92,14 +103,26 @@
                   class="teamTitle">{team.id}</a
                 >
                 <p class="teamName">{team.name}</p>
-                <p style={colorData(team.cargo + team.climb, 43)}>
-                  TOT<br />{limitSigfigs(team.cargo + team.climb)}
+                <p
+                  style={colorData(
+                    team.gamepiece + team.autoCharge + team.teleopCharge,
+                    43
+                  )}
+                >
+                  <b
+                    >TOT<br />{limitSigfigs(
+                      team.gamepiece + team.autoCharge + team.teleopCharge
+                    )}</b
+                  >
                 </p>
-                <p style={colorData(team.cargo, 30)}>
-                  CRGO<br />{limitSigfigs(team.cargo)}
+                <p style={colorData(team.autoCharge, 12)}>
+                  ACRG<br />{limitSigfigs(team.autoCharge)}
                 </p>
-                <p style={colorData(team.climb, 13)}>
-                  CLMB<br />{limitSigfigs(team.climb)}
+                <p style={colorData(team.teleopCharge, 10)}>
+                  TCRG<br />{limitSigfigs(team.teleopCharge)}
+                </p>
+                <p style={colorData(team.gamepiece, 45)}>
+                  GMPC<br />{limitSigfigs(team.gamepiece)}
                 </p>
               </div>
             {/each}
@@ -126,14 +149,26 @@
                   class="teamTitle">{team.id}</a
                 >
                 <p class="teamName">{team.name}</p>
-                <p style={colorData(team.cargo + team.climb, 43)}>
-                  TOT<br />{limitSigfigs(team.cargo + team.climb)}
+                <p
+                  style={colorData(
+                    team.gamepiece + team.autoCharge + team.teleopCharge,
+                    43
+                  )}
+                >
+                  <b
+                    >TOT<br />{limitSigfigs(
+                      team.gamepiece + team.autoCharge + team.teleopCharge
+                    )}</b
+                  >
                 </p>
-                <p style={colorData(team.cargo, 30)}>
-                  CRGO<br />{limitSigfigs(team.cargo)}
+                <p style={colorData(team.autoCharge, 12)}>
+                  ACRG<br />{limitSigfigs(team.autoCharge)}
                 </p>
-                <p style={colorData(team.climb, 13)}>
-                  CLMB<br />{limitSigfigs(team.climb)}
+                <p style={colorData(team.teleopCharge, 10)}>
+                  TCRG<br />{limitSigfigs(team.teleopCharge)}
+                </p>
+                <p style={colorData(team.gamepiece, 45)}>
+                  GMPC<br />{limitSigfigs(team.gamepiece)}
                 </p>
               </div>
             {/each}
@@ -166,6 +201,13 @@
     height: 40px;
     width: 40px;
     image-rendering: pixelated;
+    margin: 0.4em;
+  }
+  .matchNum {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
   }
   .teamTitle {
     grid-column-start: 2;
@@ -182,6 +224,7 @@
     border-color: blue;
   }
   .teamHolder {
+    margin: 0.2em;
     border: 2px solid;
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -203,5 +246,8 @@
   }
   .matchContainer * {
     flex-grow: 1;
+  }
+  :global(main) {
+    max-width: unset !important;
   }
 </style>

@@ -16,7 +16,7 @@
 </script>
 
 <div id="qrcode">
-    <canvas width={squareSize} height={squareSize} bind:this={qrcode} />
+  <canvas width={squareSize} height={squareSize} bind:this={qrcode} />
 </div>
 
 <style>
