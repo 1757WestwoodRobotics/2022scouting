@@ -53,3 +53,48 @@ export const getPredictedWinner = async (
     });
   });
 };
+
+
+
+export const getTeamEventEPA = async (
+  event: string,
+  team: number,
+): Promise<number> => {
+  const event_id =
+    process.env.YEAR +
+    event 
+
+  return new Promise((resolve, reject) => {
+    let opt = {
+      protocol: "https:",
+      hostname: "api.statbotics.io",
+      path: `/v2/team_event/${team}/${event_id}`,
+      headers: {
+        accept: "application/json",
+      },
+    };
+    get(opt, (res) => {
+      res.setEncoding("utf8");
+      let raw = "";
+      res.on("data", (m) => {
+        raw += m;
+      });
+      res.on("error", (e) => {
+        reject(e);
+      });
+      res.on("end", () => {
+        if (res.statusCode === 404) reject(JSON.parse(raw));
+        else {
+          if (typeof res.statusCode != "number") {
+            reject();
+          }
+          if ((res.statusCode as number) >= 400) return reject(raw);
+          const dat = JSON.parse(raw);
+          resolve(dat.epa_end);
+        }
+      });
+    });
+  });
+};
+
+

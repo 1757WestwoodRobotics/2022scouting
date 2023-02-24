@@ -215,6 +215,7 @@
             }}>Avg GP cycles per match</th
           >
           <th>avg variation</th>
+          <th>Statbotics EPA</th>
         </tr>
       </thead>
       <tbody>
@@ -337,6 +338,13 @@
               )}>{limitSigfigs(team.avgGPCycledTeleop)}</td
             >
             <td>{limitSigfigs(team.sd)}</td>
+            <td
+              style={genColor(
+                team.epa,
+                Math.max(...data.map((a) => a.epa)),
+                Math.min(...data.map((a) => a.epa))
+              )}>{limitSigfigs(team.epa)}</td
+            >
           </tr>
         {/each}
       </tbody>
