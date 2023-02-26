@@ -39,7 +39,7 @@ export const teamFullData = async (
   const imp_notes = await fetchNotes(teamNum);
   let epa = undefined;
   if (typeof compLimit === "string"){
-    epa = await getTeamEventEPA(compLimit, teamNum)
+    epa = await getTeamEventEPA(compLimit, teamNum).catch()
   }
 
   const fullData = {

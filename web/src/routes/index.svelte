@@ -98,6 +98,7 @@
       name: "gp cycled teleop",
       fn: (team1, team2) => team2.avgGPCycledTeleop - team1.avgGPCycledTeleop,
     },
+    { name: "statbotics epa", fn: (team1, team2) => team2.epa - team1.epa },
   ];
   let sortingFunction = sortingMethods[0].fn;
 </script>
@@ -191,31 +192,35 @@
           >
           <th
             on:click={() => {
-              sortingFunction = sortingMethods[11].fn;
+              sortingFunction = sortingMethods[10].fn;
             }}>Avg Mid</th
           >
           <th
             on:click={() => {
-              sortingFunction = sortingMethods[10].fn;
+              sortingFunction = sortingMethods[11].fn;
             }}>Avg Hybrid</th
           >
           <th
             on:click={() => {
-              sortingFunction = sortingMethods[11].fn;
+              sortingFunction = sortingMethods[12].fn;
             }}>Avg GP Points</th
           >
           <th
             on:click={() => {
-              sortingFunction = sortingMethods[11].fn;
+              sortingFunction = sortingMethods[13].fn;
             }}>Avg Total Points</th
           >
           <th
             on:click={() => {
-              sortingFunction = sortingMethods[11].fn;
+              sortingFunction = sortingMethods[14].fn;
             }}>Avg GP cycles per match</th
           >
           <th>avg variation</th>
-          <th>Statbotics EPA</th>
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[15].fn;
+            }}>Statbotics EPA</th
+          >
         </tr>
       </thead>
       <tbody>

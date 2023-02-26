@@ -66,6 +66,36 @@
 <div class="content">
   <div>
     <h3 style="color:red;">Red Alliance</h3>
+{#if isPlayed}
+    Auto
+    <table>
+      <tbody>
+        {#each Object.values(match.score_breakdown.red.autoCommunity).reverse() as row}
+        <tr>
+            {#each row as node}
+
+              <td style={'background-color: ' + (node =='Cone' ? 'yellow' : node == 'Cube' ? 'purple': 'inherit') + ';'} ></td>
+{/each}
+
+        </tr>
+{/each}
+      </tbody>
+    </table>
+      Teleop
+    <table>
+      <tbody>
+        {#each Object.values(match.score_breakdown.red.teleopCommunity).reverse() as row}
+        <tr>
+            {#each row as node}
+
+              <td style={'background-color: ' + (node =='Cone' ? 'yellow' : node == 'Cube' ? 'purple': 'inherit') + ';'} ></td>
+{/each}
+
+        </tr>
+{/each}
+      </tbody>
+    </table>
+  {/if}
     <h4>
       {#if isPlayed}
         Total points: {match.score_breakdown.red.totalPoints},
@@ -78,6 +108,36 @@
   </div>
   <div>
     <h3 style="color:blue;">Blue Alliance</h3>
+{#if isPlayed}
+    Auto
+    <table>
+      <tbody>
+        {#each Object.values(match.score_breakdown.blue.autoCommunity).reverse() as row}
+        <tr>
+            {#each row as node}
+
+              <td style={'background-color: ' + (node =='Cone' ? 'yellow' : node == 'Cube' ? 'purple': 'inherit') + ';'} ></td>
+{/each}
+
+        </tr>
+{/each}
+      </tbody>
+    </table>
+      Teleop
+    <table>
+      <tbody>
+        {#each Object.values(match.score_breakdown.blue.teleopCommunity).reverse() as row}
+        <tr>
+            {#each row as node}
+
+              <td style={'background-color: ' + (node =='Cone' ? 'yellow' : node == 'Cube' ? 'purple': 'inherit') + ';'} ></td>
+{/each}
+
+        </tr>
+{/each}
+      </tbody>
+    </table>
+  {/if}
     <h4>
       {#if isPlayed}
         Total points: {match.score_breakdown.blue.totalPoints},
@@ -138,5 +198,13 @@
 
   .content :global(li) {
     margin: 0 0 0.5em 0;
+  }
+td {
+width: 1em;
+    height: 1em;
+    border: 1px solid;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
   }
 </style>

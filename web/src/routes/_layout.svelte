@@ -16,7 +16,7 @@
 <style>
   main {
     position: relative;
-    max-width: 75em;
+    max-width: 80em;
     background-color: #212121;
     padding: 2em;
     margin: 0 auto;
