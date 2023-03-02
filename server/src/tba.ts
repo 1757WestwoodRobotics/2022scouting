@@ -142,7 +142,9 @@ export const matchData = async (
     matchType +
     (setNumber ? setNumber + "m" + matchNumber : matchNumber);
 
-  let data = await client.Match(match_id).catch(() => {console.log("unable to find")});
+  let data = await client.Match(match_id).catch(() => {
+    console.log("unable to find");
+  });
 
   matchCache.setVal(`${event}${matchType}${matchNumber}`, data);
   return data || {};

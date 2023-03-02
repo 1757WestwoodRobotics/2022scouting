@@ -54,15 +54,11 @@ export const getPredictedWinner = async (
   });
 };
 
-
-
 export const getTeamEventEPA = async (
   event: string,
-  team: number,
+  team: number
 ): Promise<number> => {
-  const event_id =
-    process.env.YEAR +
-    event 
+  const event_id = process.env.YEAR + event;
 
   return new Promise((resolve, reject) => {
     let opt = {
@@ -96,5 +92,3 @@ export const getTeamEventEPA = async (
     });
   });
 };
-
-

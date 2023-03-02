@@ -203,7 +203,9 @@ export const dbTeamData = async (
     100;
 
   let mobilityConsistency =
-    (dat.map((entry) => (entry.mobility ? 1 : 0)).reduce((a: number, b: number) => a + b, 0) /
+    (dat
+      .map((entry) => (entry.mobility ? 1 : 0))
+      .reduce((a: number, b: number) => a + b, 0) /
       dat.length) *
     100;
 
@@ -316,7 +318,7 @@ export const dbTeamData = async (
     sd,
     conePreference,
     cubePreference,
-    mobilityConsistency
+    mobilityConsistency,
   };
 };
 

@@ -75,7 +75,7 @@
         data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
         data.auto_charge = 0;
         data.teleop_charge = 0;
-        data.mobility = false
+        data.mobility = false;
         data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
@@ -92,7 +92,7 @@
         data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
         data.auto_charge = 0;
         data.teleop_charge = 0;
-        data.mobility = false
+        data.mobility = false;
         data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
@@ -165,7 +165,7 @@
       <p style="color:red;"><strong>WARNING</strong> team not part of comp</p>
     {/if}
   </Box>
-    <br>
+  <br />
   <Box header="Auto Mobil">
     Mobility
     <input type="checkbox" bind:checked={data.mobility} />
@@ -183,7 +183,7 @@
       {/each}
     </select>
   </Box>
-    <br>
+  <br />
   <Box header="Teleop">
     <Counter bind:value={data.teleop_gamepiece.top} name="Top" />
     <Counter bind:value={data.teleop_gamepiece.mid} name="Mid" />
@@ -197,7 +197,7 @@
       {/each}
     </select>
   </Box>
-    <br>
+  <br />
   <Box header="Scoring Capabilities">
     Cone
     <input type="checkbox" bind:checked={data.scoring_capabilities.cone} />
