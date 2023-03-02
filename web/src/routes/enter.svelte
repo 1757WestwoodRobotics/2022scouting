@@ -165,6 +165,7 @@
       <p style="color:red;"><strong>WARNING</strong> team not part of comp</p>
     {/if}
   </Box>
+    <br>
   <Box header="Auto Mobil">
     Mobility
     <input type="checkbox" bind:checked={data.mobility} />
@@ -182,6 +183,7 @@
       {/each}
     </select>
   </Box>
+    <br>
   <Box header="Teleop">
     <Counter bind:value={data.teleop_gamepiece.top} name="Top" />
     <Counter bind:value={data.teleop_gamepiece.mid} name="Mid" />
@@ -195,6 +197,7 @@
       {/each}
     </select>
   </Box>
+    <br>
   <Box header="Scoring Capabilities">
     Cone
     <input type="checkbox" bind:checked={data.scoring_capabilities.cone} />
@@ -236,7 +239,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
   }
 
   select {
