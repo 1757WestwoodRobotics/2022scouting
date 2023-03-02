@@ -38,6 +38,7 @@
     sd: number;
     conePreference: number;
     cubePreference: number;
+    mobilityConsistency: number;
     notes: string[];
     imp_notes: string[];
   };
@@ -271,6 +272,7 @@
 
       <h4>Consistency: {limitSigfigs(team.autoConsistency)}%</h4>
       <h4>GP #: {limitSigfigs(team.avgAutoGP)}</h4>
+      <h4>Mobility consistency: {limitSigfigs(team.mobilityConsistency)}%</h4>
     </div>
 
     <div class="avgContent">

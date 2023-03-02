@@ -98,6 +98,11 @@
       name: "gp cycled teleop",
       fn: (team1, team2) => team2.avgGPCycledTeleop - team1.avgGPCycledTeleop,
     },
+    {
+      name: "mobility",
+      fn: (team1, team2) =>
+        team2.mobilityConsistency - team1.mobilityConsistency,
+    },
     { name: "statbotics epa", fn: (team1, team2) => team2.epa - team1.epa },
   ];
   let sortingFunction = sortingMethods[0].fn;
@@ -215,10 +220,15 @@
               sortingFunction = sortingMethods[14].fn;
             }}>Avg GP cycles per match</th
           >
-          <th>avg variation</th>
           <th
             on:click={() => {
               sortingFunction = sortingMethods[15].fn;
+            }}>Mobility %</th
+          >
+          <th>avg variation</th>
+          <th
+            on:click={() => {
+              sortingFunction = sortingMethods[16].fn;
             }}>Statbotics EPA</th
           >
         </tr>
@@ -341,6 +351,13 @@
                 Math.max(...data.map((a) => a.avgGPCycledTeleop)),
                 Math.min(...data.map((a) => a.avgGPCycledTeleop))
               )}>{limitSigfigs(team.avgGPCycledTeleop)}</td
+            >
+            <td
+              style={genColor(
+                team.mobilityConsistency,
+                Math.max(...data.map((a) => a.mobilityConsistency)),
+                Math.min(...data.map((a) => a.mobilityConsistency))
+              )}>{limitSigfigs(team.mobilityConsistency)}</td
             >
             <td>{limitSigfigs(team.sd)}</td>
             <td

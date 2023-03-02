@@ -69,11 +69,18 @@ export const eventMatch = async (
     }
 
     const totalAutoPoints =
-      entry.auto_gamepiece.top * 6 + entry.auto_gamepiece.mid * 4 + entry.auto_gamepiece.hybrid * 3 + entry.auto_charge + 2;
+      entry.auto_gamepiece.top * 6 +
+      entry.auto_gamepiece.mid * 4 +
+      entry.auto_gamepiece.hybrid * 3 +
+      entry.auto_charge +
+      (entry.auto_charge != 0 ? 2 : 0) +
+      (entry.mobility ? 3 : 0);
     const totalTeleopPoints =
-      entry.teleop_gamepiece.top * 5 + entry.teleop_gamepiece.mid * 3 + entry.teleop_gamepiece.hybrid * 2 + entry.teleop_charge;
-    const totalPointsByTeam =
-      totalAutoPoints + totalTeleopPoints;
+      entry.teleop_gamepiece.top * 5 +
+      entry.teleop_gamepiece.mid * 3 +
+      entry.teleop_gamepiece.hybrid * 2 +
+      entry.teleop_charge;
+    const totalPointsByTeam = totalAutoPoints + totalTeleopPoints;
 
     const totalPercentContributionToMatch =
       totalPointsByTeam / data.totalPoints;
@@ -81,7 +88,7 @@ export const eventMatch = async (
     const totalPercentContributionToTeleop =
       totalTeleopPoints / data.teleopGamePiecePoints;
 
-    const activationBonusContrib = data.auto_charge + 2 + data.teleop_charge
+    const activationBonusContrib = data.auto_charge + 2 + data.teleop_charge;
 
     // I hate this jank
     const teamData = roundObject(
@@ -95,7 +102,7 @@ export const eventMatch = async (
         totalPercentContributionToTeleop,
         totalPercentContributionToMatch,
         notes: entry.notes,
-        activationBonusContrib
+        activationBonusContrib,
       },
       3
     );
@@ -104,26 +111,30 @@ export const eventMatch = async (
     return returnData;
   };
 
-    const individualBlueData = matchPlayed ? dat.alliances.blue.team_keys.map(
-      (teamIden: string) => {
+  const individualBlueData = matchPlayed
+    ? dat.alliances.blue.team_keys.map((teamIden: string) => {
         let team = parseInt(teamIden.substring(3));
         return mapTeamPercentContribution(team, dat.score_breakdown!.blue);
-      }
-    ) : [];
+      })
+    : [];
 
-    const individualRedData = matchPlayed ? dat.alliances.red.team_keys.map(
-      (teamIden: string) => {
+  const individualRedData = matchPlayed
+    ? dat.alliances.red.team_keys.map((teamIden: string) => {
         let team = parseInt(teamIden.substring(3));
         return mapTeamPercentContribution(team, dat.score_breakdown!.red);
-      }
-    ) : [];
+      })
+    : [];
 
   const redExpectedPoint = (
     await Promise.all(
       dat.alliances.red.team_keys.map(async (team_iden: string) => {
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
-        const teamPoints = teamInfo.avgGPPoints + teamInfo.avgAutoDock + teamInfo.avgTeleopDock;
+        const teamPoints =
+          teamInfo.avgGPPoints +
+          teamInfo.avgAutoDock +
+          teamInfo.avgTeleopDock +
+          3 * teamInfo.mobilityConsistency;
         return teamPoints || 0;
       })
     )
@@ -134,7 +145,11 @@ export const eventMatch = async (
       dat.alliances.blue.team_keys.map(async (team_iden: string) => {
         let team = parseInt(team_iden.substring(3));
         const teamInfo = await dbTeamData(team);
-        const teamPoints = teamInfo.avgGPPoints + teamInfo.avgAutoDock + teamInfo.avgTeleopDock;
+        const teamPoints =
+          teamInfo.avgGPPoints +
+          teamInfo.avgAutoDock +
+          teamInfo.avgTeleopDock +
+          3 * teamInfo.mobilityConsistency;
         return teamPoints || 0;
       })
     )
@@ -145,10 +160,12 @@ export const eventMatch = async (
     .concat(individualRedData)
     .forEach((teams: any) => (teamData = { ...teamData, ...teams }));
 
-  let statboticsPrediction = await getPredictedWinner(event,type,
+  let statboticsPrediction = await getPredictedWinner(
+    event,
+    type,
     matchNum as unknown as number,
     setNum as unknown as number
-  )
+  );
 
   res.json({
     teamData,

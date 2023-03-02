@@ -25,6 +25,7 @@ export type FullTeamData = {
   sd: number;
   conePreference: number;
   cubePreference: number;
+  mobilityConsistency: number;
   epa?: number;
 };
 

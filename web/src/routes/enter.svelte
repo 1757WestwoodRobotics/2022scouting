@@ -36,6 +36,7 @@
           cone: false,
           cube: false,
         },
+        mobility: false,
         notes: "",
       },
     };
@@ -74,6 +75,7 @@
         data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
         data.auto_charge = 0;
         data.teleop_charge = 0;
+        data.mobility = false
         data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
@@ -90,6 +92,7 @@
         data.teleop_gamepiece = { top: 0, mid: 0, hybrid: 0, miss: 0 };
         data.auto_charge = 0;
         data.teleop_charge = 0;
+        data.mobility = false
         data.scoring_capabilities = { cone: false, cube: false };
         data.notes = "";
         data.identifier.set_number = undefined;
@@ -161,6 +164,10 @@
     {#if !possibleTeams.includes(data.identifier.team)}
       <p style="color:red;"><strong>WARNING</strong> team not part of comp</p>
     {/if}
+  </Box>
+  <Box header="Auto Mobil">
+    Mobility
+    <input type="checkbox" bind:checked={data.mobility} />
   </Box>
   <Box header="Auto">
     <Counter bind:value={data.auto_gamepiece.top} name="Top" />

@@ -44,6 +44,9 @@ export class ScoutingData extends BaseEntity {
   })
   identifier!: DataIdentifier; // comp_TYPENUM_team
 
+  @Column()
+  mobility: boolean;
+
   @Column({
     type: "jsonb",
   })
@@ -93,6 +96,7 @@ export type TeamStats = {
   sd: number;
   conePreference: number;
   cubePreference: number;
+  mobilityConsistency: number;
 };
 
 export const dbTeamMatchData = async (
@@ -151,6 +155,7 @@ export const dbTeamData = async (
       miss: parseInt(entry.teleop_gamepiece.miss as unknown as string),
     };
     ret.identifier = entry.identifier;
+    ret.mobility = entry.mobility;
     ret.auto_charge = parseInt(entry.auto_charge as unknown as string);
     ret.teleop_charge = parseInt(entry.teleop_charge as unknown as string);
 
@@ -195,6 +200,11 @@ export const dbTeamData = async (
             (entry.teleop_gamepiece.miss as number)
         )
         .reduce((a, b) => a + b, 0)) *
+    100;
+
+  let mobilityConsistency =
+    (dat.map((entry) => (entry.mobility ? 1 : 0)).reduce((a: number, b: number) => a + b, 0) /
+      dat.length) *
     100;
 
   let autoConsistency =
@@ -277,14 +287,14 @@ export const dbTeamData = async (
 
   let conePreference =
     (dat
-      .map((entry) => (+!!entry.scoring_capabilities.cone))
+      .map((entry) => +!!entry.scoring_capabilities.cone)
       .reduce((a, b) => a + b, 0) /
       dat.length) *
     100;
 
   let cubePreference =
     (dat
-      .map((entry) => (+!!entry.scoring_capabilities.cube))
+      .map((entry) => +!!entry.scoring_capabilities.cube)
       .reduce((a, b) => a + b, 0) /
       dat.length) *
     100;
@@ -306,6 +316,7 @@ export const dbTeamData = async (
     sd,
     conePreference,
     cubePreference,
+    mobilityConsistency
   };
 };
 
@@ -328,6 +339,7 @@ export const handleScoutUpload = async (
     data.teleop_charge = requ.teleop_charge;
     data.scoring_capabilities = requ.scoring_capabilities;
     data.notes = requ.notes;
+    data.mobility = requ.mobility;
 
     const dataRepo = conn.getRepository(ScoutingData);
 
