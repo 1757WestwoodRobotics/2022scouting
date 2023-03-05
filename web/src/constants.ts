@@ -10,6 +10,8 @@ export const competitions = [
   { id: "mabos", name: "Revere [mabos]" },
   { id: "mawor", name: "WPI [mawor]" },
   { id: "week0", name: "Week 0 [week0]" },
+  { id: "nhgrs", name: "Granite State [nhgrs]" },
+  { id: "mabri", name: "SE Mass [mabri]" },
   ...comp,
 ];
 export const charge = [

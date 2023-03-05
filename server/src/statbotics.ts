@@ -1,9 +1,13 @@
 import { get } from "https";
+import { ItemCache } from "./tba";
 
 export type MatchPrediction = {
   winner: string;
   difference: number;
 };
+
+let winnerPredicts = new ItemCache("winnerPredict");
+let teamEventEpa = new ItemCache("teamEPA");
 
 export const getPredictedWinner = async (
   event: string,
@@ -17,6 +21,10 @@ export const getPredictedWinner = async (
     "_" +
     matchType +
     (setNumber ? setNumber + "m" + matchNumber : matchNumber);
+
+  if (typeof winnerPredicts.getVal(match_id) !== "undefined") {
+    return winnerPredicts.getVal(match_id);
+  }
 
   return new Promise((resolve, reject) => {
     let opt = {
@@ -44,10 +52,12 @@ export const getPredictedWinner = async (
           }
           if ((res.statusCode as number) >= 400) return reject(raw);
           const dat = JSON.parse(raw);
-          resolve({
+          const retVal = {
             winner: dat.epa_winner,
             difference: Math.abs(dat.red_epa_sum - dat.blue_epa_sum),
-          });
+          };
+          winnerPredicts.setVal(match_id, retVal);
+          resolve(retVal);
         }
       });
     });
@@ -59,6 +69,10 @@ export const getTeamEventEPA = async (
   team: number
 ): Promise<number> => {
   const event_id = process.env.YEAR + event;
+
+  if (typeof teamEventEpa.getVal(event_id) !== "undefined") {
+    return teamEventEpa.getVal(event_id);
+  }
 
   return new Promise((resolve, reject) => {
     let opt = {
@@ -86,7 +100,10 @@ export const getTeamEventEPA = async (
           }
           if ((res.statusCode as number) >= 400) return reject(raw);
           const dat = JSON.parse(raw);
-          resolve(dat.epa_end);
+          const revVal = dat.epa_end;
+          teamEventEpa.setVal(event_id, revVal);
+
+          resolve(revVal);
         }
       });
     });

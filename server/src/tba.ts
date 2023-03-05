@@ -13,7 +13,7 @@ const extraComps = JSON.parse(
   )
 );
 
-class ItemCache {
+export class ItemCache {
   name: string;
   data: any;
   constructor(name: string) {
@@ -21,6 +21,10 @@ class ItemCache {
     this.data = existsSync(this.name + ".json")
       ? JSON.parse(String(readFileSync(this.name + ".json")))
       : {};
+  }
+  reset() {
+    this.data = {};
+    writeFileSync(this.name + ".json", "{}");
   }
   getVal(val: string) {
     return this.data[val];
@@ -41,7 +45,6 @@ export const teamData = async (team: number) => {
   const team_key = "frc" + team;
 
   if (typeof teamCache.getVal(team_key) !== "undefined") {
-    console.log(`using cache for team ${team}`);
     return teamCache.getVal(team_key);
   }
   let teamData = await client.Team(team_key);
@@ -66,11 +69,11 @@ export const teamData = async (team: number) => {
   return returnDat;
 };
 export const removeCache = () => {
-  teamCache = new ItemCache("teamCache");
-  matchCache = new ItemCache("matchCache");
-  eventCache = new ItemCache("eventCache");
-  teamMatchCache = new ItemCache("teamMatchCache");
-  eventMatchCache = new ItemCache("eventMatchCache");
+  teamCache.reset()
+  matchCache.reset()
+  eventCache.reset()
+  teamMatchCache.reset()
+  eventMatchCache.reset()
 };
 
 export const teamMatches = async (
@@ -80,7 +83,6 @@ export const teamMatches = async (
   const team_key = "frc" + team;
   const event_id = process.env.YEAR + event;
   if (typeof teamMatchCache.getVal(team_key + event_id) !== "undefined") {
-    console.log(`using cache for team ${team}, event ${event}`);
     return teamMatchCache.getVal(team_key + event_id);
   }
   let data;
@@ -132,7 +134,6 @@ export const matchData = async (
     typeof matchCache.getVal(`${event}${matchType}${matchNumber}`) !==
     "undefined"
   ) {
-    console.log(`using cache for match`);
     return matchCache.getVal(`${event}${matchType}${matchNumber}`);
   }
   const match_id =
@@ -158,7 +159,6 @@ export const eventMatches = async (event: string): Promise<Match_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
   if (typeof eventMatchCache.getVal(event_id) !== "undefined") {
-    console.log(`using cache for event ${event}`);
     return eventMatchCache.getVal(event_id);
   }
 
@@ -195,7 +195,6 @@ export const eventData = async (event: string): Promise<Team_Simple[]> => {
   const event_id = process.env.YEAR + event;
 
   if (typeof eventCache.getVal(event_id) !== "undefined") {
-    console.log(`using cache for event ${event}`);
     return eventCache.getVal(event_id);
   }
 

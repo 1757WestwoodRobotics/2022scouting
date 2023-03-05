@@ -58,6 +58,16 @@ export const eventMatchHandler = async (
   const genTeamInfo = (team_keys: string[]): Promise<any>[] => {
     return team_keys.map(async (a: string) => {
       const teamNum = a.substring(3);
+      if (teamNum == "0") {
+        return {
+          id: 0,
+          name: "NO BOT",
+          av: undefined,
+          gamepiece: 0,
+          autoCharge: 0,
+          teleopCharge: 0,
+        };
+      }
       if (typeof infoCache[teamNum] !== "undefined") {
         return infoCache[teamNum];
       }
@@ -89,8 +99,10 @@ export const eventMatchHandler = async (
           event,
           match.comp_level,
           match.match_number,
-          match.set_number
-        ).catch(() => {});
+          match.comp_level != "qm" ? match.set_number: undefined
+        ).catch((e) => {
+          console.warn(e);
+        });
         return {
           match_type: match.comp_level,
           match_number: match.match_number,
