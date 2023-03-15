@@ -125,7 +125,7 @@
 </svelte:head>
 
 <div class="container-1">
-  <Box --box-width="46em" header="Match Info">
+  <Box --box-width="auto" header="Match Info">
     <select
       name="Comp"
       bind:value={data.identifier.comp}
@@ -240,6 +240,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    align-content: space-around;
   }
 
   select {

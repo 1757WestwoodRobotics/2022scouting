@@ -69,11 +69,11 @@ export const teamData = async (team: number) => {
   return returnDat;
 };
 export const removeCache = () => {
-  teamCache.reset()
-  matchCache.reset()
-  eventCache.reset()
-  teamMatchCache.reset()
-  eventMatchCache.reset()
+  teamCache.reset();
+  matchCache.reset();
+  eventCache.reset();
+  teamMatchCache.reset();
+  eventMatchCache.reset();
 };
 
 export const teamMatches = async (

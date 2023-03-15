@@ -12,6 +12,7 @@ export const competitions = [
   { id: "week0", name: "Week 0 [week0]" },
   { id: "nhgrs", name: "Granite State [nhgrs]" },
   { id: "mabri", name: "SE Mass [mabri]" },
+  { id: "rinsc", name: "Rhode Island [rinsc]" },
   ...comp,
 ];
 export const charge = [

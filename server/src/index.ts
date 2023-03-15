@@ -11,6 +11,7 @@ import { dbTeamMatchData, handleScoutUpload } from "./scout";
 import { removeCache, teamMatches } from "./tba";
 import { eventHandler, eventMatchHandler, eventSimple } from "./event";
 import { teamFullData } from "./teamData";
+import { refreshCache } from "./statbotics";
 
 const handleErr = (
   err: any,
@@ -89,6 +90,7 @@ export const main = async (app: Express | undefined = undefined) => {
   app.post("/refresh", async (_req, res, next) => {
     try {
       removeCache();
+      refreshCache();
       console.log("Refreshing");
       res.json("OK");
     } catch (err) {

@@ -64,14 +64,19 @@ export const getPredictedWinner = async (
   });
 };
 
+export const refreshCache = () => {
+  teamEventEpa.reset();
+  winnerPredicts.reset();
+};
+
 export const getTeamEventEPA = async (
   event: string,
   team: number
 ): Promise<number> => {
   const event_id = process.env.YEAR + event;
 
-  if (typeof teamEventEpa.getVal(event_id) !== "undefined") {
-    return teamEventEpa.getVal(event_id);
+  if (typeof teamEventEpa.getVal(event_id + team.toString()) !== "undefined") {
+    return teamEventEpa.getVal(event_id + team.toString());
   }
 
   return new Promise((resolve, reject) => {

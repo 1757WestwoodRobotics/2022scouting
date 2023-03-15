@@ -99,7 +99,7 @@ export const eventMatchHandler = async (
           event,
           match.comp_level,
           match.match_number,
-          match.comp_level != "qm" ? match.set_number: undefined
+          match.comp_level != "qm" ? match.set_number : undefined
         ).catch((e) => {
           console.warn(e);
         });
